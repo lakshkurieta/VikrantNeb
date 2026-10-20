@@ -1,0 +1,281 @@
+/*
+  Writing section: "Notes from the floor", the studio's second page (studio.css has the bust and
+  the sideways pan).
+
+  Pulled up over the podcast's last screen, so its header pins (top: --podcast-top) exactly when
+  the podcast has scrolled to its end: the cross-over starts from that frame. While pinned, for
+  --writing-shift of scroll, the bust crosses to the left (--studio-move, written by StudioBust)
+  and the header slides in from the right; then it scrolls on as normal, with the articles after it.
+  Content sits in the right column; the left one is now the bust's.
+*/
+.writing {
+  --writing-shift: 110svh;
+  position: relative;
+  margin-top: calc(-1 * (100svh - var(--podcast-top)));
+  padding: 0 var(--spacing-gutter) clamp(72px, 12svh, 140px);
+  /* The "Writing" nav link lands at the end of the pan, with the page in place. */
+  scroll-margin-top: calc(var(--podcast-top) - var(--writing-shift));
+}
+.writing-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 11fr) minmax(0, 13fr);
+  column-gap: var(--studio-gap);
+  max-width: 1440px;
+  margin: 0 auto;
+}
+.writing-grid > * {
+  grid-column: 2;
+}
+/* It comes in once the band has gone and he is on his way back up: sliding from the right over the
+   second two-thirds of the cross-over, fading up over its second half. */
+.writing-pin__head {
+  --studio-move: 0;
+  --slide: clamp(0, calc((var(--studio-move) - 0.3) / 0.7), 1);
+  position: sticky;
+  top: var(--podcast-top);
+  translate: calc((1 - var(--slide)) * 55vw) 0;
+  opacity: clamp(0, calc((var(--studio-move) - 0.45) * 2.4), 1);
+}
+.writing-pin__track {
+  height: var(--writing-shift);
+}
+
+/* ---- Header -------------------------------------------------------------------------------------- */
+.writing-head__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+.writing-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: color 250ms;
+}
+.writing-link:hover,
+.writing-link:focus-visible {
+  color: var(--color-signal);
+}
+/* Set like the podcast's title: two lines, the joiner in the serif italic accent. */
+.writing-title {
+  margin-top: 18px;
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 6.2vw, 7.4rem);
+  font-weight: 800;
+  line-height: 0.88;
+  letter-spacing: -0.035em;
+  text-transform: uppercase;
+}
+.writing-title > span {
+  display: block;
+}
+.writing-title em {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 0.8em;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--color-signal);
+}
+.writing-intro {
+  margin-top: clamp(18px, 3svh, 28px);
+  max-width: 52ch;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--color-muted);
+}
+.writing-meta {
+  color: var(--color-muted);
+}
+
+/* The latest article, featured in the pinned header so the frame he lands beside is full. */
+.writing-feature {
+  margin-top: clamp(22px, 3.6svh, 36px);
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  align-items: center;
+  gap: clamp(16px, 2vw, 28px);
+  padding: 12px;
+  border-radius: 24px;
+  background: var(--color-raised);
+}
+.writing-feature__cover,
+.writing-row__cover {
+  position: relative;
+  overflow: clip;
+  aspect-ratio: 16 / 10;
+}
+.writing-feature__cover {
+  border-radius: 16px;
+}
+.writing-feature__cover img,
+.writing-row__cover img {
+  object-fit: cover;
+  transition: scale 900ms var(--ease-out-expo);
+}
+.writing-feature:hover .writing-feature__cover img,
+.writing-row:hover .writing-row__cover img {
+  scale: 1.05;
+}
+.writing-feature__text {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-right: 12px;
+}
+.writing-feature__title {
+  font-family: var(--font-display);
+  font-size: clamp(1.15rem, 1.55vw, 1.55rem);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+.writing-feature__excerpt {
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--color-muted);
+}
+.writing-read {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 2px;
+  font-size: 14px;
+  font-weight: 700;
+  transition: color 250ms;
+}
+.writing-feature:hover .writing-read,
+.writing-feature:focus-visible .writing-read {
+  color: var(--color-signal);
+}
+
+/* ---- The other articles -------------------------------------------------------------------------- */
+.writing-list {
+  margin-top: clamp(28px, 5svh, 56px);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.writing-row {
+  display: grid;
+  grid-template-columns: auto clamp(108px, 10vw, 148px) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: clamp(14px, 1.6vw, 22px);
+  padding: 12px 18px 12px 14px;
+  border-radius: 20px;
+  transition: background 350ms var(--ease-out-quart);
+}
+.writing-row:hover,
+.writing-row:focus-visible {
+  background: var(--color-raised);
+}
+.writing-row__number {
+  font-family: var(--font-display);
+  width: 2.2ch;
+  font-size: clamp(1.4rem, 1.8vw, 1.9rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-subtle);
+  transition: color 300ms;
+}
+.writing-row:hover .writing-row__number {
+  color: var(--color-signal);
+}
+.writing-row__cover {
+  border-radius: 12px;
+}
+.writing-row__text {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 6px;
+}
+.writing-row__title {
+  font-size: clamp(1rem, 1.2vw, 1.15rem);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+}
+.writing-row__excerpt {
+  overflow: hidden;
+  font-size: 14px;
+  color: var(--color-muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.writing-row__arrow {
+  color: var(--color-muted);
+  transition:
+    color 250ms,
+    translate 500ms var(--ease-out-expo);
+}
+.writing-row:hover .writing-row__arrow {
+  color: var(--color-signal);
+  translate: 2px -2px;
+}
+
+/* ---- One column: no pan, the header sits in place ----------------------------------------------- */
+@media (width < 1024px) {
+  .writing {
+    margin-top: 0;
+    padding-top: clamp(56px, 10svh, 96px);
+    scroll-margin-top: 0;
+  }
+  .writing-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .writing-grid > * {
+    grid-column: 1;
+  }
+  .writing-pin__head {
+    position: relative;
+    top: auto;
+    translate: none;
+    opacity: 1;
+  }
+  .writing-pin__track {
+    display: none;
+  }
+}
+@media (width < 768px) {
+  .writing-title {
+    font-size: clamp(2.6rem, 13vw, 4rem);
+  }
+  .writing-feature {
+    grid-template-columns: minmax(0, 1fr);
+    border-radius: 20px;
+  }
+  .writing-feature__text {
+    padding: 0 6px 6px;
+  }
+  .writing-row {
+    grid-template-columns: 96px minmax(0, 1fr);
+    padding: 10px;
+  }
+  .writing-row__number,
+  .writing-row__arrow,
+  .writing-row__excerpt {
+    display: none;
+  }
+}
+/* No script: no pan, everything in place. */
+@media (scripting: none) {
+  .writing {
+    margin-top: 0;
+  }
+  .writing-pin__head {
+    position: relative;
+    top: auto;
+    translate: none;
+    opacity: 1;
+  }
+  .writing-pin__track {
+    display: none;
+  }
+}

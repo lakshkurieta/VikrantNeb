@@ -1,0 +1,58 @@
+/*
+  What the section pages share (app/about, book, podcast, resources): room for the bar, the gutters,
+  the way back home, and their headings. Titles use the site's lockup (`text-hero`); each page's own
+  layout lives beside it.
+*/
+.page {
+  padding: max(120px, 14svh) var(--spacing-gutter) clamp(80px, 12svh, 140px);
+  color: var(--color-fg);
+}
+/* Full width up to the cap (auto margins alone would shrink a grid item to its content). */
+.page > * {
+  width: 100%;
+  max-width: 1240px;
+  margin-inline: auto;
+}
+.page-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: clamp(24px, 4svh, 40px);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-muted);
+  transition: color 250ms;
+}
+.page-back:hover,
+.page-back:focus-visible {
+  color: var(--color-fg);
+}
+.page-lead {
+  max-width: 52ch;
+  font-size: clamp(1.05rem, 1.3vw, 1.2rem);
+  line-height: 1.6;
+  color: var(--color-muted);
+}
+/* Section headings within a page: the same lockup, smaller. */
+.page-heading {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 3.4vw, 3rem);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+.page-heading em {
+  font-family: var(--font-serif);
+  font-size: 0.86em;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--color-signal);
+}
+.page-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}

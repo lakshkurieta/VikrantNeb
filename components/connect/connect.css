@@ -1,0 +1,223 @@
+/*
+  Connect form (ConnectForm.tsx): a full-screen panel over the page, revealed by the theme switch's
+  circle. It scrolls on its own (data-lenis-prevent keeps Lenis off it) while the page is locked.
+*/
+.connect {
+  position: fixed;
+  inset: 0;
+  z-index: 95;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--color-canvas);
+  color: var(--color-fg);
+}
+.btn.connect__close {
+  position: fixed;
+  top: 20px;
+  right: var(--spacing-gutter);
+  z-index: 1;
+  background: var(--color-canvas);
+}
+.connect__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  gap: 48px clamp(40px, 6vw, 120px);
+  align-items: start;
+  max-width: 1340px;
+  min-height: 100%;
+  margin: 0 auto;
+  padding: max(110px, 14svh) var(--spacing-gutter) 64px;
+}
+
+/* ---- Left: the pitch ------------------------------------------------------------------------------ */
+.connect__title {
+  margin-top: 18px;
+  font-size: clamp(3rem, 6vw, 6.6rem);
+  font-weight: 800;
+  line-height: 0.88;
+  letter-spacing: -0.035em;
+  text-transform: uppercase;
+}
+.connect__title > span {
+  display: block;
+}
+.connect__title em {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: 0.86em;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--color-signal);
+}
+.connect__lead {
+  margin-top: 24px;
+  max-width: 44ch;
+  font-size: 16.5px;
+  line-height: 1.6;
+  color: var(--color-muted);
+}
+.connect__email {
+  display: inline-block;
+  margin-top: 28px;
+  font-family: var(--font-display);
+  font-size: clamp(1.3rem, 2vw, 1.8rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  background: linear-gradient(var(--color-signal), var(--color-signal)) no-repeat 0 100% / 100% 2px;
+  transition: color 250ms;
+}
+.connect__email:hover,
+.connect__email:focus-visible {
+  color: var(--color-signal);
+}
+.connect__socials {
+  display: flex;
+  gap: 10px;
+  margin-top: 28px;
+}
+.connect__socials a {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 3px;
+  background: var(--color-raised);
+  transition:
+    background 250ms,
+    color 250ms;
+}
+.connect__socials a:hover,
+.connect__socials a:focus-visible {
+  background: var(--color-fg);
+  color: var(--color-canvas);
+}
+.connect__socials svg {
+  width: 19px;
+  height: auto;
+}
+
+/* ---- Right: the form ------------------------------------------------------------------------------ */
+.connect__form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px 18px;
+}
+.connect__field {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+  border: 0;
+}
+.connect__field--wide {
+  grid-column: 1 / -1;
+}
+.connect__field > span,
+.connect__field legend {
+  font-size: 11px;
+  font-weight: 650;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+.connect__field i {
+  font-style: normal;
+  letter-spacing: 0.04em;
+  text-transform: none;
+  color: var(--color-subtle);
+}
+.connect__field legend {
+  margin-bottom: 10px;
+}
+.connect__field input,
+.connect__field textarea {
+  width: 100%;
+  padding: 15px 16px;
+  border: 1.5px solid transparent;
+  border-radius: 3px;
+  background: var(--color-raised);
+  font: inherit;
+  font-size: 16px;
+  color: var(--color-fg);
+  transition: border-color 250ms;
+}
+.connect__field textarea {
+  resize: vertical;
+  min-height: 140px;
+}
+.connect__field input:focus,
+.connect__field textarea:focus {
+  outline: none;
+  border-color: var(--color-signal);
+}
+.connect__topics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.connect__topic input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.connect__topic span {
+  display: inline-flex;
+  align-items: center;
+  height: 40px;
+  padding: 0 16px;
+  border: 1.5px solid color-mix(in srgb, var(--color-fg) 24%, transparent);
+  border-radius: 3px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 250ms,
+    border-color 250ms,
+    color 250ms;
+}
+.connect__topic input:checked + span {
+  border-color: var(--color-fg);
+  background: var(--color-fg);
+  color: var(--color-canvas);
+}
+.connect__topic input:focus-visible + span {
+  outline: 1px solid var(--color-signal);
+  outline-offset: 3px;
+}
+.connect__send {
+  grid-column: 1 / -1;
+  justify-self: start;
+  margin-top: 6px;
+}
+
+.connect__sent {
+  align-self: center;
+}
+.connect__sent-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 3vw, 2.8rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+.connect__sent p:not(.connect__sent-title) {
+  margin: 14px 0 28px;
+  max-width: 46ch;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--color-muted);
+}
+.connect__sent a {
+  color: var(--color-fg);
+  font-weight: 700;
+}
+
+@media (width < 1024px) {
+  .connect__inner {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (width < 640px) {
+  .connect__form {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

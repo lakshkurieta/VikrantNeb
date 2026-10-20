@@ -39,3 +39,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# 3D/image source files (build inputs for `npm run bust` / `npm run portrait`).
+# The optimized output that the site actually serves is committed in public/assets/.
+/assets/
+/execution-under-pressure.glb

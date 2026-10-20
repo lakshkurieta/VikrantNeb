@@ -1,0 +1,343 @@
+/*
+  Footer (Footer.tsx): a light, rounded panel lifted off the page, on every page. Built on the
+  theme tokens, so it is paper-light by default and follows the dark theme when switched.
+*/
+.footer {
+  padding: 0 clamp(10px, 1.2vw, 18px) clamp(10px, 1.2vw, 18px);
+  color: var(--color-fg);
+}
+.footer__inner {
+  position: relative;
+  overflow: clip;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: clamp(48px, 8svh, 96px) var(--spacing-gutter) 28px;
+  border-radius: clamp(28px, 3vw, 44px);
+  background: var(--color-raised);
+}
+/* A warm glow in one corner, so the panel reads as lit rather than flat. */
+.footer__inner::before {
+  content: "";
+  position: absolute;
+  top: -30%;
+  right: -10%;
+  width: 60%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--color-signal) 14%, transparent), transparent);
+  pointer-events: none;
+}
+
+/* ---- Sign-off and the book ------------------------------------------------------------------------ */
+.footer-lead {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  align-items: end;
+  gap: 40px clamp(32px, 5vw, 96px);
+}
+/* As wide as its headline, so the signature can end where "is the job." ends. */
+.footer-statement {
+  width: fit-content;
+  max-width: 100%;
+}
+.footer-statement__lines {
+  font-family: var(--font-display);
+  font-size: clamp(2.8rem, 6.4vw, 7.4rem);
+  font-weight: 800;
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+}
+.footer-statement__lines > span {
+  display: block;
+}
+/* The same lockup as the hero and every section title. */
+.footer-statement__lines em {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 0.86em;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--color-signal);
+}
+.footer-statement__sign-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 28px;
+  margin-top: 16px;
+}
+.footer-statement__accent {
+  font-size: clamp(1.3rem, 2vw, 1.9rem);
+  color: var(--color-muted);
+}
+.footer-statement__accent em {
+  font-family: var(--font-serif);
+  font-size: 1.15em;
+  color: var(--color-signal);
+}
+.footer-connect {
+  margin-top: 28px;
+}
+
+.footer-book {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 24px;
+  padding: 18px 24px 18px 18px;
+  border-radius: 28px;
+  background: var(--color-canvas);
+  box-shadow: 0 30px 60px -44px rgb(0 0 0 / 0.45);
+  transition: translate 600ms var(--ease-out-expo);
+}
+.footer-book:hover,
+.footer-book:focus-visible {
+  translate: 0 -4px;
+}
+.footer-book__cover {
+  display: block;
+  width: clamp(92px, 9vw, 128px);
+  rotate: -6deg;
+  transition: rotate 700ms var(--ease-out-expo);
+}
+.footer-book__cover img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+  box-shadow: 0 18px 30px -16px rgb(0 0 0 / 0.55);
+}
+.footer-book:hover .footer-book__cover {
+  rotate: 0deg;
+}
+.footer-book__text {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.footer-book__title {
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 1.8vw, 1.7rem);
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+}
+.footer-book__subtitle {
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  font-style: italic;
+  color: var(--color-muted);
+}
+.footer-book__buy {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  font-size: 14px;
+  font-weight: 700;
+}
+.footer-book__amazon {
+  --amazon-smile: #ff9900;
+  width: 74px;
+  height: auto;
+  translate: 0 3px;
+}
+
+/* ---- Columns ------------------------------------------------------------------------------------- */
+.footer-cols {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 5fr) minmax(0, 4fr);
+  gap: 40px clamp(32px, 5vw, 96px);
+  margin-top: clamp(56px, 10svh, 112px);
+}
+.footer-heading {
+  margin-bottom: 18px;
+  color: var(--color-muted);
+}
+.footer-nav {
+  display: grid;
+  gap: 4px;
+}
+.footer-nav__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: clamp(1.25rem, 1.7vw, 1.6rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  transition: color 250ms;
+}
+.footer-nav__link span {
+  opacity: 0;
+  translate: -8px 0;
+  color: var(--color-signal);
+  transition:
+    opacity 300ms,
+    translate 500ms var(--ease-out-expo);
+}
+.footer-nav__link:hover,
+.footer-nav__link:focus-visible {
+  color: var(--color-signal);
+}
+.footer-nav__link:hover span,
+.footer-nav__link:focus-visible span {
+  opacity: 1;
+  translate: 0 0;
+}
+.footer-latest {
+  display: grid;
+  gap: 18px;
+}
+.footer-latest__link {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.footer-latest__link .text-label {
+  color: var(--color-signal);
+}
+.footer-latest__title {
+  font-size: 16px;
+  font-weight: 650;
+  line-height: 1.35;
+  transition: color 250ms;
+}
+.footer-latest__link:hover .footer-latest__title,
+.footer-latest__link:focus-visible .footer-latest__title {
+  color: var(--color-signal);
+}
+
+/* Social: a pill each, the icon disc filling with the platform's own colour on hover. */
+.footer-socials {
+  display: grid;
+  gap: 12px;
+}
+.footer-social {
+  --brand: var(--color-fg);
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 18px 10px 10px;
+  border-radius: 4px;
+  background: var(--color-canvas);
+  transition:
+    translate 500ms var(--ease-out-expo),
+    box-shadow 400ms;
+}
+.footer-social[data-brand="youtube"] {
+  --brand: #ff0033;
+}
+.footer-social[data-brand="linkedin"] {
+  --brand: #0a66c2;
+}
+.footer-social__icon {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 3px;
+  background: var(--color-raised);
+  color: var(--color-fg);
+  transition:
+    background 300ms,
+    color 300ms,
+    rotate 600ms var(--ease-out-expo);
+}
+.footer-social__icon svg {
+  width: 21px;
+  height: auto;
+}
+.footer-social__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.footer-social__label {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 800;
+}
+.footer-social__handle {
+  font-size: 13px;
+  color: var(--color-muted);
+}
+.footer-social__arrow {
+  color: var(--color-muted);
+  transition:
+    translate 500ms var(--ease-out-expo),
+    color 250ms;
+}
+.footer-social:hover,
+.footer-social:focus-visible {
+  translate: 0 -3px;
+  box-shadow: 0 18px 34px -24px rgb(0 0 0 / 0.5);
+}
+.footer-social:hover .footer-social__icon,
+.footer-social:focus-visible .footer-social__icon {
+  background: var(--brand);
+  color: #fff;
+  rotate: -8deg;
+}
+.footer-social:hover .footer-social__arrow {
+  translate: 2px -2px;
+  color: var(--brand);
+}
+
+/* ---- Signature and the last line ---------------------------------------------------------------- */
+.footer-sign {
+  flex: none;
+  width: clamp(120px, 12vw, 200px);
+  margin-top: 6px;
+  rotate: -4deg;
+  color: var(--color-fg);
+}
+.footer-sign:not([data-signed]) {
+  opacity: 0;
+}
+.footer-bottom {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px 32px;
+  margin-top: clamp(48px, 9svh, 96px);
+  padding-top: 22px;
+  font-size: 13px;
+  color: var(--color-muted);
+}
+.footer-bottom__tagline {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  font-style: italic;
+}
+
+@media (width < 1024px) {
+  .footer-lead,
+  .footer-cols {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (width < 768px) {
+  .footer-book {
+    gap: 16px;
+    padding: 14px 18px 14px 14px;
+  }
+  .footer-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .footer-statement__sign-row {
+    flex-wrap: wrap;
+  }
+}
+@media (scripting: none) {
+  .footer-sign:not([data-signed]) {
+    opacity: 1;
+  }
+}

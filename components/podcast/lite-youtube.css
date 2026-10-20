@@ -1,0 +1,43 @@
+/* LiteYouTube.tsx: the cover with its play button, then the embed in its place. */
+.lite-youtube {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: clip;
+  border-radius: 6px;
+  background: var(--color-raised);
+}
+.lite-youtube iframe,
+.lite-youtube > button {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+.lite-youtube > button {
+  cursor: pointer;
+}
+.lite-youtube img {
+  object-fit: cover;
+  transition: scale 900ms var(--ease-out-expo);
+}
+.lite-youtube > button:hover img {
+  scale: 1.03;
+}
+.btn.lite-youtube__play {
+  position: absolute;
+  left: 20px;
+  bottom: 20px;
+}
+.lite-youtube > button:hover .lite-youtube__play::before {
+  scale: 1 1;
+}
+.lite-youtube > button:hover .lite-youtube__play {
+  color: var(--btn-wipe-fg);
+}
+@media (width < 640px) {
+  .btn.lite-youtube__play {
+    left: 12px;
+    bottom: 12px;
+  }
+}

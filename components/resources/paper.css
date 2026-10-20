@@ -1,0 +1,148 @@
+/*
+  A white paper as a stack of paper (PaperCover.tsx). The sheets are always paper white, in either
+  theme, like the book's pages. PaperTilt writes --rx/--ry (tilt) and --gx/--gy (sheen position).
+*/
+.paper {
+  --rx: 0deg;
+  --ry: 0deg;
+  --gx: 30%;
+  --gy: 20%;
+  position: relative;
+  display: block;
+  aspect-ratio: 900 / 1042;
+  perspective: 1400px;
+}
+.paper__body {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  transform: rotateX(var(--rx)) rotateY(var(--ry));
+  transition: transform 700ms var(--ease-out-expo);
+}
+.paper__sheet,
+.paper__cover {
+  position: absolute;
+  inset: 0;
+  border-radius: 6px;
+}
+.paper__sheet {
+  background: #fbf8f2;
+  box-shadow: 0 18px 40px -24px rgb(0 0 0 / 0.4);
+  transform-origin: 0% 100%;
+  transition:
+    rotate 800ms var(--ease-out-expo),
+    translate 800ms var(--ease-out-expo);
+}
+.paper__sheet--back {
+  rotate: 5deg;
+  translate: 14px 6px;
+  background: #f1ebe0;
+}
+.paper__sheet--mid {
+  rotate: 2.4deg;
+  translate: 7px 3px;
+}
+.paper__cover {
+  overflow: clip;
+  background: #fbf8f2;
+  box-shadow:
+    0 1px 0 rgb(0 0 0 / 0.04),
+    0 40px 70px -36px rgb(0 0 0 / 0.55);
+}
+.paper__cover img {
+  object-fit: cover;
+}
+/* A soft light that follows the cursor across the cover. */
+.paper__sheen {
+  position: absolute;
+  inset: 0;
+  border-radius: 6px;
+  background: radial-gradient(circle at var(--gx) var(--gy), rgb(255 255 255 / 0.42), transparent 55%);
+  opacity: 0;
+  mix-blend-mode: soft-light;
+  pointer-events: none;
+  transition: opacity 500ms;
+}
+
+/* Hover: the loose sheets fan out from under the cover. */
+:is(.paper:hover, a:hover > .paper, a:focus-visible > .paper) .paper__sheet--back {
+  rotate: 10deg;
+  translate: 30px 4px;
+}
+:is(.paper:hover, a:hover > .paper, a:focus-visible > .paper) .paper__sheet--mid {
+  rotate: 5deg;
+  translate: 16px 2px;
+}
+.paper:hover .paper__sheen {
+  opacity: 1;
+}
+
+/* Scrolling into view (inside a .reveal): the stack comes up tilted with its sheets gathered,
+   then straightens as the sheets fan out behind it. */
+.reveal .paper__body {
+  rotate: -7deg;
+  translate: 0 56px;
+  transition:
+    transform 700ms var(--ease-out-expo),
+    rotate 1300ms var(--ease-out-expo) var(--reveal-delay, 0ms),
+    translate 1300ms var(--ease-out-expo) var(--reveal-delay, 0ms);
+}
+.reveal:not([data-revealed]) .paper__sheet {
+  rotate: 0deg;
+  translate: 0 0;
+}
+/* The fan-out on arrival is an animation, not a transition, so hovering later isn't delayed. */
+.reveal[data-revealed] .paper__sheet {
+  animation: paper-gathered 1200ms var(--ease-out-expo) calc(var(--reveal-delay, 0ms) + 300ms) backwards;
+}
+@keyframes paper-gathered {
+  from {
+    rotate: 0deg;
+    translate: 0 0;
+  }
+}
+.reveal[data-revealed] .paper__body {
+  rotate: 0deg;
+  translate: 0 0;
+}
+
+@media (prefers-reduced-motion: reduce), (scripting: none) {
+  .paper__body,
+  .paper__sheet {
+    transition: none;
+    animation: none !important;
+  }
+  .reveal .paper__body {
+    rotate: 0deg;
+    translate: 0 0;
+  }
+}
+
+/* ---- Shared by the Resources section and each resource's page ---------------------------------- */
+
+/* ---- "Looking for something that isn’t here?" (both pages) --------------------------------------------------------------------------------- */
+.resources-more {
+  margin-top: clamp(72px, 12svh, 128px);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px 32px;
+  padding: clamp(24px, 3vw, 40px);
+  border-radius: 28px;
+  background: var(--color-raised);
+}
+.resources-more p {
+  font-size: clamp(1.2rem, 1.9vw, 1.8rem);
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+.resources-more__title {
+  font-family: var(--font-display);
+  font-weight: 800;
+}
+.resources-more em {
+  font-family: var(--font-serif);
+  font-style: italic;
+  color: var(--color-signal);
+}

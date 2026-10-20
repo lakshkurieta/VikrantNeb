@@ -1,26 +1,772 @@
 @import "tailwindcss";
+@import "lenis/dist/lenis.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ------------------------------------------------------------------------------------------------
+   Design tokens
+   Colours are named by role, not hue, so one attribute flips the whole site: dark is the default,
+   :root[data-theme="light"] below swaps the values. Utilities read the variables, so `bg-canvas`,
+   `text-fg/80` etc. follow the theme with no per-component work.
+   The particle portrait reads the same colours from lib/theme.ts — keep the two in step.
+   ------------------------------------------------------------------------------------------------ */
+@theme {
+  --color-canvas: #0b0a09;
+  --color-raised: #151311;
+  --color-fg: #efe9df;
+  --color-muted: #a29b90;
+  --color-subtle: #57524b;
+  --color-line: rgb(239 233 223 / 0.12);
+  --color-signal: #3a78ee;
+  /* Text on signal-coloured fills: white in both themes, as on the original site's blue. */
+  --color-on-signal: #ffffff;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+
+  --spacing-gutter: clamp(1.25rem, 4vw, 4rem);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-fraunces), ui-serif, Georgia, serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
-@media (prefers-color-scheme: dark) {
+/* ------------------------------------------------------------------------------------------------
+   Base
+   ------------------------------------------------------------------------------------------------ */
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --grain-opacity: 0.07;
+    /* The page background, resolved here at the root. Sections that force their own palette
+       (the black book stage) can still fade out onto it. */
+    --page-canvas: var(--color-canvas);
+  }
+
+  /* Pure white and press-black. Signal is the original site's blue (#1a60e0); dark mode's is a step
+     brighter so small labels still read on black. The particle portrait keeps its orange (lib/theme.ts). */
+  :root[data-theme="light"] {
+    color-scheme: light;
+    --color-canvas: #ffffff;
+    --color-raised: #f2f2f2;
+    --color-fg: #15130f;
+    --color-muted: #675f55;
+    --color-subtle: #8f877b;
+    --color-line: rgb(21 19 15 / 0.13);
+    --color-signal: #1a60e0;
+  }
+
+  html {
+    color-scheme: dark;
+    background: var(--color-canvas);
+  }
+
+  body {
+    background: var(--color-canvas);
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+    /* Manrope's 400 reads thin in small sizes on black; a touch heavier keeps body copy crisp. */
+    font-weight: 450;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    /* Pieces waiting off-screen (Writing's header before it slides in, the book's title) must never
+       widen the page: a sideways swipe would slide everything. `clip`, unlike `hidden`, keeps sticky
+       elements working. */
+    overflow-x: clip;
+    /* Copy deterrent (CopyGuard.tsx): text can't be selected and images can't be long-pressed to save. */
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+  }
+
+  /* Form fields stay editable and selectable. */
+  :is(input, textarea) {
+    -webkit-user-select: text;
+    user-select: text;
+  }
+
+  img {
+    -webkit-user-drag: none;
+  }
+
+  /* Printing (or saving as PDF) gives a blank page. */
+  @media print {
+    body {
+      display: none;
+    }
+  }
+
+  ::selection {
+    background: var(--color-signal);
+    color: var(--color-on-signal);
+  }
+
+  :focus-visible {
+    outline: 1px solid var(--color-signal);
+    outline-offset: 4px;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ------------------------------------------------------------------------------------------------
+   Type scale
+   ------------------------------------------------------------------------------------------------ */
+/* Set like every section title: heavy capitals, the joining words in the blue serif italic. */
+@utility text-hero {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 14vw, 5rem);
+  font-weight: 800;
+  line-height: 0.88;
+  letter-spacing: -0.035em;
+  text-transform: uppercase;
+
+  @media (width >= 48rem) {
+    font-size: clamp(3rem, min(5vw, 10svh), 6.6rem);
+  }
+}
+
+/* The line under it: plain and muted, the last word in the blue serif italic. */
+@utility text-counter {
+  font-family: var(--font-sans);
+  font-size: 1.25rem;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--color-muted);
+
+  @media (width >= 48rem) {
+    font-size: clamp(1.15rem, min(1.6vw, 3.2svh), 1.7rem);
+  }
+}
+
+.text-hero em,
+.text-counter em {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--color-signal);
+}
+.text-hero em {
+  font-size: 0.86em;
+}
+.text-counter em {
+  font-size: 1.15em;
+}
+
+@utility text-label {
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+/* ------------------------------------------------------------------------------------------------
+   Intro choreography
+   CSS rather than JS on purpose: these run on the compositor, so they stay smooth while the main
+   thread is busy hydrating and compiling the particle shaders. Delays come from --delay (ms) and
+   count from the moment the loader lifts: everything waits, paused, until :root[data-intro].
+   ------------------------------------------------------------------------------------------------ */
+@keyframes intro-rise {
+  from {
+    transform: translate3d(0, 108%, 0) rotate(2deg);
+  }
+  to {
+    transform: translate3d(0, 0, 0) rotate(0);
+  }
+}
+
+@keyframes intro-fade {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 0.9rem, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes intro-draw {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes signature-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes loader-progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes scroll-cue {
+  0% {
+    transform: translate3d(0, -100%, 0);
+  }
+  60%,
+  100% {
+    transform: translate3d(0, 100%, 0);
+  }
+}
+
+@layer components {
+  /* Masked line: the outer span clips, the inner span rises. Padding keeps descenders (j, y) in. */
+  .intro-line {
+    display: block;
+    overflow: clip;
+    padding-bottom: 0.14em;
+    margin-bottom: -0.14em;
+  }
+  .intro-line > span {
+    display: block;
+    transform-origin: 0 100%;
+    animation: intro-rise 1.4s var(--ease-out-expo) both;
+    animation-delay: calc(var(--delay, 0) * 1ms);
+  }
+
+  .intro-fade {
+    animation: intro-fade 1.2s var(--ease-out-expo) both;
+    animation-delay: calc(var(--delay, 0) * 1ms);
+  }
+
+  .intro-draw {
+    transform-origin: 0 50%;
+    animation: intro-draw 1.6s var(--ease-in-out-quart) both;
+    animation-delay: calc(var(--delay, 0) * 1ms);
+  }
+
+  :root:not([data-intro]) :is(.intro-line > span, .intro-fade, .intro-draw) {
+    animation-play-state: paused;
+  }
+
+  /* Pen strokes in the signature's reveal mask (components/signature). Offset just past 1 so the
+     round cap does not leave a dot at the start of each stroke before it is drawn. */
+  .signature-stroke {
+    stroke-dasharray: 1 1.1;
+    stroke-dashoffset: 1.05;
+    animation: signature-draw var(--stroke-duration) cubic-bezier(0.45, 0.05, 0.35, 1) var(--stroke-delay) forwards;
+  }
+
+  .loader-progress {
+    transform: scaleX(0);
+    animation: loader-progress linear forwards;
+  }
+
+  /* The navigation bar's signature stays hidden until the loader's copy has landed on top of it. */
+  :root:not([data-intro="done"]) [data-signature-target] {
+    opacity: 0;
+  }
+
+  .scroll-cue::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--color-fg);
+    animation: scroll-cue 2.4s var(--ease-in-out-quart) infinite;
+  }
+
+  /* Static film grain. A tiled SVG rasterises once, then only composites. Light noise on dark;
+     none on the white theme, so its white stays pure. */
+  .grain {
+    opacity: var(--grain-opacity);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+}
+
+:root[data-theme="light"] .grain {
+  display: none;
+}
+
+/* ------------------------------------------------------------------------------------------------
+   Navigation (components/layout/Navbar.tsx)
+   Open and transparent at the top of the page; once scrolled it condenses into a solid capsule.
+   ------------------------------------------------------------------------------------------------ */
+.nav-header {
+  position: fixed;
+  inset-inline: 0;
+  top: 0;
+  z-index: 50;
+  padding: 14px var(--spacing-gutter) 0;
+  /* Only the bar itself takes clicks; the strip around it stays transparent to the page. */
+  pointer-events: none;
+  transition: transform 700ms var(--ease-out-expo);
+}
+.nav-header[data-hidden="true"]:not([data-menu-open="true"]) {
+  transform: translate3d(0, calc(-100% - 24px), 0);
+}
+.nav-bar {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  max-width: 100%;
+  margin-inline: auto;
+  padding: 7px 7px 7px 16px;
+  border-radius: 6px;
+  transition:
+    max-width 900ms var(--ease-out-expo),
+    background-color 500ms var(--ease-out-quart),
+    box-shadow 500ms var(--ease-out-quart);
+}
+.nav-header[data-scrolled="true"] .nav-bar {
+  max-width: 1120px;
+  /* Near-opaque instead of a backdrop blur: the WebGL scenes beneath redraw every scroll frame,
+     and a live blur over them would have to be recomputed every frame too. */
+  background-color: color-mix(in srgb, var(--color-canvas) 94%, transparent);
+  box-shadow: 0 14px 44px -22px rgb(0 0 0 / 0.4);
+}
+.nav-brand {
+  display: block;
+  width: 128px;
+  /* Taller than the buttons: the overlap keeps the bar their height. */
+  margin-block: -12px;
+  color: var(--color-fg);
+}
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+/* Two lines that close into a cross while the menu is open. */
+.nav-menu-button__lines {
+  position: relative;
+  width: 16px;
+  height: 8px;
+}
+.nav-menu-button__lines::before,
+.nav-menu-button__lines::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 1.5px;
+  background: currentColor;
+  transition:
+    translate 500ms var(--ease-out-expo),
+    rotate 500ms var(--ease-out-expo);
+}
+.nav-menu-button__lines::before {
+  top: 0;
+}
+.nav-menu-button__lines::after {
+  bottom: 0;
+}
+.nav-menu-button[aria-expanded="true"] .nav-menu-button__lines::before {
+  translate: 0 3.25px;
+  rotate: 45deg;
+}
+.nav-menu-button[aria-expanded="true"] .nav-menu-button__lines::after {
+  translate: 0 -3.25px;
+  rotate: -45deg;
+}
+
+/* The menu: a signal-blue sheet across the top of the screen that unfolds out of the Menu button
+   over a dimmed page; its links rise in one after another. Navbar gives it the button's place and
+   size (--menu-*): folded, it is exactly the button; open, its content lines up with the bar, so
+   Close lands where Menu was. */
+.nav-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: rgb(10 9 8 / 0.28);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 500ms var(--ease-out-quart);
+}
+.nav-scrim[data-open] {
+  opacity: 1;
+  pointer-events: auto;
+}
+.nav-panel {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 61;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 40px 48px;
+  padding: var(--menu-top) var(--menu-right) 44px;
+  background: var(--color-signal);
+  color: var(--color-on-signal);
+  clip-path: inset(
+    var(--menu-top) var(--menu-right) calc(100% - var(--menu-top) - var(--menu-h))
+      calc(100% - var(--menu-right) - var(--menu-w)) round 3px
+  );
+  visibility: hidden;
+  transition:
+    clip-path 750ms var(--ease-in-out-quart),
+    visibility 0s 750ms;
+}
+.nav-panel[data-open] {
+  clip-path: inset(0 round 0 0 14px 14px);
+  visibility: visible;
+  transition: clip-path 800ms var(--ease-out-expo);
+}
+.nav-panel__top {
+  grid-column: 1 / -1;
+  align-self: start;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.nav-panel__top .btn-ink {
+  --btn-bg: var(--color-on-signal);
+  --btn-line: var(--color-on-signal);
+  --btn-fg: var(--color-signal);
+  --btn-wipe: #0b0a09;
+  --btn-wipe-fg: #fff;
+}
+.nav-panel__links li {
+  overflow: clip;
+}
+.nav-panel__link {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  padding: 2px 0;
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 6vw, 5.2rem);
+  font-weight: 700;
+  line-height: 1.04;
+  letter-spacing: -0.035em;
+  translate: 0 105%;
+  transition:
+    translate 700ms var(--ease-out-expo),
+    opacity 300ms;
+}
+.nav-panel[data-open] .nav-panel__link {
+  translate: 0 0;
+  transition-delay: calc(180ms + var(--i) * 60ms), 0ms;
+}
+.nav-panel__index {
+  min-width: 2.2em;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 650;
+  letter-spacing: 0.14em;
+  opacity: 0.6;
+}
+.nav-panel__arrow {
+  width: 0.5em;
+  height: auto;
+  margin-left: 4px;
+  opacity: 0;
+  translate: -12px 0;
+  transition:
+    opacity 300ms,
+    translate 500ms var(--ease-out-expo);
+}
+/* Hovering one link dims the rest; the hovered one slides and shows its arrow. */
+.nav-panel__links:hover .nav-panel__link:not(:hover) {
+  opacity: 0.45;
+}
+.nav-panel__link:hover .nav-panel__arrow,
+.nav-panel__link:focus-visible .nav-panel__arrow {
+  opacity: 1;
+  translate: 0 0;
+}
+.nav-panel__link[aria-current] .nav-panel__index::before {
+  content: "● ";
+}
+.nav-panel__foot {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px 48px;
+  font-size: 14px;
+  font-weight: 600;
+  opacity: 0;
+  transition: opacity 400ms;
+}
+.nav-panel[data-open] .nav-panel__foot {
+  opacity: 1;
+  transition-delay: 450ms;
+}
+.nav-panel__foot ul {
+  display: grid;
+  gap: 6px;
+  align-content: start;
+}
+.nav-panel__foot a,
+.nav-panel__connect {
+  cursor: pointer;
+  background: linear-gradient(currentColor, currentColor) no-repeat 0 100% / 0% 1.5px;
+  transition: background-size 500ms var(--ease-out-expo);
+}
+.nav-panel__foot a:hover,
+.nav-panel__connect:hover {
+  background-size: 100% 1.5px;
+}
+@media (width < 48rem) {
+  .nav-bar {
+    padding-left: 14px;
+  }
+  .nav-brand {
+    width: 104px;
+  }
+  .nav-panel {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto 1fr;
+    min-height: 100svh;
+  }
+}
+/* Phones: the logo needs the room, and Connect is in the menu too. */
+@media (width < 40rem) {
+  .nav-actions .nav-connect {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nav-panel,
+  .nav-panel__link {
+    transition: none !important;
+  }
+}
+
+/* ------------------------------------------------------------------------------------------------
+   Hero → book hand-off
+   The hero pins while the book section, pulled up over this track (see book-section.css), stages
+   its entrance: the hero fades out, the background title glides in, then the book rises.
+   ------------------------------------------------------------------------------------------------ */
+:root {
+  /* Scroll spent on the hero → book hand-off: fade out, title in, book in (BookSection). */
+  --handoff: 130svh;
+}
+.hero-pin {
+  position: relative;
+  height: calc(max(100svh, 640px) + var(--handoff));
+}
+.hero-pin__sticky {
+  position: sticky;
+  top: 0;
+  will-change: transform;
+}
+/* No scroll scrubbing (reduced motion, no JS, or the book fell back to a still): plain flow. */
+.hero-pin:has(~ .book-section[data-status="fallback"]) {
+  height: auto;
+}
+@media (prefers-reduced-motion: reduce), (scripting: none) {
+  .hero-pin {
+    height: auto;
+  }
+  .hero-pin__sticky {
+    position: relative;
+  }
+}
+
+/* ------------------------------------------------------------------------------------------------
+   Buttons, everywhere: square-cut, uppercase and tracked, with a panel that wipes across from the
+   left on hover. .btn is outlined; .btn-solid is signal, .btn-ink is ink; .btn-sm is the small size.
+   ------------------------------------------------------------------------------------------------ */
+.btn {
+  --btn-bg: transparent;
+  --btn-fg: var(--color-fg);
+  --btn-line: color-mix(in srgb, var(--color-fg) 24%, transparent);
+  --btn-wipe: var(--color-fg);
+  --btn-wipe-fg: var(--color-canvas);
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  height: 50px;
+  padding: 0 22px;
+  border: 1.5px solid var(--btn-line);
+  border-radius: 3px;
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 650;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    color 450ms var(--ease-out-expo),
+    border-color 450ms var(--ease-out-expo);
+}
+.btn::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  z-index: -1;
+  background: var(--btn-wipe);
+  scale: 0 1;
+  transform-origin: right;
+  transition: scale 550ms var(--ease-out-expo);
+}
+.btn:hover,
+.btn:focus-visible {
+  border-color: var(--btn-wipe);
+  color: var(--btn-wipe-fg);
+}
+.btn:hover::before,
+.btn:focus-visible::before {
+  scale: 1 1;
+  transform-origin: left;
+}
+.btn svg {
+  flex: none;
+  transition: translate 500ms var(--ease-out-expo);
+}
+.btn:hover svg {
+  translate: 3px 0;
+}
+.btn-solid {
+  --btn-bg: var(--color-signal);
+  --btn-fg: var(--color-on-signal);
+  --btn-line: var(--color-signal);
+}
+.btn-ink {
+  --btn-bg: var(--color-fg);
+  --btn-fg: var(--color-canvas);
+  --btn-line: var(--color-fg);
+  --btn-wipe: var(--color-signal);
+  --btn-wipe-fg: var(--color-on-signal);
+}
+.btn-sm {
+  gap: 10px;
+  height: 40px;
+  padding: 0 16px;
+  font-size: 11px;
+}
+
+/* ------------------------------------------------------------------------------------------------
+   Scroll reveal (components/motion/Reveal.tsx): content lifts in once, when it first scrolls into
+   view. Children can cascade after it with --reveal-step (ms per --i).
+   ------------------------------------------------------------------------------------------------ */
+.reveal,
+.reveal .reveal-item {
+  opacity: 0;
+  transform: translate3d(0, 34px, 0);
+  transition:
+    opacity 900ms var(--ease-out-quart) var(--reveal-delay, 0ms),
+    transform 1200ms var(--ease-out-expo) var(--reveal-delay, 0ms);
+}
+.reveal .reveal-item {
+  --reveal-item-delay: calc(var(--reveal-delay, 0ms) + 160ms + var(--i, 0) * var(--reveal-step, 90ms));
+  transform: translate3d(0, 22px, 0);
+  transition-delay: var(--reveal-item-delay);
+}
+/* Pop: rises further and settles with a slight overshoot. */
+.reveal--pop {
+  transform: translate3d(0, 90px, 0) scale(0.9);
+  transition:
+    opacity 600ms var(--ease-out-quart) var(--reveal-delay, 0ms),
+    transform 1000ms cubic-bezier(0.34, 1.45, 0.64, 1) var(--reveal-delay, 0ms);
+}
+.reveal[data-revealed],
+.reveal[data-revealed] .reveal-item {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce), (scripting: none) {
+  .reveal,
+  .reveal .reveal-item {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ------------------------------------------------------------------------------------------------
+   Theme switch (lib/theme-mode.ts)
+   With the View Transitions API the new theme is revealed by a circle growing out of the toggle;
+   the browser's default cross-fade is switched off so only that clip animates. Without it, every
+   colour eases across for the length of `.theme-fading`.
+   ------------------------------------------------------------------------------------------------ */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+:root.theme-fading,
+:root.theme-fading *,
+:root.theme-fading *::before,
+:root.theme-fading *::after {
+  transition-property: color, background-color, border-color, fill, stroke, outline-color !important;
+  transition-duration: 650ms !important;
+  transition-timing-function: var(--ease-in-out-quart) !important;
+  transition-delay: 0s !important;
+}
+
+/* Toggle icon: crescent moon in dark mode, sun in light. Transform-only, so it runs on the
+   compositor and stays crisp inside the view transition. */
+.theme-toggle__disc,
+.theme-toggle__rays {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.theme-toggle__disc,
+.theme-toggle__rays,
+.theme-toggle__bite {
+  transition:
+    transform 0.8s var(--ease-out-expo),
+    opacity 0.5s var(--ease-out-quart);
+}
+.theme-toggle__disc {
+  transform: scale(1.5);
+}
+.theme-toggle__rays {
+  transform: rotate(-90deg) scale(0.4);
+  opacity: 0;
+}
+.theme-toggle:hover .theme-toggle__disc {
+  transform: scale(1.5) rotate(-18deg);
+}
+:root[data-theme="light"] .theme-toggle__disc {
+  transform: scale(1);
+}
+:root[data-theme="light"] .theme-toggle__bite {
+  transform: translate(8px, -8px);
+}
+:root[data-theme="light"] .theme-toggle__rays {
+  transform: none;
+  opacity: 1;
+}
+:root[data-theme="light"] .theme-toggle:hover .theme-toggle__rays {
+  transform: rotate(45deg);
+}
+/* The colour fade must not flatten the icon's own motion. */
+:root.theme-fading :is(.theme-toggle__disc, .theme-toggle__rays, .theme-toggle__bite) {
+  transition-property: transform, opacity !important;
+  transition-duration: 0.8s !important;
+  transition-timing-function: var(--ease-out-expo) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-cue::after {
+    animation: none;
+  }
+
+  .signature-stroke {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+
+  .theme-toggle__disc,
+  .theme-toggle__rays,
+  .theme-toggle__bite {
+    transition: none;
+  }
 }

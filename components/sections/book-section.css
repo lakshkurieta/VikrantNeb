@@ -1,0 +1,360 @@
+/*
+  Book section: a pinned stage scrubbed by scroll (see BookSection.tsx and lib/webgl/BookScene.ts).
+
+  Variables written per frame by BookSection. The hand-off from the hero is staged:
+    --book-bg        the stage backdrop fades in as the hero fades out
+    --book-text-in   then the big background title fades up (its position: --book-marquee-x)
+    --book-in        then the book grows into place, centred
+    --book-ui-in     then the name lockup, Amazon badge and CTA settle in
+    --book-progress  0 → 1 across the book's own scroll, after the hand-off
+    --book-chrome    header, marquee and footer: out as the camera dives
+    --book-exit      the closing fade into the next section's background
+  It also writes --book-next-in on the section after it (studio.css), which is pulled up
+  over the stage's last screen (--book-stage-h) and arrives as the dive lands.
+*/
+:root {
+  --book-stage-h: max(100svh, 640px);
+}
+.book-section {
+  /* Follows the site theme: paper in light mode, black in dark. */
+  /* The ghosted tone of the big title behind the book; the Amazon logo shares it exactly. */
+  --book-ghost: color-mix(in srgb, var(--color-fg) 10%, transparent);
+
+  position: relative;
+  /* Pulled up over the hero's pin track (--handoff, set on :root): that stretch of scroll is the
+     hand-off, then come the book's own ~3.2 screens, then the stage's height. Transparent, so the
+     hero shows through until the stage fades in. */
+  height: calc(var(--book-stage-h) + var(--handoff) + 320svh);
+  margin-top: calc(-1 * (max(100svh, 640px) + var(--handoff)));
+  background: transparent;
+  color: var(--color-fg);
+  overflow-x: clip;
+  pointer-events: none;
+  /* The "Book" nav link lands after the hand-off, on the first frame of the book. */
+  scroll-margin-top: calc(-1 * var(--handoff));
+}
+.book-stage {
+  --book-bg: 0;
+  --book-text-in: 0;
+  --book-in: 0;
+  --book-ui-in: 0;
+  --book-progress: 0;
+  --book-chrome: 1;
+  --book-exit: 0;
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  min-height: 640px;
+  overflow: clip;
+  isolation: isolate;
+  /* Clicks pass through to the hero until the book has arrived (BookSection sets data-entered). */
+  pointer-events: none;
+}
+.book-stage[data-entered] {
+  pointer-events: auto;
+}
+/* The stage backdrop, faded with opacity (compositor-only) rather than by animating a colour. */
+.book-stage::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--color-canvas);
+  opacity: var(--book-bg);
+}
+.book-marquee {
+  position: absolute;
+  top: 50%;
+  left: 52%;
+  white-space: nowrap;
+  font-size: clamp(5rem, 17vw, 20rem);
+  line-height: 1;
+  letter-spacing: -0.045em;
+  font-weight: 700;
+  color: var(--book-ghost);
+  opacity: calc(var(--book-text-in) * var(--book-chrome));
+  /* One straight path, right to left at a constant speed, from its entrance to the end of the
+     book's scroll (BookSection computes it in px). */
+  transform: translate3d(var(--book-marquee-x, 0px), -50%, 0);
+  pointer-events: none;
+  will-change: transform;
+}
+.book-header,
+.book-amazon--corner,
+.book-footer,
+.book-track {
+  opacity: calc(var(--book-ui-in) * var(--book-chrome));
+  transform: translate3d(0, calc((1 - var(--book-ui-in)) * 18px), 0);
+}
+.book-header {
+  position: absolute;
+  top: max(100px, 13svh);
+  left: var(--spacing-gutter);
+  z-index: 2;
+}
+.book-header h2 {
+  margin-top: 14px;
+}
+/* The name, big and heavy; sized so it clears the book at every desktop width. */
+.book-name {
+  display: block;
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 3.9vw, 4.6rem);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+.book-byline {
+  display: block;
+  margin-top: 14px;
+  font-size: clamp(1.05rem, 1.5vw, 1.45rem);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--color-fg);
+}
+.book-byline em {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.12em;
+  letter-spacing: 0;
+  color: var(--color-signal);
+}
+/* "Exclusively available on" + Amazon wordmark: the heading in the label style, the logo in the
+   text colour with Amazon's own orange smile. */
+.book-amazon {
+  display: block;
+  width: fit-content;
+}
+/* Top-right corner, mirroring the name lockup on the left. */
+.book-amazon--corner {
+  position: absolute;
+  top: max(100px, 13svh);
+  right: var(--spacing-gutter);
+  z-index: 2;
+  text-align: right;
+}
+/* Letter-spacing trails the last letter; pull it back so the heading ends flush with the logo. */
+.book-amazon--corner .book-amazon__heading {
+  margin-right: -0.16em;
+}
+.book-amazon--corner .book-amazon__mark {
+  justify-content: flex-end;
+}
+.book-amazon--footer {
+  display: none;
+}
+.book-amazon__heading {
+  display: block;
+  color: var(--color-muted);
+  transition: color 300ms;
+}
+.book-amazon__mark {
+  display: flex;
+  margin-top: 12px;
+}
+.book-amazon__logo {
+  --amazon-smile: currentColor;
+  display: block;
+  width: clamp(112px, 9.5vw, 148px);
+  height: auto;
+  color: var(--book-ghost);
+  transition:
+    color 450ms var(--ease-out-quart),
+    transform 600ms var(--ease-out-expo);
+}
+.book-amazon__logo .amazon-smile {
+  transform-box: fill-box;
+  transform-origin: 0% 50%;
+  transition:
+    fill 450ms var(--ease-out-quart),
+    transform 700ms var(--ease-out-expo);
+}
+.book-amazon:hover .book-amazon__heading,
+.book-amazon:focus-visible .book-amazon__heading {
+  color: var(--color-fg);
+}
+.book-amazon:hover .book-amazon__logo,
+.book-amazon:focus-visible .book-amazon__logo {
+  --amazon-smile: #ff9900;
+  color: var(--color-fg);
+  transform: translate3d(0, -2px, 0);
+}
+.book-amazon:hover .amazon-smile,
+.book-amazon:focus-visible .amazon-smile {
+  transform: scaleX(1.06);
+}
+
+/* Full-bleed so the dive can fill the screen. Grows into place on arrival, never leaving centre. */
+.book-visual {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: var(--book-in);
+  transform: scale(calc(0.86 + 0.14 * var(--book-in)));
+  will-change: transform, opacity;
+}
+.book-canvas {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+}
+.book-canvas canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.book-poster {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  height: 58%;
+  width: auto;
+  max-width: 70%;
+  object-fit: contain;
+  transform: translate(-50%, -50%) rotate(-5deg);
+}
+.book-section[data-status="ready"] .book-canvas {
+  opacity: 1;
+}
+.book-section[data-status="ready"] .book-poster {
+  visibility: hidden;
+}
+.book-footer {
+  position: absolute;
+  bottom: 6%;
+  left: var(--spacing-gutter);
+  right: var(--spacing-gutter);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16px;
+  z-index: 3;
+}
+/* Phones: the badge and the buy button fill the row. */
+@media (width < 640px) {
+  .book-footer__more {
+    display: none;
+  }
+}
+.book-track {
+  position: absolute;
+  bottom: 0;
+  height: 2px;
+  width: 100%;
+  background: var(--color-line);
+}
+.book-track span {
+  display: block;
+  height: 100%;
+  background: var(--color-signal);
+  transform: scaleX(var(--book-progress));
+  transform-origin: left;
+}
+/* The dive ends on the first page (paper or black, by theme); this settles it on exactly the
+   next section's background. */
+.book-exit {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  background: var(--page-canvas);
+  opacity: var(--book-exit);
+  pointer-events: none;
+}
+.book-section[data-status="fallback"] {
+  height: auto;
+  margin-top: 0;
+  background: var(--color-canvas);
+  pointer-events: auto;
+}
+.book-section[data-status="fallback"] .book-stage {
+  position: relative;
+  --book-bg: 1 !important;
+  --book-text-in: 1 !important;
+  --book-in: 1 !important;
+  --book-ui-in: 1 !important;
+  --book-chrome: 1 !important;
+  --book-exit: 0 !important;
+  pointer-events: auto;
+}
+@media (width < 768px) {
+  :root {
+    --book-stage-h: max(100svh, 700px);
+  }
+  .book-section {
+    height: calc(var(--book-stage-h) + var(--handoff) + 280svh);
+  }
+  .book-stage {
+    min-height: 700px;
+  }
+  .book-header {
+    top: 90px;
+  }
+  .book-name {
+    font-size: clamp(2.1rem, 11vw, 3rem);
+  }
+  .book-byline {
+    margin-top: 10px;
+    font-size: 1rem;
+  }
+  .book-footer {
+    bottom: 5%;
+    justify-content: space-between;
+  }
+  /* The header has no room beside the book on phones, so the badge joins the CTA in the footer. */
+  .book-amazon--corner {
+    display: none;
+  }
+  .book-amazon--footer {
+    display: block;
+  }
+  .book-amazon--footer .book-amazon__heading {
+    font-size: 9px;
+  }
+  .book-amazon--footer .book-amazon__mark {
+    margin-top: 8px;
+  }
+  .book-amazon--footer .book-amazon__logo {
+    width: 92px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .book-section {
+    height: auto;
+    margin-top: 0;
+    background: var(--color-canvas);
+    pointer-events: auto;
+  }
+  .book-stage {
+    position: relative;
+    --book-bg: 1 !important;
+    --book-text-in: 1 !important;
+    --book-in: 1 !important;
+    --book-ui-in: 1 !important;
+    --book-chrome: 1 !important;
+    --book-exit: 0 !important;
+    pointer-events: auto;
+  }
+  .book-marquee,
+  .book-track {
+    display: none;
+  }
+}
+@media (scripting: none) {
+  .book-section {
+    height: auto;
+    margin-top: 0;
+    background: var(--color-canvas);
+    pointer-events: auto;
+  }
+  .book-stage {
+    position: relative;
+    --book-bg: 1 !important;
+    --book-text-in: 1 !important;
+    --book-in: 1 !important;
+    --book-ui-in: 1 !important;
+    --book-chrome: 1 !important;
+    --book-exit: 0 !important;
+    pointer-events: auto;
+  }
+}

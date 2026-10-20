@@ -1,0 +1,239 @@
+/*
+  The book (app/book): a product page. The cover stands in 3D beside the title (CSS only: the cover
+  and a block of page edges, turned in perspective); the back cover's pitch runs full width; the
+  readers' words fill a wall of cards.
+*/
+.book-page {
+  display: grid;
+  gap: clamp(72px, 12svh, 140px);
+}
+
+/* ---- Head --------------------------------------------------------------------------------------- */
+.book-page__head {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  gap: clamp(32px, 5vw, 80px);
+  align-items: center;
+}
+.book-page__title {
+  margin-top: 18px;
+}
+.book-page__title > span {
+  display: block;
+}
+.book-page__subtitle {
+  margin-top: 24px;
+  max-width: 30ch;
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 2vw, 1.75rem);
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+.book-page__stat {
+  margin: 20px 0 32px;
+  font-size: 15px;
+  color: var(--color-muted);
+}
+.book-page__stat strong {
+  color: var(--color-signal);
+}
+.book-page__amazon {
+  width: 64px;
+  height: auto;
+  margin-top: 4px;
+}
+
+.book3d {
+  perspective: 1800px;
+  padding: 24px 0;
+}
+.book3d__book {
+  position: relative;
+  width: min(380px, 72%);
+  margin: 0 auto;
+  transform-style: preserve-3d;
+  transform: rotateY(-26deg) rotateX(4deg);
+  transition: transform 1100ms var(--ease-out-expo);
+}
+.book3d:hover .book3d__book {
+  transform: rotateY(-10deg) rotateX(2deg);
+}
+.book3d__cover {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 2px 5px 5px 2px;
+  box-shadow: 0 60px 90px -40px rgb(0 0 0 / 0.55);
+}
+/* The fore-edge: a block of pages turned back from the cover's right side. */
+.book3d__pages {
+  position: absolute;
+  top: 1%;
+  right: 0;
+  width: 30px;
+  height: 98%;
+  transform-origin: right center;
+  transform: rotateY(90deg);
+  background: repeating-linear-gradient(to right, #f4f1ea 0 2px, #d9d2c5 2px 3px);
+}
+
+/* ---- The pitch: the back cover's headline, full width ------------------------------------------ */
+.book-pitch {
+  padding: clamp(36px, 6vw, 88px);
+  border-radius: 6px;
+  background: var(--color-fg);
+  color: var(--color-canvas);
+}
+.book-pitch p {
+  max-width: 24ch;
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 4.2vw, 3.8rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+}
+.book-pitch em {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--color-signal);
+}
+
+/* ---- Inside: the blurb beside the five reasons ------------------------------------------------- */
+.book-inside {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(32px, 5vw, 80px);
+}
+.book-inside__text {
+  display: grid;
+  gap: 1.1em;
+  align-content: start;
+  font-size: clamp(1.08rem, 1.4vw, 1.3rem);
+  line-height: 1.6;
+}
+.book-reasons {
+  display: grid;
+  margin-top: 24px;
+  border-top: 1px solid var(--color-line);
+}
+.book-reasons li {
+  padding: 18px 0;
+  border-bottom: 1px solid var(--color-line);
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--color-muted);
+}
+.book-reasons strong {
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--color-fg);
+}
+
+/* ---- Close: the last paragraph, then his line -------------------------------------------------- */
+.book-close {
+  display: grid;
+  gap: clamp(32px, 5svh, 56px);
+  justify-items: start;
+}
+.book-close__quote {
+  max-width: 40ch;
+  padding-left: clamp(18px, 2vw, 28px);
+  border-left: 3px solid var(--color-signal);
+}
+.book-close__quote > p {
+  font-family: var(--font-serif);
+  font-size: clamp(1.6rem, 3vw, 2.6rem);
+  font-style: italic;
+  line-height: 1.2;
+}
+.book-close__quote footer {
+  display: grid;
+  gap: 4px;
+  margin-top: 22px;
+  font-size: 14px;
+  color: var(--color-muted);
+}
+
+/* ---- Readers: a wall of cards ------------------------------------------------------------------ */
+.book-readers {
+  display: grid;
+  gap: clamp(28px, 4svh, 44px);
+}
+.book-readers ul {
+  columns: 3 280px;
+  column-gap: 16px;
+}
+.book-reader {
+  display: grid;
+  gap: 20px;
+  break-inside: avoid;
+  margin-bottom: 16px;
+  padding: 28px;
+  border-radius: 6px;
+  background: var(--color-raised);
+  font-size: 16px;
+  line-height: 1.6;
+}
+.book-reader__who {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13.5px;
+  color: var(--color-muted);
+}
+.book-reader__who img {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  object-fit: cover;
+}
+.book-reader__who span {
+  display: grid;
+  gap: 2px;
+}
+.book-reader__who strong {
+  font-size: 15px;
+  color: var(--color-fg);
+}
+
+/* ---- Details ----------------------------------------------------------------------------------- */
+.book-details {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: 28px;
+  padding-top: clamp(28px, 4svh, 44px);
+  border-top: 1px solid var(--color-line);
+}
+.book-details dl {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px clamp(32px, 5vw, 72px);
+}
+.book-details dt {
+  color: var(--color-signal);
+}
+.book-details dd {
+  margin-top: 6px;
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+@media (width < 1024px) {
+  .book-page__head,
+  .book-inside {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .book3d__book {
+    transition: none;
+  }
+}

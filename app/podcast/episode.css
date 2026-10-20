@@ -1,0 +1,136 @@
+/*
+  An episode's page (app/podcast/[slug]): the article layout (app/blogs/blog.css) plus the video,
+  the guest, and the transcript as speaker turns.
+*/
+.episode-video {
+  max-width: 1100px;
+  margin: clamp(36px, 6svh, 64px) auto 0;
+}
+.episode-listen {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.episode-about {
+  display: grid;
+  grid-template-columns: minmax(0, 680px) minmax(0, 320px);
+  justify-content: center;
+  gap: clamp(32px, 5vw, 80px);
+  margin-top: clamp(40px, 7svh, 72px);
+}
+.episode-about .blog-body {
+  margin: 0;
+}
+.episode-h2 {
+  margin: 1.6em 0 0.7em;
+  font-size: clamp(1.5rem, 2.4vw, 2.1rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  color: var(--color-fg);
+}
+.episode-about .episode-h2:first-child {
+  margin-top: 0;
+}
+.episode-learn {
+  display: grid;
+  gap: 10px;
+}
+.episode-learn li {
+  position: relative;
+  padding-left: 26px;
+}
+.episode-learn li::before {
+  content: "";
+  position: absolute;
+  top: 0.66em;
+  left: 4px;
+  width: 9px;
+  height: 9px;
+  background: var(--color-signal);
+  rotate: 45deg;
+}
+.episode-guest {
+  position: sticky;
+  top: max(100px, 12svh);
+  align-self: start;
+  padding: clamp(22px, 2.4vw, 30px);
+  border-radius: 8px;
+  background: var(--color-raised);
+}
+.episode-guest__name {
+  margin-top: 12px;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+.episode-guest__role {
+  margin-top: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-muted);
+}
+.episode-guest__bio {
+  margin-top: 14px;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* Transcript: each turn under its speaker (a signal square for the host, ink for the guest); the
+   guest's turns set a step in. */
+.episode-transcript {
+  max-width: 760px;
+  margin: clamp(56px, 10svh, 112px) auto 0;
+}
+.episode-transcript__heading {
+  margin: 2em 0 0.6em;
+  font-size: 1.3rem;
+  font-weight: 800;
+}
+.episode-turn {
+  --mark: var(--color-signal);
+  padding: 16px 0;
+}
+.episode-turn[data-role="Guest"] {
+  --mark: var(--color-fg);
+  padding-left: clamp(0px, 3vw, 36px);
+}
+.episode-turn__speaker {
+  margin-bottom: 8px;
+  color: var(--color-fg);
+}
+.episode-turn__speaker::before {
+  content: "";
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-right: 10px;
+  background: var(--mark);
+  vertical-align: 0.1em;
+}
+.episode-turn__speaker span {
+  margin-left: 8px;
+  color: var(--color-muted);
+}
+.episode-turn p:not(.episode-turn__speaker) {
+  font-size: 16.5px;
+  line-height: 1.7;
+  color: color-mix(in srgb, var(--color-fg) 86%, transparent);
+}
+.episode-turn p + p {
+  margin-top: 0.9em;
+}
+
+@media (width < 1024px) {
+  .episode-about {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .episode-guest {
+    position: relative;
+    top: auto;
+  }
+}

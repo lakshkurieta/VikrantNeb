@@ -1,0 +1,259 @@
+/*
+  Studio: the podcast and Writing pages, sharing Vikrant's 3D bust (Studio.tsx).
+
+  Arrival from the book. The studio is pulled up over the book stage's last screen
+  (--book-stage-h, book-section.css) and is transparent, so while the stage is still pinned it sits
+  on top of it, invisible. BookSection writes --book-next-in (0 → 1) as the dive lands and the
+  content fades up onto the paper; at 1 the studio is exactly in place and the stage unpins beneath
+  it. --book-next-lift (px still to rise) holds the bust at his final spot meanwhile.
+
+  The bust's rail spans the whole studio: he is pinned on the right beside the podcast, then glides
+  to the left as Writing pans in (StudioBust writes --studio-move 0 → 1 on `[data-studio-move]`),
+  and stays pinned there beside the articles. He never moves vertically.
+
+  Clicks pass through until the studio has arrived, and only reach the page he is on ([data-side]).
+  Without the scrubbed book (fallback, reduced motion, no script) the arrival is skipped.
+*/
+.studio {
+  --book-next-in: 0;
+  /* Just under the navbar: where each page's heading starts, and where the bust pins. */
+  --podcast-top: max(100px, 11svh);
+  --studio-gap: clamp(32px, 4vw, 72px);
+  /* The bust's share of the page, either side: 11 of 24 columns. */
+  --studio-columns: minmax(0, 13fr) minmax(0, 11fr);
+  position: relative;
+  z-index: 1;
+  /* Writing's header waits off to the right before it slides in: it must not widen the page. */
+  overflow-x: clip;
+  margin-top: calc(-1 * var(--book-stage-h));
+  color: var(--color-fg);
+  pointer-events: none;
+}
+.studio[data-arrived] .studio__bust,
+.studio[data-arrived][data-side="podcast"] :is(.podcast-heading, .podcast-body, .podcast-signup),
+.studio[data-arrived][data-side="writing"] :is(.writing-pin__head, .writing-list) {
+  pointer-events: auto;
+}
+
+/* ---- Arrival: one cascade off --book-next-in --------------------------------------------------
+   Each piece starts --stagger steps later and takes under half the arrival to land, so the first
+   screen builds up in order (eyebrow, bust, title lines, episodes) as the dive lands. Title lines
+   rise out of a mask; everything else fades up. */
+.studio [data-arrive],
+.podcast-title__line > span {
+  --t: clamp(0, calc((var(--book-next-in) - var(--stagger, 0) * 0.09) * 2.4), 1);
+}
+.studio [data-arrive] {
+  opacity: var(--t);
+  transform: translate3d(0, calc((1 - var(--t)) * 30px), 0);
+}
+
+/* ---- The rail and the bust ---------------------------------------------------------------------- */
+.studio__rail {
+  position: absolute;
+  inset: 0;
+  /* Above the pages (whose columns he never shares), below the sign-up band (z-index 3). */
+  z-index: 2;
+  padding: var(--podcast-top) var(--spacing-gutter) 0;
+  pointer-events: none;
+}
+.studio__rail-grid {
+  display: grid;
+  grid-template-columns: var(--studio-columns);
+  column-gap: var(--studio-gap);
+  max-width: 1440px;
+  height: 100%;
+  margin: 0 auto;
+}
+/* Pinned at the height each page starts at, for the whole studio. In the cross-over to Writing it
+   moves from the right column to the left one (13/11 of its own width plus the gap), dipping down
+   on the way (--studio-dip: 0 at both ends, 1 halfway). Otherwise it only cancels the arrival's
+   rise (--book-next-lift), so he holds still while the studio comes in. */
+.studio__bust {
+  --studio-move: 0;
+  grid-column: 2;
+  position: sticky;
+  top: var(--podcast-top);
+  height: clamp(460px, calc(100svh - var(--podcast-top) - 32px), 860px);
+  translate: calc(var(--studio-move) * -1 * (118.1818% + var(--studio-gap)))
+    calc(var(--studio-dip, 0) * 22svh - var(--book-next-lift, 0px));
+}
+/* He only fades in on arrival (no rise). */
+.studio [data-arrive].studio__bust {
+  transform: none;
+}
+.studio__model {
+  position: absolute;
+  inset: 0;
+}
+
+/* Where each page lives, in one row, huge and ghosted behind him at head height (same tone as the
+   book's background title): his head covers the middle, the mark and the word's ends show either
+   side. YouTube for the podcast, swapping to Writing's as he crosses. */
+.studio__ghost {
+  position: absolute;
+  top: 22%;
+  left: 50%;
+  display: flex;
+  align-items: center;
+  gap: 0.16em;
+  transform: translateX(-50%);
+  font-size: clamp(4rem, 7.2vw, 8.6rem);
+  color: color-mix(in srgb, var(--color-fg) 7%, transparent);
+  pointer-events: none;
+  user-select: none;
+}
+.studio__ghost svg {
+  flex: none;
+  width: 1.4em;
+  height: auto;
+}
+.studio__ghost span {
+  font-family: var(--font-display);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.05em;
+  white-space: nowrap;
+}
+.studio__ghost--podcast {
+  opacity: clamp(0, calc(1 - var(--studio-move) * 2.5), 1);
+}
+/* "BLOGS" is short, so his head would hide most of it at the YouTube row's size: it goes up to the
+   width of his column, in capitals and a shade darker, so the letters read either side of him. */
+.studio__ghost--writing {
+  top: 19%;
+  font-size: clamp(5.5rem, 12.6vw, 14.5rem);
+  color: color-mix(in srgb, var(--color-fg) 9%, transparent);
+  opacity: clamp(0, calc(var(--studio-move) * 2.5 - 1.5), 1);
+}
+.studio__ghost--writing span {
+  text-transform: uppercase;
+  letter-spacing: -0.04em;
+}
+/* Studio light behind his head and shoulders, on the dark theme; the white theme stays pure white. */
+.studio__glow {
+  position: absolute;
+  left: 50%;
+  top: 34%;
+  width: 92%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(
+    closest-side,
+    color-mix(in srgb, var(--color-signal) 18%, transparent),
+    color-mix(in srgb, var(--color-signal) 6%, transparent) 55%,
+    transparent
+  );
+  pointer-events: none;
+}
+:root[data-theme="light"] .studio__glow {
+  display: none;
+}
+
+/* ---- The model (StudioBust.tsx) ----------------------------------------------------------------- */
+.studio-bust__poster,
+.studio-bust__canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+/* The scan ends at his waist: dissolve that cut edge into the page (the live canvas fades itself,
+   BustScene.ts, so the browser never has to mask it every frame). */
+.studio-bust__poster {
+  mask-image: linear-gradient(to bottom, #000 66%, transparent 97%);
+  object-fit: contain;
+  transition: opacity 500ms var(--ease-out-quart);
+}
+.studio-bust__canvas {
+  opacity: 0;
+  cursor: grab;
+  /* Horizontal drags turn him; vertical swipes still scroll the page. */
+  touch-action: pan-y;
+  transition: opacity 700ms var(--ease-out-quart);
+}
+.studio-bust[data-dragging] .studio-bust__canvas {
+  cursor: grabbing;
+}
+.studio-bust__canvas canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.studio-bust[data-status="ready"] .studio-bust__canvas {
+  opacity: 1;
+}
+.studio-bust[data-status="ready"] .studio-bust__poster {
+  opacity: 0;
+}
+.studio-bust__hint {
+  position: absolute;
+  left: 50%;
+  bottom: 12%;
+  translate: -50% 0;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: var(--color-canvas);
+  color: var(--color-muted);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 400ms;
+}
+.studio-bust[data-status="ready"]:not([data-dragged]) .studio-bust__hint {
+  opacity: 1;
+}
+
+/* ---- One column: no rail, no pan. He stands at the top of the studio, above the podcast. ---------- */
+@media (width < 1024px) {
+  .studio__rail {
+    position: relative;
+    inset: auto;
+    padding-bottom: 0;
+  }
+  .studio__rail-grid {
+    display: block;
+    height: auto;
+  }
+  .studio__bust {
+    position: relative;
+    top: auto;
+    height: clamp(420px, 60svh, 620px);
+    translate: none;
+  }
+}
+@media (width < 768px) {
+  .studio__bust {
+    height: clamp(380px, 54svh, 500px);
+  }
+  .studio__ghost {
+    font-size: 12.5vw;
+  }
+}
+
+/* ---- Without the scrubbed book: no arrival ----------------------------------------------------- */
+.book-section[data-status="fallback"] ~ .studio {
+  --book-next-in: 1 !important;
+  --book-next-lift: 0px !important;
+  margin-top: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  .studio {
+    --book-next-in: 1 !important;
+    --book-next-lift: 0px !important;
+    margin-top: 0;
+  }
+}
+/* No script: no pan either. He stays at the top beside the podcast, and Writing sits in place. */
+@media (scripting: none) {
+  .studio {
+    --book-next-in: 1 !important;
+    --book-next-lift: 0px !important;
+    margin-top: 0;
+    pointer-events: auto;
+  }
+  .studio__bust {
+    position: relative;
+    top: auto;
+  }
+}

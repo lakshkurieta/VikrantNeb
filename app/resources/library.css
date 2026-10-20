@@ -1,0 +1,98 @@
+/*
+  The library (app/resources): the title across the top, then the papers side by side as tall
+  cards, each cover on its own raised panel. Each paper's reading page is app/resources/[slug].
+*/
+.library {
+  display: grid;
+  gap: clamp(64px, 10svh, 120px);
+}
+.library-head {
+  display: grid;
+  gap: 18px;
+}
+.library-title {
+  max-width: 16ch;
+}
+.library-title em {
+  display: block;
+}
+.library-head__about {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: 16px 48px;
+  margin-top: clamp(12px, 2svh, 24px);
+}
+.library-promise {
+  font-family: var(--font-display);
+  font-size: clamp(1.2rem, 1.8vw, 1.6rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.library-papers {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(48px, 7svh, 72px) clamp(20px, 3vw, 40px);
+  align-items: start;
+}
+.library-paper {
+  display: grid;
+  gap: 14px;
+}
+.library-paper__cover {
+  display: grid;
+  place-items: center;
+  margin-bottom: 14px;
+  padding: clamp(32px, 5vw, 64px);
+  border-radius: 6px;
+  background: var(--color-raised);
+}
+.library-paper__cover > * {
+  width: min(320px, 78%);
+}
+.library-paper__title {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 2.4vw, 2.2rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+.library-paper__title a {
+  transition: color 250ms;
+}
+.library-paper__title a:hover {
+  color: var(--color-signal);
+}
+.library-paper__kicker {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  font-style: italic;
+  color: var(--color-signal);
+}
+.library-paper__summary {
+  max-width: 52ch;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--color-muted);
+}
+.library-paper__learn {
+  display: grid;
+  gap: 8px;
+  margin: 4px 0 10px;
+  padding-left: 1.1em;
+  list-style: square;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.library-paper__learn li::marker {
+  color: var(--color-signal);
+}
+
+@media (width < 1024px) {
+  .library-papers {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

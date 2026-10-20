@@ -1,0 +1,171 @@
+/*
+  The show (app/podcast): the title across the top with what the show is beside it, the newest
+  episode playing in place, then every earlier one as a card. Each episode's own page is
+  app/podcast/[slug] (episode.css).
+*/
+.show {
+  display: grid;
+  gap: clamp(64px, 10svh, 120px);
+}
+
+/* ---- Head: the title, then what it is beside where to watch ---------------------------------- */
+.show-head {
+  display: grid;
+  gap: 18px;
+}
+.show-title {
+  font-size: clamp(3rem, 9vw, 9rem);
+}
+.show-head__about {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: 20px clamp(32px, 5vw, 80px);
+  align-items: start;
+  margin-top: clamp(16px, 3svh, 32px);
+}
+.show-head__about .page-actions {
+  grid-column: 2;
+}
+.show-tagline {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 2.4vw, 2.2rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+.show-tagline em {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  color: var(--color-signal);
+}
+
+/* ---- Latest: the video beside its details ------------------------------------------------------ */
+.show-latest {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
+  gap: clamp(28px, 4vw, 56px);
+  align-items: center;
+}
+.show-latest__text {
+  display: grid;
+  gap: 14px;
+  justify-items: start;
+}
+.show-latest__title {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 2.6vw, 2.4rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+.show-latest__guest {
+  font-weight: 700;
+}
+.show-latest__guest em {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  color: var(--color-signal);
+}
+.show-latest__about {
+  margin-bottom: 6px;
+  font-size: 15.5px;
+  line-height: 1.6;
+  color: var(--color-muted);
+}
+
+/* ---- Every episode ------------------------------------------------------------------------------ */
+.show-all {
+  display: grid;
+  gap: clamp(28px, 4svh, 44px);
+}
+.show-all ol {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(28px, 4svh, 44px) 20px;
+}
+.show-card {
+  display: grid;
+  gap: 10px;
+}
+.show-card__cover {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: clip;
+  margin-bottom: 6px;
+  border-radius: 6px;
+  background: var(--color-raised);
+}
+.show-card__cover img {
+  object-fit: cover;
+  transition: scale 900ms var(--ease-out-expo);
+}
+.show-card:hover .show-card__cover img {
+  scale: 1.04;
+}
+.show-card__meta {
+  color: var(--color-muted);
+}
+.show-card__title {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  transition: color 250ms;
+}
+.show-card:hover .show-card__title {
+  color: var(--color-signal);
+}
+.show-card__guest {
+  font-size: 14.5px;
+  color: var(--color-muted);
+}
+
+/* ---- Sign-up band ------------------------------------------------------------------------------ */
+.show-signup {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px 48px;
+  padding: clamp(28px, 4vw, 56px);
+  border-radius: 6px;
+  background: var(--color-signal);
+  color: var(--color-on-signal);
+}
+.show-signup__title {
+  font-family: var(--font-display);
+  font-size: clamp(1.7rem, 3.2vw, 3rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+.show-signup__body {
+  margin-top: 12px;
+  font-size: 16px;
+  opacity: 0.85;
+}
+/* On the blue band the solid button turns white. */
+.show-signup .btn-solid {
+  --btn-bg: var(--color-on-signal);
+  --btn-line: var(--color-on-signal);
+  --btn-fg: var(--color-signal);
+}
+
+@media (width < 1024px) {
+  .show-head__about,
+  .show-latest {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .show-head__about .page-actions {
+    grid-column: auto;
+  }
+  .show-all ol {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (width < 640px) {
+  .show-all ol {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

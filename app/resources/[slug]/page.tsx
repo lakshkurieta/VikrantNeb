@@ -11,6 +11,7 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { pad } from "@/lib/format";
 import { ConnectButton } from "@/components/connect/ConnectButton";
 import { PaperCover } from "@/components/resources/PaperCover";
+import { PaperExhibit } from "@/components/resources/Exhibits";
 import { ArrowRight, ArrowUp } from "@/components/ui/icons";
 import "../resource.css";
 
@@ -164,6 +165,22 @@ const anchor = (text: string) =>
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-|-$/g, "");
 
+/** A paper's inline marks: **bold**, [label](href) (outside links open in a new tab) and line breaks. */
+function rich(text: string) {
+  return text.split(/(\*\*[^*]+\*\*|\[[^\]]+\]\([^)]+\)|\n)/).map((part, i) => {
+    if (part === "\n") return <br key={i} />;
+    if (part.startsWith("**")) return <strong key={i}>{part.slice(2, -2)}</strong>;
+    const link = part.match(/^\[(.+)\]\((.+)\)$/);
+    if (!link) return part;
+    const away = link[2].startsWith("http");
+    return (
+      <a key={i} href={link[2]} {...(away && { target: "_blank", rel: "noreferrer" })}>
+        {link[1]}
+      </a>
+    );
+  });
+}
+
 /** One block of a paper (content/papers.ts) as reading markup. */
 function renderBlock(block: PaperBlock, i: number, all: readonly PaperBlock[]) {
   switch (block.t) {
@@ -178,7 +195,13 @@ function renderBlock(block: PaperBlock, i: number, all: readonly PaperBlock[]) {
     case "h4":
       return <h4 key={i}>{block.text}</h4>;
     case "p":
-      return <p key={i}>{block.text}</p>;
+      return <p key={i}>{rich(block.text)}</p>;
+    case "note":
+      return (
+        <p key={i} className="paper-note">
+          {rich(block.text)}
+        </p>
+      );
     case "by":
       return null;
     case "quote":
@@ -193,7 +216,7 @@ function renderBlock(block: PaperBlock, i: number, all: readonly PaperBlock[]) {
         <aside key={i} className="paper-callout">
           {block.title && <p className="paper-callout__title text-label">{block.title}</p>}
           {block.text.map((text, j) => (
-            <p key={j}>{text}</p>
+            <p key={j}>{rich(text)}</p>
           ))}
         </aside>
       );
@@ -203,18 +226,59 @@ function renderBlock(block: PaperBlock, i: number, all: readonly PaperBlock[]) {
           <span className="paper-item__n">{block.n}</span>
           <div>
             {block.title && <p className="paper-item__title">{block.title}</p>}
-            <p>{block.text}</p>
+            <p>{rich(block.text)}</p>
           </div>
         </div>
       );
     case "list":
+    case "ul":
       return (
-        <ul key={i} className="paper-checklist">
+        <ul key={i} className={block.t === "list" ? "paper-checklist" : "paper-list"}>
           {block.items.map((item) => (
-            <li key={item}>{item}</li>
+            <li key={item}>{rich(item)}</li>
           ))}
         </ul>
       );
+    case "steps":
+      return (
+        <ol key={i} className="paper-steps">
+          {block.items.map((step, j) => (
+            <li key={j}>
+              <span className="text-label text-signal">{step.n}</span>
+              <strong>{step.title}</strong>
+              {step.text}
+            </li>
+          ))}
+        </ol>
+      );
+    case "table":
+      return (
+        <div key={i} className="paper-table">
+          {block.title && <p className="text-label text-signal">{block.title}</p>}
+          <table>
+            {block.head && (
+              <thead>
+                <tr>
+                  {block.head.map((cell, c) => (
+                    <th key={c}>{cell}</th>
+                  ))}
+                </tr>
+              </thead>
+            )}
+            <tbody>
+              {block.rows.map((row, r) => (
+                <tr key={r}>
+                  {row.map((cell, c) => (
+                    <td key={c}>{rich(cell)}</td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      );
+    case "exhibit":
+      return <PaperExhibit key={i} id={block.id} />;
     case "figure":
       return (
         <figure key={i} className="paper-figure">

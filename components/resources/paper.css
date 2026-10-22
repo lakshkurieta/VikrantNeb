@@ -64,19 +64,6 @@
   transition: opacity 500ms;
 }
 
-/* Hover: the loose sheets fan out from under the cover. */
-:is(.paper:hover, a:hover > .paper, a:focus-visible > .paper) .paper__sheet--back {
-  rotate: 10deg;
-  translate: 30px 4px;
-}
-:is(.paper:hover, a:hover > .paper, a:focus-visible > .paper) .paper__sheet--mid {
-  rotate: 5deg;
-  translate: 16px 2px;
-}
-.paper:hover .paper__sheen {
-  opacity: 1;
-}
-
 /* Scrolling into view (inside a .reveal): the stack comes up tilted with its sheets gathered,
    then straightens as the sheets fan out behind it. */
 .reveal .paper__body {
@@ -145,4 +132,21 @@
   font-family: var(--font-serif);
   font-style: italic;
   color: var(--color-signal);
+}
+
+/* Hover effects only where a hover-capable pointer exists: on touch these states latch
+   on tap and stay stuck until you tap somewhere else. */
+@media (hover: hover) and (pointer: fine) {
+  /* Hover: the loose sheets fan out from under the cover. */
+  :is(.paper:hover, a:hover > .paper, a:focus-visible > .paper) .paper__sheet--back {
+    rotate: 10deg;
+    translate: 30px 4px;
+  }
+  :is(.paper:hover, a:hover > .paper, a:focus-visible > .paper) .paper__sheet--mid {
+    rotate: 5deg;
+    translate: 16px 2px;
+  }
+  .paper:hover .paper__sheen {
+    opacity: 1;
+  }
 }

@@ -15,7 +15,7 @@ const WIDTH = 1200;
  * launch line at its foot, both centred. The middle is left as open paper on purpose, because
  * that's where the camera dives in, so the dive lands on clean paper rather than a giant letter.
  *
- * Uses the site's own font (Manrope via next/font), read from the body's computed style.
+ * Uses the site's own font (Grift, via next/font), read from the body's computed style.
  */
 export class FirstPage {
   readonly texture: CanvasTexture;

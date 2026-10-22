@@ -99,9 +99,7 @@
   object-fit: cover;
   transition: scale 900ms var(--ease-out-expo);
 }
-.show-card:hover .show-card__cover img {
-  scale: 1.04;
-}
+
 .show-card__meta {
   color: var(--color-muted);
 }
@@ -113,9 +111,7 @@
   letter-spacing: -0.015em;
   transition: color 250ms;
 }
-.show-card:hover .show-card__title {
-  color: var(--color-signal);
-}
+
 .show-card__guest {
   font-size: 14.5px;
   color: var(--color-muted);
@@ -167,5 +163,16 @@
 @media (width < 640px) {
   .show-all ol {
     grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Hover effects only where a hover-capable pointer exists: on touch these states latch
+   on tap and stay stuck until you tap somewhere else. */
+@media (hover: hover) and (pointer: fine) {
+  .show-card:hover .show-card__cover img {
+    scale: 1.04;
+  }
+  .show-card:hover .show-card__title {
+    color: var(--color-signal);
   }
 }

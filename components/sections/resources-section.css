@@ -72,6 +72,9 @@
   gap: clamp(36px, 6vw, 112px);
 }
 /* Every other paper sits on the right (the columns swap with it). */
+.btn.resources-show-all {
+  margin-top: clamp(40px, 7svh, 72px);
+}
 .resources-list > li:nth-child(even) .resource-row {
   grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
 }
@@ -96,10 +99,7 @@
   background: linear-gradient(currentColor, currentColor) no-repeat 0 100% / 0% 2px;
   transition: background-size 600ms var(--ease-out-expo);
 }
-.resource-row__title a:hover,
-.resource-row__title a:focus-visible {
-  background-size: 100% 2px;
-}
+
 .resource-row__kicker {
   margin-top: 14px;
   font-family: var(--font-serif);
@@ -138,5 +138,14 @@
 @media (width < 768px) {
   .resources-title {
     font-size: clamp(2.6rem, 13vw, 4rem);
+  }
+}
+
+/* Hover effects only where a hover-capable pointer exists: on touch these states latch
+   on tap and stay stuck until you tap somewhere else. */
+@media (hover: hover) and (pointer: fine) {
+  .resource-row__title a:hover,
+  .resource-row__title a:focus-visible {
+    background-size: 100% 2px;
   }
 }

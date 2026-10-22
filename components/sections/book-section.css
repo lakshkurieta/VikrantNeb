@@ -170,20 +170,6 @@
     fill 450ms var(--ease-out-quart),
     transform 700ms var(--ease-out-expo);
 }
-.book-amazon:hover .book-amazon__heading,
-.book-amazon:focus-visible .book-amazon__heading {
-  color: var(--color-fg);
-}
-.book-amazon:hover .book-amazon__logo,
-.book-amazon:focus-visible .book-amazon__logo {
-  --amazon-smile: #ff9900;
-  color: var(--color-fg);
-  transform: translate3d(0, -2px, 0);
-}
-.book-amazon:hover .amazon-smile,
-.book-amazon:focus-visible .amazon-smile {
-  transform: scaleX(1.06);
-}
 
 /* Full-bleed so the dive can fill the screen. Grows into place on arrival, never leaving centre. */
 .book-visual {
@@ -356,5 +342,24 @@
     --book-chrome: 1 !important;
     --book-exit: 0 !important;
     pointer-events: auto;
+  }
+}
+
+/* Hover effects only where a hover-capable pointer exists: on touch these states latch
+   on tap and stay stuck until you tap somewhere else. */
+@media (hover: hover) and (pointer: fine) {
+  .book-amazon:hover .book-amazon__heading,
+  .book-amazon:focus-visible .book-amazon__heading {
+    color: var(--color-fg);
+  }
+  .book-amazon:hover .book-amazon__logo,
+  .book-amazon:focus-visible .book-amazon__logo {
+    --amazon-smile: #ff9900;
+    color: var(--color-fg);
+    transform: translate3d(0, -2px, 0);
+  }
+  .book-amazon:hover .amazon-smile,
+  .book-amazon:focus-visible .amazon-smile {
+    transform: scaleX(1.06);
   }
 }

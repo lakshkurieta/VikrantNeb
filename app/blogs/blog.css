@@ -48,16 +48,11 @@
   color: var(--color-muted);
   transition: color 250ms;
 }
-.blog-back:hover,
-.blog-back:focus-visible {
-  color: var(--color-fg);
-}
+
 .blog-back span {
   transition: translate 400ms var(--ease-out-expo);
 }
-.blog-back:hover span {
-  translate: -4px 0;
-}
+
 .blog-meta {
   color: var(--color-muted);
 }
@@ -176,10 +171,7 @@
   font-weight: 600;
   transition: color 250ms;
 }
-.blog-more__all:hover,
-.blog-more__all:focus-visible {
-  color: var(--color-signal);
-}
+
 .blog-more__grid,
 .blogs-grid {
   display: grid;
@@ -205,9 +197,7 @@
   object-fit: cover;
   transition: scale 900ms var(--ease-out-expo);
 }
-.blog-card:hover .blog-card__cover img {
-  scale: 1.04;
-}
+
 .blog-card__meta {
   margin-top: 6px;
   color: var(--color-muted);
@@ -220,9 +210,7 @@
   letter-spacing: -0.02em;
   transition: color 250ms;
 }
-.blog-card:hover .blog-card__title {
-  color: var(--color-signal);
-}
+
 .blog-card__excerpt {
   font-size: 15px;
   line-height: 1.55;
@@ -296,5 +284,27 @@
   .blog-card__cover img,
   .blog-back span {
     transition: none;
+  }
+}
+
+/* Hover effects only where a hover-capable pointer exists: on touch these states latch
+   on tap and stay stuck until you tap somewhere else. */
+@media (hover: hover) and (pointer: fine) {
+  .blog-back:hover,
+  .blog-back:focus-visible {
+    color: var(--color-fg);
+  }
+  .blog-back:hover span {
+    translate: -4px 0;
+  }
+  .blog-more__all:hover,
+  .blog-more__all:focus-visible {
+    color: var(--color-signal);
+  }
+  .blog-card:hover .blog-card__cover img {
+    scale: 1.04;
+  }
+  .blog-card:hover .blog-card__title {
+    color: var(--color-signal);
   }
 }

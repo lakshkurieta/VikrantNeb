@@ -23,10 +23,7 @@
   color: var(--color-muted);
   transition: color 250ms;
 }
-.page-back:hover,
-.page-back:focus-visible {
-  color: var(--color-fg);
-}
+
 .page-lead {
   max-width: 52ch;
   font-size: clamp(1.05rem, 1.3vw, 1.2rem);
@@ -55,4 +52,13 @@
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
+}
+
+/* Hover effects only where a hover-capable pointer exists: on touch these states latch
+   on tap and stay stuck until you tap somewhere else. */
+@media (hover: hover) and (pointer: fine) {
+  .page-back:hover,
+  .page-back:focus-visible {
+    color: var(--color-fg);
+  }
 }

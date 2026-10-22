@@ -52,6 +52,16 @@ export function LinkedInMark(props: IconProps) {
   );
 }
 
+/** An envelope, in `currentColor`. */
+export function MailMark(props: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden width={22} height={22} {...props}>
+      <rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" strokeWidth={1.8} />
+      <path d="m4 7 8 6 8-6" stroke="currentColor" strokeWidth={1.8} strokeLinejoin="round" />
+    </svg>
+  );
+}
+
 export function ArrowUp(props: IconProps) {
   return (
     <svg viewBox="0 0 16 16" fill="none" aria-hidden width={14} height={14} {...props}>

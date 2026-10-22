@@ -56,9 +56,7 @@
   transform: rotateY(-26deg) rotateX(4deg);
   transition: transform 1100ms var(--ease-out-expo);
 }
-.book3d:hover .book3d__book {
-  transform: rotateY(-10deg) rotateX(2deg);
-}
+
 .book3d__cover {
   display: block;
   width: 100%;
@@ -235,5 +233,13 @@
 @media (prefers-reduced-motion: reduce) {
   .book3d__book {
     transition: none;
+  }
+}
+
+/* Hover effects only where a hover-capable pointer exists: on touch these states latch
+   on tap and stay stuck until you tap somewhere else. */
+@media (hover: hover) and (pointer: fine) {
+  .book3d:hover .book3d__book {
+    transform: rotateY(-10deg) rotateX(2deg);
   }
 }

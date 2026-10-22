@@ -21,23 +21,30 @@
   object-fit: cover;
   transition: scale 900ms var(--ease-out-expo);
 }
-.lite-youtube > button:hover img {
-  scale: 1.03;
-}
+
 .btn.lite-youtube__play {
   position: absolute;
   left: 20px;
   bottom: 20px;
 }
-.lite-youtube > button:hover .lite-youtube__play::before {
-  scale: 1 1;
-}
-.lite-youtube > button:hover .lite-youtube__play {
-  color: var(--btn-wipe-fg);
-}
+
 @media (width < 640px) {
   .btn.lite-youtube__play {
     left: 12px;
     bottom: 12px;
+  }
+}
+
+/* Hover effects only where a hover-capable pointer exists: on touch these states latch
+   on tap and stay stuck until you tap somewhere else. */
+@media (hover: hover) and (pointer: fine) {
+  .lite-youtube > button:hover img {
+    scale: 1.03;
+  }
+  .lite-youtube > button:hover .lite-youtube__play::before {
+    scale: 1 1;
+  }
+  .lite-youtube > button:hover .lite-youtube__play {
+    color: var(--btn-wipe-fg);
   }
 }

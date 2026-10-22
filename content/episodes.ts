@@ -17,7 +17,6 @@ export type Episode = {
   about: readonly string[];
   learn: readonly string[];
   youtube: string;
-  spotify?: string;
   cover: string;
 };
 
@@ -126,7 +125,6 @@ export const episodes: readonly Episode[] = [
       "How to build a business that creates lasting value beyond its services",
     ],
     youtube: "KvkdSc5IGWk",
-    spotify: "https://open.spotify.com/episode/1pBBjTN0zUPL4ExPk6y4nj",
     cover: "/assets/podcast/ep-07.webp",
   },
   {
@@ -151,7 +149,6 @@ export const episodes: readonly Episode[] = [
       "A practical framework for backup carrier, forwarder, and port relationships that hold under pressure",
     ],
     youtube: "U9k0ssLMS-4",
-    spotify: "https://open.spotify.com/episode/7qd1FwrOKSdh694xF2fKJI",
     cover: "/assets/podcast/ep-06.webp",
   },
   {
@@ -173,7 +170,6 @@ export const episodes: readonly Episode[] = [
       "What separates paper resilience from operational resilience",
     ],
     youtube: "v15DY2RRINk",
-    spotify: "https://open.spotify.com/episode/3uvSsfbHsgpbSMeTQ8htgU",
     cover: "/assets/podcast/ep-05.webp",
   },
   {
@@ -197,7 +193,6 @@ export const episodes: readonly Episode[] = [
       "How growing organizations can build stronger accountability and execution culture",
     ],
     youtube: "IKiY9-IlDmE",
-    spotify: "https://open.spotify.com/episode/5eSJ3NcRPanhEzToY1eOWK",
     cover: "/assets/podcast/ep-04.webp",
   },
   {
@@ -219,7 +214,6 @@ export const episodes: readonly Episode[] = [
       "How to recognize the warning signs before the damage is done",
     ],
     youtube: "r4-cchQ3EgA",
-    spotify: "https://open.spotify.com/episode/7y5F2XGlXdQkJT6VkPkrHU",
     cover: "/assets/podcast/ep-03.webp",
   },
   {
@@ -241,7 +235,6 @@ export const episodes: readonly Episode[] = [
       "The signals that your pricing model needs to be rebuilt",
     ],
     youtube: "SVC60gXdTd8",
-    spotify: "https://open.spotify.com/episode/3nb8eBI3wrv7KuqsnLcZSW",
     cover: "/assets/podcast/ep-02.webp",
   },
   {
@@ -263,11 +256,13 @@ export const episodes: readonly Episode[] = [
       "How the conversation around execution has shifted in recent years",
     ],
     youtube: "dGFww-6aKrE",
-    spotify: "https://open.spotify.com/episode/2SiIlTuu8QNQBk49Wx0DLI",
     cover: "/assets/podcast/ep-01.webp",
   },
 ];
 
 export const episodeHref = (slug: string) => `/podcast/${slug}`;
+
+/** The guest's headshot: from the old site's episode page, or cropped from the episode's thumbnail. Add one per new episode. */
+export const guestPhoto = (episode: Episode) => `/assets/podcast/guests/${episode.slug}.webp`;
 
 export const findEpisode = (slug: string) => episodes.find((episode) => episode.slug === slug);

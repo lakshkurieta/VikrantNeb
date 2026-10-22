@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
+import type { CSSProperties } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
-import { episodeHref, episodes, findEpisode } from "@/content/episodes";
+import { episodeHref, episodes, findEpisode, guestPhoto } from "@/content/episodes";
 import { podcast } from "@/content/site";
 import { transcripts } from "@/content/transcripts";
 import { episodeGraph } from "@/lib/schema";
@@ -32,9 +33,10 @@ export async function generateMetadata({ params }: PageProps<"/podcast/[slug]">)
 }
 
 /**
- * One episode of Execution at Scale: the video, what it covers, the guest, then the full transcript
- * where there is one. Shares the article layout (app/blogs/blog.css). Server component; the slug is
- * read inside Suspense (Next's instant-navigation rule, as for articles).
+ * One episode of Execution at Scale: the video, title and brief pinned on the left while what
+ * you'll learn, the guest and the full transcript (where there is one) scroll past on the right. Type from the
+ * article layout (app/blogs/blog.css). Server component; the slug is read inside Suspense (Next's
+ * instant-navigation rule, as for articles).
  */
 export default function EpisodePage({ params }: PageProps<"/podcast/[slug]">) {
   return (
@@ -58,29 +60,30 @@ async function Episode({ params }: { params: PageProps<"/podcast/[slug]">["param
   return (
     <>
       <JsonLd data={episodeGraph(episode)} />
-      <article>
-        <header className="blog-head">
-          <Link className="blog-back" href="/#latest-episode">
-            <span aria-hidden>←</span> {show}
-          </Link>
-          <p className="blog-meta text-label">
-            <span className="text-signal">Episode {pad(episode.number)}</span> · {episode.duration} ·{" "}
-            <time dateTime={episode.date}>{formatDate(episode.date)}</time>
-          </p>
-          <h1 className="blog-title">{episode.title}</h1>
-          <p className="blog-byline">
-            <em>with</em> {episode.guest}, {episode.role}
-          </p>
-        </header>
-
-        <div className="episode-video">
-          <LiteYouTube
-            id={episode.youtube}
-            title={`Episode ${episode.number}: ${episode.title}`}
-            cover={episode.cover}
-            sizes="(min-width: 1200px) 1100px, 92vw"
-            eager
-          />
+      {/* Split: the video, title and brief pinned on the left; what you'll learn, the guest and the
+          transcript scrolling past on the right. */}
+      <article className="episode-split">
+        {/* On a screen too short for it, this column scrolls by itself (SmoothScroll lets it). */}
+        <aside className="episode-side" data-scroll-own>
+          <div className="episode-video">
+            <LiteYouTube
+              id={episode.youtube}
+              title={`Episode ${episode.number}: ${episode.title}`}
+              cover={episode.cover}
+              sizes="(min-width: 1024px) 46vw, 92vw"
+              eager
+            />
+          </div>
+          <header className="episode-head">
+            <p className="blog-meta text-label">
+              <span className="text-signal">Episode {pad(episode.number)}</span> · {episode.duration} ·{" "}
+              <time dateTime={episode.date}>{formatDate(episode.date)}</time>
+            </p>
+            <h1 className="episode-title">{episode.title}</h1>
+            <p className="blog-byline">
+              <em>with</em> {episode.guest}, {episode.role}
+            </p>
+          </header>
           <div className="episode-listen">
             <a
               className="btn btn-sm"
@@ -91,71 +94,80 @@ async function Episode({ params }: { params: PageProps<"/podcast/[slug]">["param
               Watch on YouTube
               <ArrowUpRight />
             </a>
-            {episode.spotify && (
-              <a className="btn btn-sm" href={episode.spotify} target="_blank" rel="noreferrer">
-                Listen on Spotify
-                <ArrowUpRight />
-              </a>
-            )}
           </div>
-        </div>
-
-        <div className="episode-about">
-          <div className="blog-body">
-            <h2 className="episode-h2">About this episode</h2>
+          <div className="episode-brief">
+            <h2 className="text-label text-signal">About this episode</h2>
             {episode.about.map((paragraph, i) => (
-              <p key={i} className={i === 0 ? "blog-lead" : undefined}>
+              <p key={i} className={i === 0 ? "episode-brief__lead" : undefined}>
                 {paragraph}
               </p>
             ))}
-            {episode.learn.length > 0 && (
-              <>
-                <h2 className="episode-h2">What you’ll learn</h2>
-                <ul className="episode-learn">
-                  {episode.learn.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-              </>
-            )}
           </div>
+        </aside>
+
+        <div className="episode-main">
+          <Link className="blog-back" href="/podcast">
+            <span aria-hidden>←</span> {show}
+          </Link>
+          {episode.learn.length > 0 && (
+            <section className="episode-learn-block" aria-labelledby="learn-title">
+              <h2 id="learn-title" className="episode-h2">
+                What you’ll learn
+              </h2>
+              <ul className="episode-learn">
+                {episode.learn.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </section>
+          )}
+
           <aside className="episode-guest">
-            <p className="text-label text-signal">The guest</p>
-            <p className="episode-guest__name">{episode.guest}</p>
-            <p className="episode-guest__role">{episode.role}</p>
+            <div className="episode-guest__head">
+              <Image className="episode-guest__photo" src={guestPhoto(episode)} alt="" width={88} height={88} />
+              <div>
+                <p className="text-label text-signal">The guest</p>
+                <p className="episode-guest__name">{episode.guest}</p>
+                <p className="episode-guest__role">{episode.role}</p>
+              </div>
+            </div>
             <p className="episode-guest__bio">{episode.bio}</p>
           </aside>
-        </div>
 
-        {transcript && (
-          <section className="episode-transcript" aria-labelledby="transcript-title">
-            <h2 id="transcript-title" className="episode-h2">
-              Transcript
-            </h2>
-            {transcript.map((turn, i) =>
-              turn.heading ? (
-                <h3 key={i} className="episode-transcript__heading">
-                  {turn.heading}
-                </h3>
-              ) : (
-                <div key={i} className="episode-turn" data-role={turn.role}>
-                  <p className="episode-turn__speaker text-label">
-                    {turn.speaker} <span>{turn.role}</span>
-                  </p>
-                  {turn.text.map((paragraph, j) => (
-                    <p key={j}>{paragraph}</p>
-                  ))}
-                </div>
-              ),
-            )}
-          </section>
-        )}
+          {transcript && (
+            <section
+              className="episode-transcript"
+              aria-labelledby="transcript-title"
+              style={{ "--guest": `url(${guestPhoto(episode)})` } as CSSProperties}
+            >
+              <h2 id="transcript-title" className="episode-h2">
+                Transcript
+              </h2>
+              {transcript.map((turn, i) =>
+                turn.heading ? (
+                  <h3 key={i} className="episode-transcript__heading">
+                    {turn.heading}
+                  </h3>
+                ) : (
+                  <div key={i} className="episode-turn" data-role={turn.role}>
+                    <p className="episode-turn__speaker text-label">
+                      {turn.speaker} <span>{turn.role}</span>
+                    </p>
+                    {turn.text.map((paragraph, j) => (
+                      <p key={j}>{paragraph}</p>
+                    ))}
+                  </div>
+                ),
+              )}
+            </section>
+          )}
+        </div>
       </article>
 
       <nav className="blog-more" aria-label="More episodes">
         <div className="blog-more__head">
           <p className="text-label text-signal">More episodes</p>
-          <Link className="blog-more__all" href="/#latest-episode">
+          <Link className="blog-more__all" href="/podcast">
             All episodes <span aria-hidden>→</span>
           </Link>
         </div>

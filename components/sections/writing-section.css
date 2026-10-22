@@ -55,10 +55,7 @@
   font-weight: 600;
   transition: color 250ms;
 }
-.writing-link:hover,
-.writing-link:focus-visible {
-  color: var(--color-signal);
-}
+
 /* Set like the podcast's title: two lines, the joiner in the serif italic accent. */
 .writing-title {
   margin-top: 18px;
@@ -117,10 +114,7 @@
   object-fit: cover;
   transition: scale 900ms var(--ease-out-expo);
 }
-.writing-feature:hover .writing-feature__cover img,
-.writing-row:hover .writing-row__cover img {
-  scale: 1.05;
-}
+
 .writing-feature__text {
   display: flex;
   flex-direction: column;
@@ -148,10 +142,6 @@
   font-weight: 700;
   transition: color 250ms;
 }
-.writing-feature:hover .writing-read,
-.writing-feature:focus-visible .writing-read {
-  color: var(--color-signal);
-}
 
 /* ---- The other articles -------------------------------------------------------------------------- */
 .writing-list {
@@ -162,33 +152,20 @@
 }
 .writing-row {
   display: grid;
-  grid-template-columns: auto clamp(108px, 10vw, 148px) minmax(0, 1fr) auto;
+  grid-template-columns: clamp(108px, 10vw, 148px) minmax(0, 1fr) auto;
   align-items: center;
   gap: clamp(14px, 1.6vw, 22px);
   padding: 12px 18px 12px 14px;
   border-radius: 20px;
   transition: background 350ms var(--ease-out-quart);
 }
-.writing-row:hover,
-.writing-row:focus-visible {
-  background: var(--color-raised);
-}
-.writing-row__number {
-  font-family: var(--font-display);
-  width: 2.2ch;
-  font-size: clamp(1.4rem, 1.8vw, 1.9rem);
-  font-weight: 800;
-  line-height: 1;
-  letter-spacing: -0.04em;
-  font-variant-numeric: tabular-nums;
-  color: var(--color-subtle);
-  transition: color 300ms;
-}
-.writing-row:hover .writing-row__number {
-  color: var(--color-signal);
-}
+
 .writing-row__cover {
   border-radius: 12px;
+}
+/* "Show all": to the Blog page, which lists every article. */
+.btn.writing-more {
+  margin: 14px 0 0 14px;
 }
 .writing-row__text {
   display: flex;
@@ -214,10 +191,6 @@
   transition:
     color 250ms,
     translate 500ms var(--ease-out-expo);
-}
-.writing-row:hover .writing-row__arrow {
-  color: var(--color-signal);
-  translate: 2px -2px;
 }
 
 /* ---- One column: no pan, the header sits in place ----------------------------------------------- */
@@ -258,7 +231,6 @@
     grid-template-columns: 96px minmax(0, 1fr);
     padding: 10px;
   }
-  .writing-row__number,
   .writing-row__arrow,
   .writing-row__excerpt {
     display: none;
@@ -277,5 +249,30 @@
   }
   .writing-pin__track {
     display: none;
+  }
+}
+
+/* Hover effects only where a hover-capable pointer exists: on touch these states latch
+   on tap and stay stuck until you tap somewhere else. */
+@media (hover: hover) and (pointer: fine) {
+  .writing-link:hover,
+  .writing-link:focus-visible {
+    color: var(--color-signal);
+  }
+  .writing-feature:hover .writing-feature__cover img,
+  .writing-row:hover .writing-row__cover img {
+    scale: 1.05;
+  }
+  .writing-feature:hover .writing-read,
+  .writing-feature:focus-visible .writing-read {
+    color: var(--color-signal);
+  }
+  .writing-row:hover,
+  .writing-row:focus-visible {
+    background: var(--color-raised);
+  }
+  .writing-row:hover .writing-row__arrow {
+    color: var(--color-signal);
+    translate: 2px -2px;
   }
 }

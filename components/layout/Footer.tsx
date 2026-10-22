@@ -1,151 +1,96 @@
 import Image from "next/image";
 import Link from "next/link";
-import { blogHref, blogs } from "@/content/blogs";
-import { resourceHref, resources } from "@/content/resources";
-import { episodeHref, episodes } from "@/content/episodes";
-import { book, footer, hero, nav } from "@/content/site";
-import { pad } from "@/lib/format";
+import { book, contact, footer, hero, nav } from "@/content/site";
 import { Reveal } from "@/components/motion/Reveal";
 import { AmazonLogo } from "@/components/ui/AmazonLogo";
 import { ConnectButton } from "@/components/connect/ConnectButton";
-import { ArrowRight, ArrowUpRight, LinkedInMark, YouTubeMark } from "@/components/ui/icons";
+import { ArrowRight, ArrowUpRight, LinkedInMark, MailMark, YouTubeMark } from "@/components/ui/icons";
 import { BackToTop } from "./BackToTop";
 import { FooterSignature } from "./FooterSignature";
 import "./footer.css";
 
-const ICONS = { youtube: YouTubeMark, linkedin: LinkedInMark } as const;
+const ICONS = { youtube: YouTubeMark, linkedin: LinkedInMark, mail: MailMark } as const;
 
 /**
- * Site footer, on every page: the hero's line as a sign-off, signed by Vikrant (his signature writes
- * itself out beside it), next to the book; then navigation, the latest of everything and the social
- * links.
+ * Site footer, on every page, kept small: the hero's line as a sign-off, signed by Vikrant (his
+ * signature writes itself out), beside the pages, Connect, where to follow him and the book; then
+ * the last line.
  *
- * Server component; the section links, the signature and back-to-top are small client islands.
+ * Server component; the signature and back-to-top are small client islands.
  */
 export function Footer() {
-  const latestEpisode = episodes[0];
-  const latestNote = blogs[0];
-  const latestPaper = resources[0];
-  const latest = [
-    {
-      label: `Podcast · Ep. ${pad(latestEpisode.number)}`,
-      title: latestEpisode.title,
-      href: episodeHref(latestEpisode.slug),
-    },
-    { label: "Note", title: latestNote.title, href: blogHref(latestNote.slug) },
-    { label: "White paper", title: latestPaper.title, href: resourceHref(latestPaper.slug) },
-  ];
+  const follow = [...footer.socials, { label: "Email", href: `mailto:${contact.email}`, icon: "mail" as const }];
 
   return (
     <footer className="footer">
-      <div className="footer__inner">
-        <div className="footer-lead">
-          <Reveal className="footer-statement">
-            <p className="footer-statement__lines">
-              <span>{hero.headline.top}</span>
-              <span>
-                <em>{hero.headline.joiner}</em> {hero.headline.bottom}
-              </span>
+      <div className="footer__panel">
+        <Reveal className="footer-signoff">
+          <p className="footer-signoff__line">
+            <span>{hero.headline.top}</span>
+            <span>
+              <em>{hero.headline.joiner}</em> {hero.headline.bottom}
+            </span>
+          </p>
+          <div className="footer-signoff__row">
+            <p className="footer-signoff__counter">
+              {hero.counterline.lead} <em>{hero.counterline.accent}</em>
             </p>
-            {/* His signature signs off the line, small, under the end of "is the job." */}
-            <div className="footer-statement__sign-row">
-              <p className="footer-statement__accent">
-                {hero.counterline.lead} <em>{hero.counterline.accent}</em>
-              </p>
-              <FooterSignature />
-            </div>
-            <ConnectButton className="btn btn-ink footer-connect">
-              {footer.connect.label}
-              <ArrowRight />
-            </ConnectButton>
-          </Reveal>
+            <FooterSignature />
+          </div>
+        </Reveal>
 
-          <Reveal delay={120}>
-            <a
-              className="footer-book"
-              href={book.amazon.href}
-              target="_blank"
-              rel="noreferrer"
-              aria-label={book.amazon.label}
-            >
-              <span className="footer-book__cover">
-                <Image src={book.poster} alt="" width={240} height={371} sizes="140px" />
-              </span>
-              <span className="footer-book__text">
-                <span className="text-label text-signal">{footer.book.eyebrow}</span>
-                <span className="footer-book__title">{book.title}</span>
-                <span className="footer-book__subtitle">{footer.book.subtitle}</span>
-                <span className="footer-book__buy">
-                  {footer.book.buy} <AmazonLogo className="footer-book__amazon" aria-hidden />
-                  <ArrowUpRight width={13} height={13} />
-                </span>
-              </span>
-            </a>
-          </Reveal>
-        </div>
-
-        <div className="footer-cols">
+        <div className="footer__links">
           <nav aria-label="Footer">
-            <p className="footer-heading text-label">{footer.headings.navigate}</p>
             <ul className="footer-nav">
               {nav.map((item) => (
                 <li key={item.href}>
-                  <Link href={item.href} className="footer-nav__link">
-                    {item.label}
-                    <span aria-hidden>→</span>
-                  </Link>
+                  <Link href={item.href}>{item.label}</Link>
                 </li>
               ))}
             </ul>
           </nav>
-
-          <div>
-            <p className="footer-heading text-label">{footer.headings.latest}</p>
-            <ul className="footer-latest">
-              {latest.map((item) => (
-                <li key={item.label}>
-                  <Link href={item.href} className="footer-latest__link">
-                    <span className="text-label">{item.label}</span>
-                    <span className="footer-latest__title">{item.title}</span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <p className="footer-heading text-label">{footer.headings.follow}</p>
-            <ul className="footer-socials">
-              {footer.socials.map((social) => {
-                const Icon = ICONS[social.icon];
+          <div className="footer__actions">
+            <ConnectButton className="btn btn-ink">
+              {footer.connect.label}
+              <ArrowRight />
+            </ConnectButton>
+            <ul className="footer-follow">
+              {follow.map(({ label, href, icon }) => {
+                const Icon = ICONS[icon];
                 return (
-                  <li key={social.href}>
+                  <li key={href}>
                     <a
-                      className="footer-social"
-                      data-brand={social.icon}
-                      href={social.href}
-                      target="_blank"
-                      rel="noreferrer"
+                      href={href}
+                      aria-label={label}
+                      data-brand={icon}
+                      {...(icon !== "mail" && { target: "_blank", rel: "noreferrer" })}
                     >
-                      <span className="footer-social__icon">
-                        <Icon />
-                      </span>
-                      <span className="footer-social__text">
-                        <span className="footer-social__label">{social.label}</span>
-                        <span className="footer-social__handle">{social.handle}</span>
-                      </span>
-                      <ArrowUpRight className="footer-social__arrow" width={12} height={12} />
+                      <Icon />
                     </a>
                   </li>
                 );
               })}
             </ul>
           </div>
+          <a
+            className="footer-book"
+            href={book.amazon.href}
+            target="_blank"
+            rel="noreferrer"
+            aria-label={book.amazon.label}
+          >
+            <Image src={book.poster} alt="" width={240} height={371} sizes="48px" />
+            <span className="footer-book__title">{book.title}</span>
+            <span className="footer-book__buy">
+              {footer.book.buy} <AmazonLogo className="footer-book__amazon" aria-hidden />
+              <ArrowUpRight width={12} height={12} />
+            </span>
+          </a>
         </div>
 
-        <div className="footer-bottom">
+        <div className="footer__bottom">
           <p>{footer.copyright}</p>
-          <p className="footer-bottom__tagline">{footer.tagline}</p>
+          <p className="footer__tagline">{footer.tagline}</p>
           <BackToTop />
         </div>
       </div>

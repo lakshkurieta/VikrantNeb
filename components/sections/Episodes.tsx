@@ -88,12 +88,6 @@ export function Episodes() {
                         YouTube
                         <ArrowUpRight />
                       </a>
-                      {item.spotify && (
-                        <a className="btn btn-sm" href={item.spotify} target="_blank" rel="noreferrer">
-                          Spotify
-                          <ArrowUpRight />
-                        </a>
-                      )}
                     </div>
                   </div>
                 </div>

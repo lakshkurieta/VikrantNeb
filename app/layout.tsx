@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Bricolage_Grotesque, Fraunces, Geist } from "next/font/google";
+import localFont from "next/font/local";
 import { ConnectForm } from "@/components/connect/ConnectForm";
 import { CopyGuard } from "@/components/layout/CopyGuard";
 import { Footer } from "@/components/layout/Footer";
@@ -11,10 +11,21 @@ import { themes } from "@/lib/theme";
 import { themeInitScript } from "@/lib/theme-mode";
 import "./globals.css";
 
-/* Titles in Bricolage Grotesque, everything else in Geist, the accents in Fraunces italic. */
-const display = Bricolage_Grotesque({ variable: "--font-bricolage", subsets: ["latin"] });
-const sans = Geist({ variable: "--font-geist", subsets: ["latin"] });
-const serif = Fraunces({ variable: "--font-fraunces", subsets: ["latin"], style: ["italic"] });
+/* Grift for everything set in sans (titles Bold, text Medium), Swarsh Daisy Italic for the accents. */
+const grift = localFont({
+  src: [
+    { path: "./fonts/grift-medium.woff2", weight: "500", style: "normal" },
+    { path: "./fonts/grift-bold.woff2", weight: "700", style: "normal" },
+  ],
+  variable: "--font-grift",
+});
+const swarsh = localFont({
+  src: "./fonts/swarsh-daisy-italic.woff2",
+  weight: "400",
+  style: "italic",
+  variable: "--font-swarsh",
+  adjustFontFallback: "Times New Roman",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -38,7 +49,7 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     // The theme script and the intro set data attributes on <html> before React hydrates.
-    <html lang="en" suppressHydrationWarning className={`${display.variable} ${sans.variable} ${serif.variable}`}>
+    <html lang="en" suppressHydrationWarning className={`${grift.variable} ${swarsh.variable}`}>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>

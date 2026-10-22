@@ -18,7 +18,16 @@ import { readFrameScroll, registerLenis } from "@/lib/scroll";
 export function SmoothScroll() {
   useEffect(() => {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const lenis = reduced ? null : new Lenis({ autoRaf: false, lerp: 0.09, anchors: true });
+    const lenis = reduced
+      ? null
+      : new Lenis({
+          autoRaf: false,
+          lerp: 0.09,
+          anchors: true,
+          // A pinned panel that has to scroll by itself (an episode's details on a short screen,
+          // `data-scroll-own`) gets the wheel; anywhere else, and when it fits, Lenis scrolls the page.
+          prevent: (node) => node.hasAttribute("data-scroll-own") && node.scrollHeight > node.clientHeight,
+        });
     const step = (time: number) => {
       lenis?.raf(time * 1000);
       readFrameScroll();

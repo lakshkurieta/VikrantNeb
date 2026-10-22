@@ -41,6 +41,26 @@
   display: grid;
   gap: 14px;
 }
+/* Side by side, the papers share their rows (subgrid): cover, title, kicker, summary, list and buttons
+   line up across both, even though only one paper lists what you'll learn. */
+@media (width >= 1024px) {
+  /* The shared rows' spacing: a larger gap here would pad every short row (the kicker) to make it up. */
+  .library-papers {
+    row-gap: 14px;
+  }
+  .library-paper {
+    grid-row: span 6;
+    grid-template-rows: subgrid;
+  }
+  .library-paper__learn {
+    grid-row: 5;
+  }
+  /* Room between one row of papers and the next (the shared row gap can't give it). */
+  .library-paper .page-actions {
+    grid-row: 6;
+    margin-bottom: clamp(36px, 6svh, 60px);
+  }
+}
 .library-paper__cover {
   display: grid;
   place-items: center;
@@ -63,9 +83,7 @@
 .library-paper__title a {
   transition: color 250ms;
 }
-.library-paper__title a:hover {
-  color: var(--color-signal);
-}
+
 .library-paper__kicker {
   font-family: var(--font-serif);
   font-size: 1.15rem;
@@ -94,5 +112,13 @@
 @media (width < 1024px) {
   .library-papers {
     grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Hover effects only where a hover-capable pointer exists: on touch these states latch
+   on tap and stay stuck until you tap somewhere else. */
+@media (hover: hover) and (pointer: fine) {
+  .library-paper__title a:hover {
+    color: var(--color-signal);
   }
 }

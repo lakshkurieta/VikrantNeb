@@ -27,9 +27,11 @@
 }
 
 @theme inline {
-  --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
-  --font-serif: var(--font-fraunces), ui-serif, Georgia, serif;
+  /* Grift has Medium (500) and Bold (700): text asks for 450–500 and gets Medium; labels, buttons and
+     titles ask for 600–800 and get Bold. */
+  --font-sans: var(--font-grift), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-grift), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-swarsh), ui-serif, Georgia, serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
@@ -66,8 +68,8 @@
     background: var(--color-canvas);
     color: var(--color-fg);
     font-family: var(--font-sans);
-    /* Manrope's 400 reads thin in small sizes on black; a touch heavier keeps body copy crisp. */
-    font-weight: 450;
+    /* Body copy in Grift Medium. */
+    font-weight: 500;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
@@ -473,15 +475,7 @@
     opacity 300ms,
     translate 500ms var(--ease-out-expo);
 }
-/* Hovering one link dims the rest; the hovered one slides and shows its arrow. */
-.nav-panel__links:hover .nav-panel__link:not(:hover) {
-  opacity: 0.45;
-}
-.nav-panel__link:hover .nav-panel__arrow,
-.nav-panel__link:focus-visible .nav-panel__arrow {
-  opacity: 1;
-  translate: 0 0;
-}
+
 .nav-panel__link[aria-current] .nav-panel__index::before {
   content: "● ";
 }
@@ -509,10 +503,7 @@
   background: linear-gradient(currentColor, currentColor) no-repeat 0 100% / 0% 1.5px;
   transition: background-size 500ms var(--ease-out-expo);
 }
-.nav-panel__foot a:hover,
-.nav-panel__connect:hover {
-  background-size: 100% 1.5px;
-}
+
 @media (width < 48rem) {
   .nav-bar {
     padding-left: 14px;
@@ -614,23 +605,12 @@
   transform-origin: right;
   transition: scale 550ms var(--ease-out-expo);
 }
-.btn:hover,
-.btn:focus-visible {
-  border-color: var(--btn-wipe);
-  color: var(--btn-wipe-fg);
-}
-.btn:hover::before,
-.btn:focus-visible::before {
-  scale: 1 1;
-  transform-origin: left;
-}
+
 .btn svg {
   flex: none;
   transition: translate 500ms var(--ease-out-expo);
 }
-.btn:hover svg {
-  translate: 3px 0;
-}
+
 .btn-solid {
   --btn-bg: var(--color-signal);
   --btn-fg: var(--color-on-signal);
@@ -648,6 +628,31 @@
   height: 40px;
   padding: 0 16px;
   font-size: 11px;
+}
+
+/* ------------------------------------------------------------------------------------------------
+   Touch targets. On a coarse pointer every control needs ~44px of tappable area, but the design's
+   small controls (the 40px .btn-sm chrome, the 21px back links) are deliberately that size. So the
+   box is left alone and the target is grown outwards with a transparent ::after, centred on the
+   control: nothing moves, nothing reflows, and the hit area clears 44px.
+   ------------------------------------------------------------------------------------------------ */
+@media (pointer: coarse) {
+  :is(.btn-sm, .theme-toggle, .page-back, .blog-back, .resource-back, .blog-more__all, .podcast-link, .writing-link) {
+    position: relative;
+  }
+  :is(.btn-sm, .theme-toggle, .page-back, .blog-back, .resource-back, .blog-more__all, .podcast-link, .writing-link)::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    width: 100%;
+    min-width: 44px;
+    height: 100%;
+    min-height: 44px;
+    /* Purely a hit area: never paints, never blocks what sits under the overhang. */
+    pointer-events: auto;
+  }
 }
 
 /* ------------------------------------------------------------------------------------------------
@@ -731,9 +736,7 @@
   transform: rotate(-90deg) scale(0.4);
   opacity: 0;
 }
-.theme-toggle:hover .theme-toggle__disc {
-  transform: scale(1.5) rotate(-18deg);
-}
+
 :root[data-theme="light"] .theme-toggle__disc {
   transform: scale(1);
 }
@@ -744,9 +747,7 @@
   transform: none;
   opacity: 1;
 }
-:root[data-theme="light"] .theme-toggle:hover .theme-toggle__rays {
-  transform: rotate(45deg);
-}
+
 /* The colour fade must not flatten the icon's own motion. */
 :root.theme-fading :is(.theme-toggle__disc, .theme-toggle__rays, .theme-toggle__bite) {
   transition-property: transform, opacity !important;
@@ -768,5 +769,42 @@
   .theme-toggle__rays,
   .theme-toggle__bite {
     transition: none;
+  }
+}
+
+/* Hover effects only where a hover-capable pointer exists: on touch these states latch
+   on tap and stay stuck until you tap somewhere else. */
+@media (hover: hover) and (pointer: fine) {
+  /* Hovering one link dims the rest; the hovered one slides and shows its arrow. */
+  .nav-panel__links:hover .nav-panel__link:not(:hover) {
+    opacity: 0.45;
+  }
+  .nav-panel__link:hover .nav-panel__arrow,
+  .nav-panel__link:focus-visible .nav-panel__arrow {
+    opacity: 1;
+    translate: 0 0;
+  }
+  .nav-panel__foot a:hover,
+  .nav-panel__connect:hover {
+    background-size: 100% 1.5px;
+  }
+  .btn:hover,
+  .btn:focus-visible {
+    border-color: var(--btn-wipe);
+    color: var(--btn-wipe-fg);
+  }
+  .btn:hover::before,
+  .btn:focus-visible::before {
+    scale: 1 1;
+    transform-origin: left;
+  }
+  .btn:hover svg {
+    translate: 3px 0;
+  }
+  .theme-toggle:hover .theme-toggle__disc {
+    transform: scale(1.5) rotate(-18deg);
+  }
+  :root[data-theme="light"] .theme-toggle:hover .theme-toggle__rays {
+    transform: rotate(45deg);
   }
 }

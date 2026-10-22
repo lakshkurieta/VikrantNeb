@@ -7,12 +7,15 @@ import { ArrowRight, ArrowUp } from "@/components/ui/icons";
 import "./resources-section.css";
 
 /**
- * Resources: "Tools for operators, not observers." Vikrant's free white papers, each as a paper
- * stack beside its summary, alternating sides. Each opens its own page on this site
- * (app/resources/[slug]) with a reader, or downloads straight away.
+ * Resources: "Tools for operators, not observers." Two of Vikrant's free white papers
+ * (`resourcesIntro.home`), each as a paper stack beside its summary, alternating sides, then a link
+ * to all of them on /resources. Each opens its own page on this site (app/resources/[slug]) with a
+ * reader, or downloads straight away.
  *
  * Server component.
  */
+const shown = resources.filter((resource) => (resourcesIntro.home as readonly string[]).includes(resource.slug));
+
 export function ResourcesSection() {
   const { title } = resourcesIntro;
   return (
@@ -38,7 +41,7 @@ export function ResourcesSection() {
         </header>
 
         <ol className="resources-list">
-          {resources.map((resource) => (
+          {shown.map((resource) => (
             <li key={resource.slug}>
               <Reveal className="resource-row">
                 <Link className="resource-row__cover" href={resourceHref(resource.slug)} tabIndex={-1} aria-hidden>
@@ -65,6 +68,10 @@ export function ResourcesSection() {
             </li>
           ))}
         </ol>
+        <Link className="btn btn-sm resources-show-all" href={resourcesIntro.all.href}>
+          Show all {resources.length} white papers
+          <ArrowRight />
+        </Link>
 
         <Reveal>
           <aside className="resources-more">

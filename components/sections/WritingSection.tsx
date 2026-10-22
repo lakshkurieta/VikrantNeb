@@ -2,11 +2,14 @@ import Image from "next/image";
 import Link from "next/link";
 import type { CSSProperties } from "react";
 import { blogHref, blogs, readingTime } from "@/content/blogs";
-import { formatDate, pad } from "@/lib/format";
+import { formatDate } from "@/lib/format";
 import { writing } from "@/content/site";
 import { Reveal } from "@/components/motion/Reveal";
-import { ArrowUpRight } from "@/components/ui/icons";
+import { ArrowRight, ArrowUpRight } from "@/components/ui/icons";
 import "./writing-section.css";
+
+/** Articles listed here: the newest in the header, two more under it; "Show all" opens the Blog page. */
+const FIRST = 3;
 
 /**
  * Writing, "Notes from the floor": the second page of the studio (Studio.tsx), reached by a
@@ -14,13 +17,13 @@ import "./writing-section.css";
  *
  * Its header (title, intro and the latest article) is pinned for the pan (`data-studio-pin`) and
  * slides in from the right as Vikrant's bust glides across to the left; then it scrolls on as
- * normal and the other articles follow in the right-hand column, beside him. Every article opens
- * on its own page on this site (app/blogs/[slug]).
+ * normal and the next two articles follow in the right-hand column, beside him, with "Show all"
+ * for the Blog page (app/blogs). Every article opens on its own page (app/blogs/[slug]).
  *
  * Server component.
  */
 export function WritingSection() {
-  const [latest, ...rest] = blogs;
+  const [latest, ...rest] = blogs.slice(0, FIRST);
   const { title } = writing;
   return (
     <section id="writing" className="writing" aria-labelledby="writing-title">
@@ -72,7 +75,6 @@ export function WritingSection() {
             {rest.map((article, i) => (
               <li key={article.slug} className="reveal-item" style={{ "--i": i } as CSSProperties}>
                 <Link className="writing-row group" href={blogHref(article.slug)}>
-                  <span className="writing-row__number">{pad(i + 2)}</span>
                   <span className="writing-row__cover">
                     <Image src={article.cover} alt="" fill sizes="160px" />
                   </span>
@@ -88,6 +90,10 @@ export function WritingSection() {
               </li>
             ))}
           </ol>
+          <Link className="btn btn-sm writing-more" href={writing.all.href}>
+            {writing.showAll}
+            <ArrowRight />
+          </Link>
         </Reveal>
       </div>
     </section>

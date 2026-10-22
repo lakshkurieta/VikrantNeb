@@ -28,10 +28,7 @@
   color: var(--color-muted);
   transition: color 250ms;
 }
-.resource-back:hover,
-.resource-back:focus-visible {
-  color: var(--color-fg);
-}
+
 .resource-title {
   font-family: var(--font-display);
   margin-top: 18px;
@@ -104,26 +101,26 @@
   letter-spacing: -0.012em;
 }
 .resource-quote {
-  position: relative;
   margin-top: clamp(36px, 6svh, 56px);
   padding: clamp(26px, 3vw, 40px) clamp(26px, 3vw, 44px);
   border-radius: 28px;
   background: var(--color-fg);
   color: var(--color-canvas);
 }
+/* Swarsh's quote mark is small and sits high in its em box (its ink runs 0.697–0.557em above the
+   baseline, starting 0.134em in): this line height and margin put the ink in the padding's top-left
+   corner, in line with the quote below it. */
 .resource-quote::before {
   content: "“";
-  position: absolute;
-  top: 18px;
-  left: 22px;
+  display: block;
+  height: 0.14em;
+  margin: 0 0 clamp(18px, 2.4vw, 28px) -0.134em;
   font-family: var(--font-serif);
-  font-size: 7rem;
-  line-height: 0.7;
+  font-size: 8rem;
+  line-height: 0.934;
   color: var(--color-signal);
 }
 .resource-quote p {
-  position: relative;
-  padding-top: 34px;
   font-family: var(--font-serif);
   font-size: clamp(1.5rem, 2.3vw, 2.2rem);
   font-style: italic;
@@ -193,10 +190,7 @@
   line-height: 1.35;
   transition: color 250ms;
 }
-.resource-contents a:hover,
-.resource-contents a:focus-visible {
-  color: var(--color-signal);
-}
+
 .resource-contents__n {
   font-family: var(--font-display);
   font-weight: 800;
@@ -290,6 +284,86 @@
   font-weight: 750;
   color: var(--color-fg);
 }
+/* The web papers' blocks: notes, bullets, a flow of steps, and tables (wide ones scroll sideways on a phone). */
+.paper-note {
+  font-size: 0.85em;
+  color: var(--color-muted);
+}
+.paper strong {
+  font-weight: 700;
+  color: var(--color-fg);
+}
+.paper a {
+  color: var(--color-signal);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+.paper-list {
+  display: grid;
+  gap: 8px;
+  padding-left: 1.2em;
+  list-style: square;
+}
+.paper-list li::marker {
+  color: var(--color-signal);
+}
+.paper-steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+}
+.paper-steps li {
+  display: grid;
+  gap: 6px;
+  align-content: start;
+  padding: 16px;
+  border-radius: 8px;
+  background: var(--color-raised);
+  font-size: 0.85em;
+  line-height: 1.5;
+}
+.paper-steps li:last-child {
+  background: color-mix(in srgb, var(--color-signal) 14%, var(--color-canvas));
+}
+.paper-steps strong {
+  font-size: 1.12em;
+  line-height: 1.25;
+}
+.paper-table {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+}
+.paper-table > .text-label {
+  margin-bottom: 10px;
+}
+.paper-table table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.84em;
+  line-height: 1.5;
+}
+.paper > .paper-table table {
+  min-width: 34rem;
+}
+.paper-table th {
+  padding: 0 14px 10px 0;
+  border-bottom: 1px solid var(--color-fg);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-align: left;
+  text-transform: uppercase;
+  color: var(--color-fg);
+}
+.paper-table td {
+  padding: 10px 14px 10px 0;
+  border-bottom: 1px solid var(--color-line);
+  vertical-align: top;
+}
+.paper-table td:first-child {
+  font-weight: 600;
+  color: var(--color-fg);
+}
 .paper-checklist {
   display: grid;
   gap: 8px;
@@ -361,12 +435,7 @@
   font-size: 1.6rem;
   transition: translate 500ms var(--ease-out-expo);
 }
-.resource-next__card:hover .resource-next__title {
-  color: var(--color-signal);
-}
-.resource-next__card:hover .resource-next__arrow {
-  translate: 6px 0;
-}
+
 .resource-more {
   margin-top: clamp(48px, 8svh, 80px);
 }
@@ -398,5 +467,24 @@
   .resource-hero__paper .paper__body,
   .resource-hero__paper .paper__sheet {
     animation: none;
+  }
+}
+
+/* Hover effects only where a hover-capable pointer exists: on touch these states latch
+   on tap and stay stuck until you tap somewhere else. */
+@media (hover: hover) and (pointer: fine) {
+  .resource-back:hover,
+  .resource-back:focus-visible {
+    color: var(--color-fg);
+  }
+  .resource-contents a:hover,
+  .resource-contents a:focus-visible {
+    color: var(--color-signal);
+  }
+  .resource-next__card:hover .resource-next__title {
+    color: var(--color-signal);
+  }
+  .resource-next__card:hover .resource-next__arrow {
+    translate: 6px 0;
   }
 }

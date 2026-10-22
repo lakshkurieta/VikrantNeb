@@ -1,27 +1,80 @@
 /*
-  An episode's page (app/podcast/[slug]): the article layout (app/blogs/blog.css) plus the video,
-  the guest, and the transcript as speaker turns.
+  An episode's page (app/podcast/[slug]): a split. The video, title and brief stay pinned on the
+  left (in YouTube's order: video, title, buttons, description) while what you'll learn, the guest
+  and the transcript (as speaker turns) scroll past on the right, as the copy scrolls past the bust
+  on the home page. Type from app/blogs/blog.css.
 */
+.episode-split {
+  display: grid;
+  grid-template-columns: minmax(0, 11fr) minmax(0, 13fr);
+  gap: clamp(32px, 4.5vw, 72px);
+  align-items: start;
+  max-width: 1340px;
+  margin: 0 auto;
+}
+/* Pinned right where it starts (the page's top padding, app/blogs/blog.css), so it never moves, and one
+   screen tall. Only on a very short screen, with the video at its smallest, does it scroll by itself. */
+.episode-side {
+  --pin: max(112px, 13svh);
+  position: sticky;
+  top: var(--pin);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: calc(100svh - var(--pin) - 16px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+}
+/* The video takes the height the text leaves it, up to full width, narrowing to keep its shape. */
 .episode-video {
-  max-width: 1100px;
-  margin: clamp(36px, 6svh, 64px) auto 0;
+  flex: 0 1 auto;
+  min-height: 112px;
+  aspect-ratio: 16 / 9;
+  container-type: size;
+}
+.episode-video .lite-youtube {
+  width: min(100%, 100cqh * 16 / 9);
+}
+.episode-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 2.1vw, 2.2rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+.episode-head .blog-byline {
+  margin-top: 10px;
+  font-size: 14px;
+}
+.episode-head .blog-meta + .episode-title {
+  margin-top: 10px;
+}
+.episode-brief {
+  display: grid;
+  gap: 8px;
+  padding-top: 14px;
+  border-top: 1px solid var(--color-line);
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--color-muted);
+}
+.episode-brief__lead {
+  font-size: 15.5px;
+  font-weight: 600;
+  line-height: 1.42;
+  color: var(--color-fg);
 }
 .episode-listen {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  margin-top: 16px;
 }
-
-.episode-about {
-  display: grid;
-  grid-template-columns: minmax(0, 680px) minmax(0, 320px);
-  justify-content: center;
-  gap: clamp(32px, 5vw, 80px);
-  margin-top: clamp(40px, 7svh, 72px);
-}
-.episode-about .blog-body {
-  margin: 0;
+.episode-learn-block {
+  font-size: clamp(1.02rem, 1.2vw, 1.12rem);
+  line-height: 1.65;
+  color: color-mix(in srgb, var(--color-fg) 86%, transparent);
 }
 .episode-h2 {
   margin: 1.6em 0 0.7em;
@@ -31,7 +84,9 @@
   letter-spacing: -0.025em;
   color: var(--color-fg);
 }
-.episode-about .episode-h2:first-child {
+/* Right after the back link, the column's first block starts flush. */
+.episode-main > .blog-back + * .episode-h2,
+.episode-main > .blog-back + .episode-guest {
   margin-top: 0;
 }
 .episode-learn {
@@ -53,15 +108,29 @@
   rotate: 45deg;
 }
 .episode-guest {
-  position: sticky;
-  top: max(100px, 12svh);
-  align-self: start;
+  margin-top: clamp(40px, 6svh, 64px);
   padding: clamp(22px, 2.4vw, 30px);
   border-radius: 8px;
   background: var(--color-raised);
 }
+/* The guest's photo beside their name and role, the bio under both. */
+.episode-guest__head {
+  display: flex;
+  align-items: center;
+  gap: clamp(16px, 2vw, 22px);
+}
+.episode-guest__photo {
+  flex: none;
+  width: clamp(72px, 7vw, 88px);
+  height: auto;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  object-fit: cover;
+  outline: 2px solid var(--color-signal);
+  outline-offset: 3px;
+}
 .episode-guest__name {
-  margin-top: 12px;
+  margin-top: 8px;
   font-family: var(--font-display);
   font-size: 1.5rem;
   font-weight: 800;
@@ -83,20 +152,21 @@
 /* Transcript: each turn under its speaker (a signal square for the host, ink for the guest); the
    guest's turns set a step in. */
 .episode-transcript {
-  max-width: 760px;
-  margin: clamp(56px, 10svh, 112px) auto 0;
+  margin-top: clamp(56px, 10svh, 112px);
 }
 .episode-transcript__heading {
   margin: 2em 0 0.6em;
   font-size: 1.3rem;
   font-weight: 800;
 }
+/* Each turn opens with the speaker's face: Vikrant's on the site's blue, the guest's headshot (set on
+   the transcript, from content/episodes.ts). */
 .episode-turn {
-  --mark: var(--color-signal);
+  --face: url(/images/portrait/vikrant-neb-avatar.webp);
   padding: 16px 0;
 }
 .episode-turn[data-role="Guest"] {
-  --mark: var(--color-fg);
+  --face: var(--guest);
   padding-left: clamp(0px, 3vw, 36px);
 }
 .episode-turn__speaker {
@@ -106,11 +176,14 @@
 .episode-turn__speaker::before {
   content: "";
   display: inline-block;
-  width: 7px;
-  height: 7px;
+  width: 30px;
+  height: 30px;
   margin-right: 10px;
-  background: var(--mark);
-  vertical-align: 0.1em;
+  border-radius: 50%;
+  background:
+    var(--face) center / cover,
+    var(--color-signal);
+  vertical-align: middle;
 }
 .episode-turn__speaker span {
   margin-left: 8px;
@@ -125,12 +198,14 @@
   margin-top: 0.9em;
 }
 
+/* One column: the video on top, not pinned (it would cover half a phone's screen). */
 @media (width < 1024px) {
-  .episode-about {
+  .episode-split {
     grid-template-columns: minmax(0, 1fr);
   }
-  .episode-guest {
-    position: relative;
-    top: auto;
+  .episode-side {
+    position: static;
+    height: auto;
+    overflow: visible;
   }
 }

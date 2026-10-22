@@ -66,10 +66,7 @@
   background: linear-gradient(var(--color-signal), var(--color-signal)) no-repeat 0 100% / 100% 2px;
   transition: color 250ms;
 }
-.connect__email:hover,
-.connect__email:focus-visible {
-  color: var(--color-signal);
-}
+
 .connect__socials {
   display: flex;
   gap: 10px;
@@ -86,11 +83,7 @@
     background 250ms,
     color 250ms;
 }
-.connect__socials a:hover,
-.connect__socials a:focus-visible {
-  background: var(--color-fg);
-  color: var(--color-canvas);
-}
+
 .connect__socials svg {
   width: 19px;
   height: auto;
@@ -219,5 +212,19 @@
 @media (width < 640px) {
   .connect__form {
     grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Hover effects only where a hover-capable pointer exists: on touch these states latch
+   on tap and stay stuck until you tap somewhere else. */
+@media (hover: hover) and (pointer: fine) {
+  .connect__email:hover,
+  .connect__email:focus-visible {
+    color: var(--color-signal);
+  }
+  .connect__socials a:hover,
+  .connect__socials a:focus-visible {
+    background: var(--color-fg);
+    color: var(--color-canvas);
   }
 }

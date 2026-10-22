@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { blogHref } from "@/content/blogs";
-import { about, footer, podcast, site } from "@/content/site";
+import { about, footer, site } from "@/content/site";
 import { aboutGraph } from "@/lib/schema";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { ConnectButton } from "@/components/connect/ConnectButton";
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   title: `About ${site.name} — Founder of Leanafy & Kurieta, Author, 3PL Operator`,
   description: about.bio[0],
   alternates: { canonical: "/about" },
-  openGraph: { title: `About ${site.name}`, description: about.bio[0], type: "profile", images: [podcast.bust.poster] },
+  openGraph: { title: `About ${site.name}`, description: about.bio[0], type: "profile", images: [about.portrait.src] },
 };
 
 /**
@@ -39,10 +39,10 @@ export default function AboutPage() {
         </div>
         <figure className="about-portrait">
           <Image
-            src={podcast.bust.poster}
-            alt={podcast.bust.alt}
-            width={900}
-            height={1040}
+            src={about.portrait.src}
+            alt={about.portrait.alt}
+            width={720}
+            height={720}
             sizes="(min-width: 1024px) 40vw, 90vw"
             loading="eager"
             fetchPriority="high"

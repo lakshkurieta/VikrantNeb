@@ -18,16 +18,15 @@ their own:
   reader's key line as their card lands.
 - Resources, _Tools for operators, not observers_: his free white papers as paper stacks, each with its own page,
   `/resources/[slug]`, with a reader and a download (the PDFs are hosted here).
-- A footer on every page: the sign-off beside the book (Amazon), navigation, the latest of everything, YouTube and
-  LinkedIn, and his signature (small, beside the sign-off line) writing itself out. The "About" nav link is still a
-  placeholder.
+- A small footer on every page: the sign-off line, his signature writing itself out beside it, then the page links,
+  Connect, YouTube / LinkedIn / email icons and the book (Amazon).
 
 **Stack:** Next.js 16 (App Router, Turbopack) · React 19 · TypeScript · Tailwind CSS v4 · three.js · GSAP · Lenis
 
-**Type:** Bricolage Grotesque for titles (every rule at weight 800), Geist for everything else including the small
-uppercase labels, and Fraunces italic for the accents. Every title, the hero's included, uses one lockup: heavy capitals
-with the joining words in blue serif italic, lowercase ("EXECUTION _is the_ JOB.", "NOTES _from the_ FLOOR"), an
-blue label above it, and a muted line under it ending on a serif accent. All three load through `next/font`.
+**Type:** Grift (served from `app/fonts`): Bold for titles, labels and buttons, Medium for body text; Swarsh Daisy
+Italic for the accents. Every title, the hero's included, uses one lockup: heavy capitals
+with the joining words in blue serif italic, lowercase ("EXECUTION _is the_ JOB.", "NOTES _from the_ FLOOR"), a
+blue label above it, and a muted line under it ending on a serif accent. Both load through `next/font/local`.
 
 **Buttons:** one system in `globals.css`: `.btn` (outlined), `.btn-solid` (signal), `.btn-ink` (ink), `.btn-sm`.
 Square-cut, uppercase and tracked, with a panel that wipes across from the left on hover. Use these for any new button.
@@ -96,7 +95,7 @@ content/blogs.ts        the articles, in full (one string per paragraph)
 content/episodes.ts     every podcast episode (1–7 from the live site, 8–10 from YouTube)
 content/transcripts.ts  episode transcripts as speaker turns (only the episode pages import it)
 content/resources.ts    the white papers: summaries, quotes, PDF and cover paths
-content/papers.ts       the white papers' full text and figures, converted from the PDFs
+content/papers.ts       the white papers' full text and figures, converted from the PDFs and HTML pages
 lib/
   webgl/
     ParticlePortrait.ts the particle engine (framework-agnostic)
@@ -248,7 +247,7 @@ on every `[data-studio-move]` element:
 | Writing's header     | slides in from the right (from 30%) and fades up (from 45%), as he rises                                                                                                                                              |
 
 YouTube's ghost swaps for "Blogs" as he crosses. After it, Writing's header scrolls on
-as normal and the other articles follow in the right column while he stays pinned on the left. The "Writing" nav link
+as normal and the next two articles follow in the right column while he stays pinned on the left. The "Writing" nav link
 lands at the end of the cross-over. Below 1024px the studio is one column: the bust stands at the top, then the
 podcast, then Writing, with no cross-over.
 
@@ -269,15 +268,15 @@ every motion moves the whole bust:
   turn him (`touch-action: pan-y`), so a vertical swipe on a phone still scrolls.
 - **Cursor:** a blue rim light swings around behind him with the pointer.
 
-**Episodes.** Each episode is a pill; the open one shows its video, guest, summary, and YouTube and Spotify links. The
+**Episodes.** Each episode is a pill; the open one shows its video, guest, summary, and YouTube link. The
 video (`components/podcast/LiteYouTube.tsx`, also on the episode pages) is a still cover until pressed, then YouTube's
 privacy-enhanced embed, so nothing loads from YouTube before someone asks to watch; opening another episode stops it.
 Episodes, guests and links are from the live site's `/episodes` pages and live in `content/episodes.ts`; covers are the
 YouTube thumbnails, saved as WebP in `public/assets/podcast/`. To add an episode, add its entry at the top of
 `episodes` and its cover beside the others.
 
-**Writing.** The first article is featured in the pinned header and the rest follow; each opens its own page on this
-site. "Notes from the floor" is his own phrase for this writing.
+**Writing.** The newest article is featured in the pinned header and the next two follow, then "Show all blogs"
+opens `/blogs`; each opens its own page on this site. "Notes from the floor" is his own phrase for this writing.
 
 ## Articles
 
@@ -350,20 +349,30 @@ skeleton into strokes in writing order (left to right, underline last, then dots
   `public/assets/resources`; download buttons use the `download` attribute, and the paper page embeds the PDF in the
   browser's own viewer (phones get a link instead). Titles and descriptions follow the live /resources pages; note
   the PDFs' own cover titles differ ("Pricing What Actually Got Picked", "From Pallet In, Pallet Out to 10,000 Orders
-  a Day").
-- **Footer** (`components/layout/Footer.tsx`): in the root layout, so it's on every page. Social links are YouTube and
-  LinkedIn only (`footer.socials` in `content/site.ts`).
+  a Day"). The home page shows two papers (`resourcesIntro.home`) and a "Show all" link; `/resources` shows all.
+- **Footer** (`components/layout/Footer.tsx`): in the root layout, so it's on every page. One small panel: the signed
+  sign-off on the left; on the right the page links, Connect, icon links (YouTube and LinkedIn from `footer.socials`
+  in `content/site.ts`, plus the contact email) and a slim book link; the last line under both.
 
 ## Episodes, transcripts and white papers
 
 - **Episodes** (`content/episodes.ts`): 1–7 come from the current vikrantneb.com episode pages (its Framer CMS data),
   8–10 from their YouTube pages; covers are the YouTube thumbnails. The home page lists the newest three and "Show all"
-  opens `/podcast`, which lists every one. Each has a page at `/podcast/[slug]` with the video (loaded on press), what it covers, the guest
-  and, for 1–7, the full transcript (`content/transcripts.ts`; 8–10 have none published yet).
+  opens `/podcast`, which lists every one. Each has a page at `/podcast/[slug]`: the video (loaded on press), title and
+  brief pinned on the left while what you'll learn, the guest and, for 1–7, the full transcript
+  (`content/transcripts.ts`; 8–10 have none published yet) scroll past on the right. The guest card carries their
+  headshot (`public/assets/podcast/guests/<slug>.webp`, 320px: from the old site's episode pages for 1–7, cropped
+  from the episode thumbnail for 8–10); a new episode needs one there. The left column pins where it
+  starts and is one screen tall: the video shrinks to leave the text room, so it never scrolls on screens from 1280×720
+  up; on shorter ones it scrolls by itself (`data-scroll-own`, which SmoothScroll leaves to the wheel).
+  Phones stack them.
 - **White papers** (`content/papers.ts`): converted from the PDFs into headings, paragraphs, his quotes, callout
   panels, numbered points and checklists; charts and tables are images in `public/assets/resources/figures`. The paper
   page shows it as a reading page with its contents (built from the headings) pinned beside it, and keeps the PDF
-  download.
+  download. The two web papers (_Every Line on the Invoice_, _Every Minute on the Floor_) came as HTML pages: their
+  text, tables and flows are blocks in the same file, and their ten interactive exhibits are live components
+  (`components/resources/Exhibits.tsx`, same maths and defaults as the originals). Their PDFs are prints of the
+  original pages, and their covers follow the PDF covers' layout with the paper's own invoice / shift log as the art.
 - **Menu** (`Navbar.tsx`): a signal sheet across the top of the screen that unfolds out of the Menu button (Close lands
   where Menu was) over a dimmed page, its links rising in one by one, the current section marked. It replaces the old
   link row on every screen size.
@@ -386,7 +395,8 @@ marks the section you're in, and each section links to its page.
 
 Shared page chrome is `components/page/page.css`; copy lives in `content/site.ts` (`about`, `book.back`,
 `podcast.page`). The white papers on `/resources/[slug]` are complete: `content/papers.ts` carries every line of each
-PDF, cover and About the Author included; charts, tables and diagrams are images of the PDF itself.
+paper, cover and About the Author included; in the PDF papers charts, tables and diagrams are images of the PDF
+itself, in the web papers they are real tables and live exhibits.
 
 **Horizontal overflow.** Writing's header waits off to the right before sliding in, so `.studio` clips horizontal
 overflow (`overflow-x: clip`, which keeps sticky working); otherwise a sideways swipe slid the whole page.

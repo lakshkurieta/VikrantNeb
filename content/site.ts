@@ -137,6 +137,11 @@ export const book = {
 export const about = {
   eyebrow: "About Vikrant",
   title: { top: "Operator", joiner: "by", bottom: "instinct." },
+  /** His photograph, not the 3D bust render the podcast stage uses. */
+  portrait: {
+    src: "/images/portrait/vikrant-neb.webp",
+    alt: "Vikrant Neb",
+  },
   statement:
     "Two decades of walking warehouse floors. Two companies built from what was found there. One book about what nobody wanted to admit.",
   story: [
@@ -209,7 +214,8 @@ export const writing = {
   title: { top: "Notes", joiner: "from the", bottom: "Floor" },
   intro:
     "What I keep seeing inside 3PLs and warehouse operations, written down as it happens. Observations, not prescriptions.",
-  all: { label: "All articles", href: "/blogs" },
+  all: { label: "All blogs", href: "/blogs" },
+  showAll: "Show all blogs",
   /** Behind the bust once he has crossed to this page, in place of the podcast's YouTube mark. */
   ghost: "Blogs",
   readLabel: "Read the note",
@@ -280,15 +286,10 @@ export const testimonials = {
 /** Footer, on every page (components/layout/Footer.tsx). No Instagram here, by request. */
 export const footer = {
   connect: { label: "Connect with Vikrant", href: "https://linkedin.com/in/vikrant-neb" },
-  book: {
-    eyebrow: "The book",
-    subtitle: "The Hidden Reasons Why 3PLs Stop Growing",
-    buy: "Buy on",
-  },
-  headings: { navigate: "Navigate", latest: "Latest", follow: "Follow" },
+  book: { buy: "Buy on" },
   socials: [
-    { label: "YouTube", handle: "@ExecuteWithVik", href: "https://www.youtube.com/@ExecuteWithVik", icon: "youtube" },
-    { label: "LinkedIn", handle: "in/vikrant-neb", href: "https://linkedin.com/in/vikrant-neb", icon: "linkedin" },
+    { label: "YouTube", href: "https://www.youtube.com/@ExecuteWithVik", icon: "youtube" },
+    { label: "LinkedIn", href: "https://linkedin.com/in/vikrant-neb", icon: "linkedin" },
   ],
   copyright: "© 2026 Vikrant Neb. All rights reserved.",
   tagline: "Built for operators, not observers.",

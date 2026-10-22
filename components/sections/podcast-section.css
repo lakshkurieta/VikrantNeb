@@ -139,10 +139,6 @@
   color: var(--color-fg);
   transition: color 250ms;
 }
-.podcast-link:hover,
-.podcast-link:focus-visible {
-  color: var(--color-signal);
-}
 
 /* ---- Episode list ---------------------------------------------------------------------------- */
 .podcast-list {
@@ -167,9 +163,7 @@
     transform 1200ms var(--ease-out-expo) var(--reveal-item-delay),
     background 350ms var(--ease-out-quart);
 }
-.podcast-item:not([data-open]):hover {
-  background: color-mix(in srgb, var(--color-raised) 55%, transparent);
-}
+
 .podcast-item[data-open] {
   background: var(--color-raised);
 }
@@ -336,5 +330,17 @@
     translate: none;
     scale: none;
     opacity: 1;
+  }
+}
+
+/* Hover effects only where a hover-capable pointer exists: on touch these states latch
+   on tap and stay stuck until you tap somewhere else. */
+@media (hover: hover) and (pointer: fine) {
+  .podcast-link:hover,
+  .podcast-link:focus-visible {
+    color: var(--color-signal);
+  }
+  .podcast-item:not([data-open]):hover {
+    background: color-mix(in srgb, var(--color-raised) 55%, transparent);
   }
 }

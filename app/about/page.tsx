@@ -18,107 +18,111 @@ export const metadata: Metadata = {
 };
 
 /**
- * Who Vikrant is, at length: his statement beside him on the site's blue, his story in his own
- * words, the facts, his two companies, and how to work with him. Server component.
+ * Who Vikrant is, at length, as a split: his portrait pinned on the left while the right column
+ * scrolls past it (as the episode pages pin their video): the title and his statement, his story in
+ * his own words, the facts, his two companies, and how to work with him. Server component.
  */
 export default function AboutPage() {
   const { title } = about;
   return (
     <main className="page about">
       <JsonLd data={aboutGraph} />
-      <header className="about-head">
-        <div className="about-head__text">
-          <Link className="page-back" href="/">
-            <span aria-hidden>←</span> {site.name}
-          </Link>
-          <p className="text-label text-signal">{about.eyebrow}</p>
-          <h1 className="text-hero about-title">
-            <span>{title.top}</span> <em>{title.joiner}</em> <span>{title.bottom}</span>
-          </h1>
-          <p className="about-statement">{about.statement}</p>
-        </div>
+      <div className="about-split">
         <figure className="about-portrait">
           <Image
             src={about.portrait.src}
             alt={about.portrait.alt}
-            width={720}
-            height={720}
-            sizes="(min-width: 1024px) 40vw, 90vw"
+            width={1186}
+            height={1326}
+            sizes="(min-width: 1024px) 46vw, 100vw"
             loading="eager"
             fetchPriority="high"
           />
         </figure>
-      </header>
 
-      <section className="about-story" aria-labelledby="about-story">
-        <p id="about-story" className="text-label text-signal about-story__label">
-          The story
-        </p>
-        <div className="about-story__text">
-          {about.story.map((paragraph) => (
-            <p key={paragraph}>{paragraph}</p>
-          ))}
-        </div>
-      </section>
+        <div className="about-main">
+          <header>
+            <Link className="page-back" href="/">
+              <span aria-hidden>←</span> {site.name}
+            </Link>
+            <p className="text-label text-signal">{about.eyebrow}</p>
+            <h1 className="text-hero about-title">
+              <span>{title.top}</span> <em>{title.joiner}</em> <span>{title.bottom}</span>
+            </h1>
+            <p className="about-statement">{about.statement}</p>
+          </header>
 
-      <section className="about-facts" aria-label="At a glance">
-        <dl>
-          {about.facts.map((fact) => (
-            <div key={fact.label}>
-              <dt className="text-label">{fact.label}</dt>
-              <dd>{fact.value}</dd>
+          <section className="about-story" aria-labelledby="about-story">
+            <p id="about-story" className="text-label text-signal about-story__label">
+              The story
+            </p>
+            <div className="about-story__text">
+              {about.story.map((paragraph) => (
+                <p key={paragraph}>{paragraph}</p>
+              ))}
             </div>
-          ))}
-        </dl>
-        <div className="about-facts__bio">
-          {about.bio.map((paragraph) => (
-            <p key={paragraph}>{paragraph}</p>
-          ))}
-        </div>
-      </section>
+          </section>
 
-      <section className="about-companies" aria-labelledby="about-companies">
-        <h2 id="about-companies" className="page-heading">
-          {about.companiesTitle}
-        </h2>
-        <ul>
-          {site.companies.map((company) => (
-            <li key={company.name} className="about-company">
-              <p className="about-company__name">{company.name}</p>
-              <p className="about-company__text">{company.description}</p>
-              <div className="page-actions">
-                <Link className="btn btn-ink btn-sm" href={blogHref(about.stories[company.name])}>
-                  Why I started {company.name}
-                  <ArrowRight />
-                </Link>
-                <a className="btn btn-sm" href={company.url} target="_blank" rel="noreferrer">
-                  {company.url.replace("https://", "")}
+          <section className="about-facts" aria-label="At a glance">
+            <dl>
+              {about.facts.map((fact) => (
+                <div key={fact.label}>
+                  <dt className="text-label">{fact.label}</dt>
+                  <dd>{fact.value}</dd>
+                </div>
+              ))}
+            </dl>
+            <div className="about-facts__bio">
+              {about.bio.map((paragraph) => (
+                <p key={paragraph}>{paragraph}</p>
+              ))}
+            </div>
+          </section>
+
+          <section className="about-companies" aria-labelledby="about-companies">
+            <h2 id="about-companies" className="page-heading">
+              {about.companiesTitle}
+            </h2>
+            <ul>
+              {site.companies.map((company) => (
+                <li key={company.name} className="about-company">
+                  <p className="about-company__name">{company.name}</p>
+                  <p className="about-company__text">{company.description}</p>
+                  <div className="page-actions">
+                    <Link className="btn btn-ink btn-sm" href={blogHref(about.stories[company.name])}>
+                      Why I started {company.name}
+                      <ArrowRight />
+                    </Link>
+                    <a className="btn btn-sm" href={company.url} target="_blank" rel="noreferrer">
+                      {company.url.replace("https://", "")}
+                      <ArrowUpRight />
+                    </a>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </section>
+
+          <section className="about-work" aria-labelledby="about-work">
+            <h2 id="about-work" className="page-heading">
+              {about.work.title}
+            </h2>
+            <p className="page-lead">{about.work.body}</p>
+            <div className="page-actions">
+              <ConnectButton className="btn btn-solid">
+                Connect
+                <ArrowRight />
+              </ConnectButton>
+              {footer.socials.map((social) => (
+                <a key={social.href} className="btn" href={social.href} target="_blank" rel="noreferrer">
+                  {social.label}
                   <ArrowUpRight />
                 </a>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      <section className="about-work" aria-labelledby="about-work">
-        <h2 id="about-work" className="page-heading">
-          {about.work.title}
-        </h2>
-        <p className="page-lead">{about.work.body}</p>
-        <div className="page-actions">
-          <ConnectButton className="btn btn-solid">
-            Connect
-            <ArrowRight />
-          </ConnectButton>
-          {footer.socials.map((social) => (
-            <a key={social.href} className="btn" href={social.href} target="_blank" rel="noreferrer">
-              {social.label}
-              <ArrowUpRight />
-            </a>
-          ))}
+              ))}
+            </div>
+          </section>
         </div>
-      </section>
+      </div>
     </main>
   );
 }

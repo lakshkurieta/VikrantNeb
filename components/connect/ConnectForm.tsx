@@ -15,12 +15,14 @@ const ICONS = { youtube: YouTubeMark, linkedin: LinkedInMark } as const;
  * The query form behind every Connect button. It opens and closes with the theme switch's circle
  * reveal (lib/reveal.ts), grown from the button that was pressed.
  *
- * There is no mail server behind this site, so sending opens the visitor's email app with the
- * message addressed to Vikrant and laid out; his address is shown too, in case it doesn't open.
+ * Sending posts the form to Formspree (`contact.form`), which delivers it to Vikrant's inbox with the
+ * visitor's email as the reply-to. While it sends the button says so; if it fails the form stays as
+ * typed, with his address beside the error. `_gotcha` is Formspree's honeypot: hidden from people,
+ * filled in only by bots.
  */
 export function ConnectForm() {
   const [open, setOpen] = useState(false);
-  const [sent, setSent] = useState(false);
+  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "failed">("idle");
   const dialogRef = useRef<HTMLDivElement>(null);
   const returnTo = useRef<Element | null>(null);
 
@@ -30,7 +32,7 @@ export function ConnectForm() {
     () =>
       onConnect((origin) => {
         returnTo.current = document.activeElement;
-        setSent(false);
+        setStatus("idle");
         circleReveal(() => flushSync(() => setOpen(true)), origin);
       }),
     [],
@@ -50,19 +52,21 @@ export function ConnectForm() {
     };
   }, [open]);
 
-  const send = (event: FormEvent<HTMLFormElement>) => {
+  const send = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    const field = (name: string) => String(data.get(name) ?? "").trim();
-    const subject = `${field("topic") || "Hello"} · ${field("name")}`;
-    const body = [
-      field("message"),
-      "",
-      `${field("name")}${field("company") ? `, ${field("company")}` : ""}`,
-      field("email"),
-    ].join("\n");
-    window.location.href = `mailto:${contact.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    setSent(true);
+    data.set("_subject", `${data.get("topic") || "Hello"} · ${data.get("name")}`);
+    setStatus("sending");
+    try {
+      const response = await fetch(contact.form, {
+        method: "POST",
+        body: data,
+        headers: { Accept: "application/json" },
+      });
+      setStatus(response.ok ? "sent" : "failed");
+    } catch {
+      setStatus("failed");
+    }
   };
 
   if (!open) return null;
@@ -113,7 +117,7 @@ export function ConnectForm() {
           </ul>
         </div>
 
-        {sent ? (
+        {status === "sent" ? (
           <div className="connect__sent" role="status">
             <p className="connect__sent-title">{contact.sent.title}</p>
             <p>
@@ -155,8 +159,14 @@ export function ConnectForm() {
               <span>Message</span>
               <textarea name="message" rows={5} required />
             </label>
-            <button type="submit" className="btn btn-solid connect__send">
-              {contact.send}
+            <input className="connect__trap" type="text" name="_gotcha" tabIndex={-1} autoComplete="off" aria-hidden />
+            {status === "failed" && (
+              <p className="connect__failed" role="alert">
+                {contact.failed} <a href={`mailto:${contact.email}`}>{contact.email}</a>.
+              </p>
+            )}
+            <button type="submit" className="btn btn-solid connect__send" disabled={status === "sending"}>
+              {status === "sending" ? contact.sending : contact.send}
               <ArrowRight />
             </button>
           </form>

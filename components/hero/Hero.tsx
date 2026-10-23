@@ -34,18 +34,19 @@ export function Hero() {
         className="absolute inset-0"
         frameClassName={[
           "left-1/2 aspect-square -translate-x-1/2",
-          // Phones and tablets: above the copy.
-          "top-[7svh] w-[min(112vw,54svh)]",
+          // Phones and tablets: from under the menu right down to the bottom, the copy over it.
+          "top-[10svh] bottom-0 w-auto",
           // Desktop: centred and anchored to the bottom, the bust dissolving into the page.
           "lg:top-auto lg:bottom-0 lg:h-[min(94%,74vw)] lg:w-auto",
         ].join(" ")}
       />
 
-      {/* Phones: keeps the copy legible over the bust. Desktop: hides the section's bottom edge,
-          where scattering particles would otherwise be cut off in a hard line. */}
+      {/* Phones: a light veil under the copy, so it reads over the particles without hiding them.
+          Desktop: hides the section's bottom edge, where scattering particles would otherwise be cut
+          off in a hard line. */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-[42%] bg-linear-to-t from-canvas via-canvas/85 to-transparent lg:h-[12%] lg:via-canvas/60"
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-[56%] bg-linear-to-t from-canvas/85 via-canvas/60 to-transparent lg:h-[12%] lg:from-canvas lg:via-canvas/60"
       />
 
       <div className="relative z-10 flex h-full flex-col px-gutter pt-24 pb-5 lg:pb-7">
@@ -152,7 +153,7 @@ function Bio() {
 function Actions() {
   const { primary, secondary } = hero.ctas;
   return (
-    <div className="intro-fade mt-8 flex flex-wrap items-center gap-3" style={delay(860)}>
+    <div className="hero-actions intro-fade mt-8 flex flex-wrap items-center gap-3" style={delay(860)}>
       <Magnetic>
         <a href={primary.href} target="_blank" rel="noreferrer" className="btn btn-solid">
           {primary.label}
@@ -161,7 +162,7 @@ function Actions() {
       </Magnetic>
       <a href={secondary.href} className="btn">
         <Play />
-        <span className="max-sm:sr-only">{secondary.label}</span>
+        {secondary.label}
       </a>
     </div>
   );

@@ -137,9 +137,9 @@ export const book = {
 export const about = {
   eyebrow: "About Vikrant",
   title: { top: "Operator", joiner: "by", bottom: "instinct." },
-  /** His photograph, not the 3D bust render the podcast stage uses. */
+  /** His black-and-white studio portrait; the About page takes its dark backdrop as the page's own. */
   portrait: {
-    src: "/images/portrait/vikrant-neb.webp",
+    src: "/images/portrait/vikrant-neb-about.webp",
     alt: "Vikrant Neb",
   },
   statement:
@@ -303,9 +303,13 @@ export const contact = {
   intro:
     "Whether you’re running a 3PL, scaling an operation, or just want to push back on something in the book, Vikrant reads every message. For speaking, advisory or media, this is the place.",
   topics: ["Advisory", "Speaking", "Media", "Podcast", "Something else"],
+  /** Formspree: the form posts here and the message lands in Vikrant's inbox. */
+  form: "https://formspree.io/f/xgaoqeob",
   send: "Send message",
+  sending: "Sending…",
   sent: {
-    title: "Your email is ready to send.",
-    body: "Your email app has opened with your message to Vikrant. If it didn’t, write to",
+    title: "Thanks, your message is on its way.",
+    body: "Vikrant reads every message and will reply to the email you gave. Anything urgent, write to",
   },
+  failed: "That didn’t send. Please try again, or write to",
 } as const;

@@ -344,12 +344,19 @@ skeleton into strokes in writing order (left to right, underline last, then dots
   is known from layout; DeckMotion measures on resize and writes `--arrive`, `--land` (the highlighter sweep) and
   `--depth` (how far back in the stack: smaller, tilted, faded) per card, and lifts the newest reader's face.
   Quotes and photos are from the live site's "Kind Words From Our Readers"; `mark` is the line highlighted.
-- **Resources** (`ResourcesSection.tsx`, `app/resources`): each paper is a `PaperCover`, the cover on two loose
-  sheets that fan out on hover while the stack tilts toward the cursor (`PaperTilt`). The PDFs and covers are in
-  `public/assets/resources`; download buttons use the `download` attribute, and the paper page embeds the PDF in the
-  browser's own viewer (phones get a link instead). Titles and descriptions follow the live /resources pages; note
-  the PDFs' own cover titles differ ("Pricing What Actually Got Picked", "From Pallet In, Pallet Out to 10,000 Orders
-  a Day"). The home page shows two papers (`resourcesIntro.home`) and a "Show all" link; `/resources` shows all.
+- **Resources** (`ResourcesSection.tsx`, `app/resources`): the home page shows two papers (`resourcesIntro.home`)
+  as an editorial index, big numbered rows that wipe in from the left as they scroll in (a CSS scroll-driven
+  animation), each showing its cover beside it on hover (inline on phones), then "Show all". `/resources` is a
+  bookshelf: every paper as a 3D booklet (cover plus page edges) on a lit stage, turning in as it scrolls into view
+  and straightening on hover, the newest featured large and the rest in a grid with their buttons lined up. Each
+  paper's own page still shows its `PaperCover` stack. The PDFs and covers are in `public/assets/resources`; download
+  buttons use the `download` attribute. Titles and descriptions follow the live /resources pages; note the PDFs' own
+  cover titles differ ("Pricing What Actually Got Picked", "From Pallet In, Pallet Out to 10,000 Orders a Day").
+- **Phones** (under 768px): the hero's particle portrait runs from under the menu to the bottom, the copy over it;
+  the 3D bust is left out (not even loaded); the book rests between its heading and buttons (`BookScene` takes that
+  band), returning to centre for the dive; the menu's links sit right under its bar; every group of buttons stacks
+  into full-width buttons of one height (globals.css). On About the portrait fills the first screen, then stays
+  pinned behind the text, dimming as it scrolls.
 - **Footer** (`components/layout/Footer.tsx`): in the root layout, so it's on every page. One small panel: the signed
   sign-off on the left; on the right the page links, Connect, icon links (YouTube and LinkedIn from `footer.socials`
   in `content/site.ts`, plus the contact email) and a slim book link; the last line under both.
@@ -359,8 +366,8 @@ skeleton into strokes in writing order (left to right, underline last, then dots
 - **Episodes** (`content/episodes.ts`): 1–7 come from the current vikrantneb.com episode pages (its Framer CMS data),
   8–10 from their YouTube pages; covers are the YouTube thumbnails. The home page lists the newest three and "Show all"
   opens `/podcast`, which lists every one. Each has a page at `/podcast/[slug]`: the video (loaded on press), title and
-  brief pinned on the left while what you'll learn, the guest and, for 1–7, the full transcript
-  (`content/transcripts.ts`; 8–10 have none published yet) scroll past on the right. The guest card carries their
+  brief pinned on the left while what you'll learn, the guest and, the full transcript
+  (`content/transcripts.ts`: 1–7 from the old site, 8–10 from their transcript PDFs) scroll past on the right. The guest card carries their
   headshot (`public/assets/podcast/guests/<slug>.webp`, 320px: from the old site's episode pages for 1–7, cropped
   from the episode thumbnail for 8–10); a new episode needs one there. The left column pins where it
   starts and is one screen tall: the video shrinks to leave the text room, so it never scrolls on screens from 1280×720
@@ -377,21 +384,22 @@ skeleton into strokes in writing order (left to right, underline last, then dots
   where Menu was) over a dimmed page, its links rising in one by one, the current section marked. It replaces the old
   link row on every screen size.
 - **Connect** (`components/connect`): every "Connect" / "Get in touch" button opens the query form, revealed by the
-  theme switch's circle (`lib/reveal.ts`). There is no mail server, so sending opens the visitor's email app with the
-  message addressed to me@vikrantneb.com.
+  theme switch's circle (`lib/reveal.ts`). Sending posts it to Formspree (`contact.form` in `content/site.ts`), which
+  delivers it to Vikrant's inbox with the visitor's email as reply-to and "Topic · Name" as the subject; a hidden
+  `_gotcha` field catches bots. If it fails, the form keeps what was typed and shows me@vikrantneb.com as a fallback.
 
 ## Pages
 
 The site is one long home page and a set of pages. The menu and footer open the pages; on the home page the menu
 marks the section you're in, and each section links to its page.
 
-| Page         | File                     | Layout                                                                                                   |
-| ------------ | ------------------------ | -------------------------------------------------------------------------------------------------------- |
-| `/about`     | `app/about/page.tsx`     | Statement beside him on the site blue; his story (from the old site's About); facts; Leanafy and Kurieta |
-| `/book`      | `app/book/page.tsx`      | CSS 3D cover; the back cover word for word (pitch, five hidden reasons, quote); every reader; details    |
-| `/podcast`   | `app/podcast/page.tsx`   | The show; the newest episode playing in place; every earlier episode as a card                           |
-| `/blogs`     | `app/blogs/page.tsx`     | Every article                                                                                            |
-| `/resources` | `app/resources/page.tsx` | The white papers side by side, each with what you'll learn                                               |
+| Page         | File                     | Layout                                                                                                                                                                                |
+| ------------ | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `/about`     | `app/about/page.tsx`     | A split: his black-and-white portrait pinned on the left (the page in its dark backdrop, both themes), the italic title, statement, story, facts and companies scrolling on the right |
+| `/book`      | `app/book/page.tsx`      | CSS 3D cover; the back cover word for word (pitch, five hidden reasons, quote); every reader; details                                                                                 |
+| `/podcast`   | `app/podcast/page.tsx`   | The show; the newest episode playing in place; every earlier episode as a card                                                                                                        |
+| `/blogs`     | `app/blogs/page.tsx`     | Every article                                                                                                                                                                         |
+| `/resources` | `app/resources/page.tsx` | The bookshelf: every paper as a 3D booklet, the newest featured, each with what you'll learn and its buttons                                                                          |
 
 Shared page chrome is `components/page/page.css`; copy lives in `content/site.ts` (`about`, `book.back`,
 `podcast.page`). The white papers on `/resources/[slug]` are complete: `content/papers.ts` carries every line of each

@@ -220,6 +220,13 @@
   }
 }
 @media (width < 768px) {
+  /* No pause after the last card on phones: Resources follows straight on. */
+  .readers {
+    padding-bottom: 28px;
+  }
+  .readers-deck {
+    padding-bottom: 0;
+  }
   .readers-title {
     font-size: clamp(2.6rem, 13vw, 4rem);
   }

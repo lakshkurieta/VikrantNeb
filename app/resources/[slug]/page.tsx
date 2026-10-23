@@ -13,6 +13,7 @@ import { ConnectButton } from "@/components/connect/ConnectButton";
 import { PaperCover } from "@/components/resources/PaperCover";
 import { PaperExhibit } from "@/components/resources/Exhibits";
 import { ArrowRight, ArrowUp } from "@/components/ui/icons";
+import "@/components/resources/more.css";
 import "../resource.css";
 
 /** Every paper is prerendered at build time. */

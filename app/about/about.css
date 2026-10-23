@@ -1,25 +1,71 @@
 /*
-  About (app/about): an editorial profile. He stands on the site's blue beside his statement; the
-  story reads in one column under a pinned label; then the facts, his companies, and how to reach him.
+  About (app/about): an editorial profile as a split. His black-and-white portrait stays pinned on the
+  left, on its own dark backdrop, which this page takes as its background; on the right the title and
+  statement, his story, the facts, his companies and how to reach him scroll past it.
 */
-.about {
+/* The portrait's backdrop, in either theme, so the photograph sits in the page rather than on it.
+   Only while this page is showing: after navigating away, Next keeps it in the document hidden
+   (display: none), and the rest of the site keeps its own colours. */
+:root:has(main.about:not([style*="display: none"])) {
+  --color-canvas: #171717;
+  --color-raised: #202020;
+  --color-fg: #efe9df;
+  --color-muted: #a29b90;
+  --color-subtle: #57524b;
+  --color-line: rgb(239 233 223 / 0.12);
+  --color-signal: #3a78ee;
+  background: var(--color-canvas);
+}
+/* This page keeps its own backdrop in both themes, so the light/dark switch has nothing to do here. */
+:root:has(main.about:not([style*="display: none"])) .theme-toggle {
+  display: none;
+}
+/* ---- The split: him pinned on the left, everything else scrolling past on the right ------------- */
+.page > .about-split {
+  max-width: 1440px;
+}
+.about-split {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  gap: clamp(40px, 6vw, 112px);
+  align-items: start;
+}
+/* Pinned where it starts (the page's top padding, components/page/page.css), one screen tall, so it
+   never moves while the text scrolls. */
+.about-portrait {
+  --pin: max(120px, 14svh);
+  position: sticky;
+  top: var(--pin);
+  height: calc(100svh - var(--pin) - 24px);
+}
+/* No frame: the photograph fills the column and its edges fade into the page's matching backdrop. */
+.about-portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 55% 30%;
+  mask-image:
+    linear-gradient(to right, transparent, #000 18%, #000 84%, transparent),
+    linear-gradient(transparent, #000 6%, #000 78%, transparent);
+  mask-composite: intersect;
+}
+.about-main {
   display: grid;
   gap: clamp(72px, 12svh, 140px);
 }
 
-/* ---- Head: statement left, him on blue right ------------------------------------------------- */
-.about-head {
-  display: grid;
-  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
-  gap: clamp(32px, 5vw, 80px);
-  align-items: end;
-}
+/* ---- Title and statement ----------------------------------------------------------------------- */
+/* The title in the italic serif, the accent face, rather than the headline caps. */
 .about-title {
   margin-top: 18px;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  line-height: 0.95;
+  letter-spacing: 0;
+  text-transform: none;
 }
-.about-title > span {
-  display: block;
-}
+.about-title > span,
 .about-title em {
   display: block;
 }
@@ -32,34 +78,11 @@
   line-height: 1.25;
   letter-spacing: -0.02em;
 }
-.about-portrait {
-  position: relative;
-  aspect-ratio: 4 / 5;
-  overflow: clip;
-  border-radius: 6px;
-  background: var(--color-signal);
-}
-/* A square photograph in a 4/5 frame: fill it and keep his face centred, rather than the
-   bottom-anchored fit the taller 3D bust render needed. */
-.about-portrait img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: 50% 42%;
-}
 
-/* ---- Story: a pinned label, one reading column ------------------------------------------------ */
+/* ---- Story: its label, then one reading column ------------------------------------------------ */
 .about-story {
   display: grid;
-  grid-template-columns: minmax(0, 3fr) minmax(0, 7fr);
-  gap: 32px clamp(32px, 5vw, 80px);
-  align-items: start;
-}
-.about-story__label {
-  position: sticky;
-  top: 120px;
+  gap: 24px;
 }
 .about-story__text {
   display: grid;
@@ -80,11 +103,10 @@
   color: var(--color-signal);
 }
 
-/* ---- Facts beside the short bio --------------------------------------------------------------- */
+/* ---- Facts over the short bio ----------------------------------------------------------------- */
 .about-facts {
   display: grid;
-  grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
-  gap: clamp(32px, 5vw, 80px);
+  gap: clamp(32px, 5svh, 48px);
   padding-top: clamp(32px, 5svh, 56px);
   border-top: 1px solid var(--color-line);
 }
@@ -153,17 +175,45 @@
   justify-items: start;
 }
 
+/* Phones and tablets: the portrait alone fills the first screen, then stays pinned behind the page as
+   the text scrolls up over it, dimming to a backdrop as it goes (a scroll-driven fade). Both share one
+   grid cell so the portrait can stay pinned for the whole page. */
 @media (width < 1024px) {
-  .about-head,
-  .about-story,
-  .about-facts {
+  .about-split {
     grid-template-columns: minmax(0, 1fr);
   }
-  .about-portrait {
-    max-width: 520px;
+  .about-split > * {
+    grid-area: 1 / 1;
   }
-  .about-story__label {
-    position: static;
+  .about-portrait {
+    --pin: 0px;
+    height: 100svh;
+    /* Full bleed, from the very top of the page (under the menu bar). */
+    margin: calc(-1 * max(120px, 14svh)) calc(-1 * var(--spacing-gutter)) 0;
+  }
+  .about-portrait img {
+    object-position: 58% 30%;
+    mask-image: linear-gradient(transparent, #000 12%, #000 74%, transparent);
+    animation: about-dim linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0 70svh;
+  }
+  .about-main {
+    position: relative;
+    z-index: 1;
+    /* The text starts at the bottom of the first screen. */
+    padding-top: calc(100svh - max(120px, 14svh));
+  }
+  /* Without scroll-driven animations the portrait starts as the backdrop, so the text stays readable. */
+  @supports not (animation-timeline: scroll()) {
+    .about-portrait img {
+      opacity: 0.22;
+    }
+  }
+}
+@keyframes about-dim {
+  to {
+    opacity: 0.16;
   }
 }
 @media (width < 640px) {

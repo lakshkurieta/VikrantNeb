@@ -31,7 +31,7 @@
 }
 .studio[data-arrived] .studio__bust,
 .studio[data-arrived][data-side="podcast"] :is(.podcast-heading, .podcast-body, .podcast-signup),
-.studio[data-arrived][data-side="writing"] :is(.writing-pin__head, .writing-list) {
+.studio[data-arrived][data-side="writing"] :is(.writing-pin__head, .writing-list, .writing-more) {
   pointer-events: auto;
 }
 
@@ -206,6 +206,10 @@
 
 /* ---- One column: no rail, no pan. He stands at the top of the studio, above the podcast. ---------- */
 @media (width < 1024px) {
+  /* One column: no cross-over, so Writing sits in place under the podcast and takes clicks too. */
+  .studio[data-arrived] :is(.writing-pin__head, .writing-list, .writing-more) {
+    pointer-events: auto;
+  }
   .studio__rail {
     position: relative;
     inset: auto;
@@ -222,9 +226,10 @@
     translate: none;
   }
 }
+/* Phones: no 3D bust; the podcast opens the section on its own. */
 @media (width < 768px) {
-  .studio__bust {
-    height: clamp(380px, 54svh, 500px);
+  .studio__rail {
+    display: none;
   }
   .studio__ghost {
     font-size: 12.5vw;

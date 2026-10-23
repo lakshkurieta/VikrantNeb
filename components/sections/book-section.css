@@ -286,6 +286,14 @@
   .book-footer {
     bottom: 5%;
     justify-content: space-between;
+    /* Fades in place: buttons that slide under a finger feel unsteady. */
+    transform: none;
+  }
+  /* The poster that stands in for the book keeps to the space between heading and buttons, as the book does
+     (BookSection sets the band). */
+  .book-poster {
+    top: calc((var(--book-band-top, 0px) + var(--book-band-bottom, 100%)) / 2);
+    height: min(58%, 0.9 * (var(--book-band-bottom, 100%) - var(--book-band-top, 0px)));
   }
   /* The header has no room beside the book on phones, so the badge joins the CTA in the footer. */
   .book-amazon--corner {

@@ -1,0 +1,29 @@
+/*
+  "Looking for something that isn’t here?": the closing panel of the home Resources section, the
+  /resources page and each paper's page.
+*/
+.resources-more {
+  margin-top: clamp(72px, 12svh, 128px);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px 32px;
+  padding: clamp(24px, 3vw, 40px);
+  border-radius: 28px;
+  background: var(--color-raised);
+}
+.resources-more p {
+  font-size: clamp(1.2rem, 1.9vw, 1.8rem);
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+.resources-more__title {
+  font-family: var(--font-display);
+  font-weight: 800;
+}
+.resources-more em {
+  font-family: var(--font-serif);
+  font-style: italic;
+  color: var(--color-signal);
+}

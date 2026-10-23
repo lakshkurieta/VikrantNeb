@@ -29,6 +29,8 @@ export function BookSection() {
     const host = hostRef.current;
     if (!section || !stage || !host) return;
     const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    // Matches book-section.css's phone layout (heading above the book, buttons below).
+    const phone = window.matchMedia("(width < 768px)");
     let scene: BookScene | null = null;
     let disposed = false;
     let visible = false;
@@ -58,7 +60,17 @@ export function BookSection() {
       // Background title: travels 105% of its own width over the book's scroll, at one constant
       // speed that also carries it in from the right during the hand-off.
       marqueeSpeed = handoff > 0 && marquee ? (1.05 * marquee.offsetWidth) / distance : 0;
-      scene?.resize(host.clientWidth, host.clientHeight);
+      // Phones: the heading sits above the book and the buttons below it, so the book keeps to the
+      // space between them (and so does the poster that stands in for it).
+      const header = stage.querySelector<HTMLElement>(".book-header");
+      const footer = stage.querySelector<HTMLElement>(".book-footer");
+      const band: [number, number] =
+        phone.matches && header && footer
+          ? [header.offsetTop + header.offsetHeight + 16, footer.offsetTop - 16]
+          : [0, host.clientHeight];
+      stage.style.setProperty("--book-band-top", `${band[0]}px`);
+      stage.style.setProperty("--book-band-bottom", `${band[1]}px`);
+      scene?.resize(host.clientWidth, host.clientHeight, band);
       last = -1;
       lastEnter = -1;
       lastProgress = -1;

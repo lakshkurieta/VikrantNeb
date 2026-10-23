@@ -1,6 +1,9 @@
 /*
-  The library (app/resources): the title across the top, then the papers side by side as tall
-  cards, each cover on its own raised panel. Each paper's reading page is app/resources/[slug].
+  The library (app/resources) as a bookshelf: the title across the top, then every paper as a 3D
+  booklet (its cover with the page block behind it) on its own lit stage. The newest is featured
+  large beside its details; the rest sit in a grid, their buttons lined up along each row. Booklets
+  turn in from the side as they scroll into view and straighten toward you on hover. Each paper's
+  reading page is app/resources/[slug].
 */
 .library {
   display: grid;
@@ -31,86 +34,149 @@
   letter-spacing: -0.02em;
 }
 
-.library-papers {
+/* ---- The shelf ---------------------------------------------------------------------------------- */
+.shelf {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(48px, 7svh, 72px) clamp(20px, 3vw, 40px);
-  align-items: start;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(48px, 7svh, 80px) clamp(20px, 2.6vw, 36px);
 }
-.library-paper {
+.shelf-item {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+/* The newest: across the shelf, the booklet beside its details. */
+.shelf-item:first-child {
+  grid-column: 1 / -1;
   display: grid;
-  gap: 14px;
+  grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+  align-items: center;
+  gap: clamp(28px, 5vw, 88px);
 }
-/* Side by side, the papers share their rows (subgrid): cover, title, kicker, summary, list and buttons
-   line up across both, even though only one paper lists what you'll learn. */
-@media (width >= 1024px) {
-  /* The shared rows' spacing: a larger gap here would pad every short row (the kicker) to make it up. */
-  .library-papers {
-    row-gap: 14px;
-  }
-  .library-paper {
-    grid-row: span 6;
-    grid-template-rows: subgrid;
-  }
-  .library-paper__learn {
-    grid-row: 5;
-  }
-  /* Room between one row of papers and the next (the shared row gap can't give it). */
-  .library-paper .page-actions {
-    grid-row: 6;
-    margin-bottom: clamp(36px, 6svh, 60px);
-  }
-}
-.library-paper__cover {
+.shelf-item__stage {
   display: grid;
   place-items: center;
-  margin-bottom: 14px;
-  padding: clamp(32px, 5vw, 64px);
-  border-radius: 6px;
-  background: var(--color-raised);
+  padding: clamp(36px, 5vw, 64px) 0;
+  border-radius: 8px;
+  background: radial-gradient(
+    110% 90% at 50% 0%,
+    color-mix(in srgb, var(--color-signal) 12%, var(--color-raised)),
+    var(--color-raised) 70%
+  );
+  perspective: 1600px;
 }
-.library-paper__cover > * {
-  width: min(320px, 78%);
+.shelf-item__text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 12px;
 }
-.library-paper__title {
+.shelf-item__title {
   font-family: var(--font-display);
-  font-size: clamp(1.6rem, 2.4vw, 2.2rem);
+  font-size: clamp(1.4rem, 1.9vw, 1.9rem);
   font-weight: 800;
-  line-height: 1.05;
-  letter-spacing: -0.03em;
+  line-height: 1.08;
+  letter-spacing: -0.025em;
   text-wrap: balance;
 }
-.library-paper__title a {
+.shelf-item:first-child .shelf-item__title {
+  font-size: clamp(2rem, 3.6vw, 3.4rem);
+  line-height: 1.02;
+}
+.shelf-item__title a {
   transition: color 250ms;
 }
-
-.library-paper__kicker {
+.shelf-item__kicker {
   font-family: var(--font-serif);
   font-size: 1.15rem;
   font-style: italic;
+  line-height: 1.3;
   color: var(--color-signal);
 }
-.library-paper__summary {
-  max-width: 52ch;
-  font-size: 16px;
+.shelf-item__summary {
+  max-width: 56ch;
+  font-size: 15.5px;
   line-height: 1.6;
   color: var(--color-muted);
 }
-.library-paper__learn {
+.shelf-item__learn {
   display: grid;
   gap: 8px;
-  margin: 4px 0 10px;
   padding-left: 1.1em;
   list-style: square;
-  font-size: 15px;
+  font-size: 14.5px;
   line-height: 1.5;
 }
-.library-paper__learn li::marker {
+.shelf-item__learn li::marker {
   color: var(--color-signal);
+}
+/* Buttons at the foot of every card, so they line up along each row. */
+.shelf-item__text .page-actions {
+  margin-top: auto;
+  padding-top: 12px;
+}
+
+/* ---- The booklet: the cover, turned, with the page block behind its right edge ------------------ */
+.booklet-in,
+.booklet {
+  display: block;
+  transform-style: preserve-3d;
+}
+.booklet-in {
+  width: min(250px, 64%);
+}
+.shelf-item:first-child .booklet-in {
+  width: min(360px, 66%);
+}
+.booklet {
+  position: relative;
+  transform: rotateY(-26deg) rotateX(4deg);
+  transition: transform 1000ms var(--ease-out-expo);
+}
+.booklet__cover {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 2px 5px 5px 2px;
+  box-shadow: 0 50px 80px -40px rgb(0 0 0 / 0.55);
+}
+.booklet__pages {
+  position: absolute;
+  top: 1.2%;
+  right: 0;
+  width: 16px;
+  height: 97.6%;
+  transform-origin: right center;
+  transform: rotateY(90deg);
+  background: repeating-linear-gradient(to right, #f4f1ea 0 2px, #d9d2c5 2px 3px);
+}
+/* Scrolling in: each booklet turns in from edge-on and settles (a scroll-driven animation). */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .booklet-in {
+      animation: booklet-in linear both;
+      animation-timeline: view();
+      animation-range: entry 5% cover 40%;
+    }
+  }
+}
+@keyframes booklet-in {
+  from {
+    opacity: 0;
+    transform: translateY(40px) rotateY(-55deg);
+  }
 }
 
 @media (width < 1024px) {
-  .library-papers {
+  .shelf {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .shelf-item:first-child {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (width < 640px) {
+  .shelf {
     grid-template-columns: minmax(0, 1fr);
   }
 }
@@ -118,7 +184,10 @@
 /* Hover effects only where a hover-capable pointer exists: on touch these states latch
    on tap and stay stuck until you tap somewhere else. */
 @media (hover: hover) and (pointer: fine) {
-  .library-paper__title a:hover {
+  .shelf-item:hover .booklet {
+    transform: rotateY(-8deg) rotateX(2deg) translateY(-8px);
+  }
+  .shelf-item__title a:hover {
     color: var(--color-signal);
   }
 }

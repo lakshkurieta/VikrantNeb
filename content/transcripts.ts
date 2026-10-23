@@ -1,7 +1,7 @@
 /**
- * Episode transcripts, from the current vikrantneb.com episode pages, as speaker turns. Only the
- * episode pages import this (app/podcast/[slug]), so it never reaches the browser bundle.
- * Episodes without one here (8–10) have no transcript published yet.
+ * Episode transcripts as speaker turns: 1–7 from the current vikrantneb.com episode pages, 8–10 from
+ * the transcript PDFs (their timestamps left out, as the others have none). Only the episode pages
+ * import this (app/podcast/[slug]), so it never reaches the browser bundle.
  */
 export type Turn = { speaker?: string; role?: "Host" | "Guest"; heading?: string; text: readonly string[] };
 
@@ -1528,6 +1528,632 @@ export const transcripts: Partial<Record<string, readonly Turn[]>> = {
       speaker: "Kevin Lawton",
       role: "Guest",
       text: ["Allright, thank you, everybody...."],
+    },
+  ],
+  "15-companies-2b-in-revenue-the-leadership-behind-scale": [
+    {
+      speaker: "Vikrant",
+      role: "Host",
+      text: [
+        "Welcome everyone to Execution at Scale. We're real operators, real answers, as we know that all the conversations happen over coffee or beer. So today I have Dr. Jim Tompkins, who is an international authority in supply chain building end-to-end supply chain solutions. Jim is more than just a person I know. I've known him for more than five years. He answered me first time when I was starting my second company just over a LinkedIn message, which I really appreciate him for. I don't think Jim, I ever formally thank you for that, but thanks a lot for always helping me out, getting on a call with me for no reason, even if it was like for me venting out that how things are going. So really appreciate that. Over 50 years, Jim has founded 15 businesses that together generated over 2 billion in revenue. His latest venture was Tompkins Ventures in 2020, which apparently he claims like he did it out of retirement. And yeah, like, you know, it's a pleasure to have you, Jim. And Jim holds a bachelor degree from bachelor, master's and PhD from Purdue University, where I graduated from as well in industrial engineering too. So boiler up, yeah. He has written 31 books, more than 2000 articles, more than 2000 speaking events. And I think as far as podcasts go, this would be 500 plus.",
+      ],
+    },
+    {
+      speaker: "Jim Tompkins",
+      role: "Guest",
+      text: [
+        "So, well, you said that I helped you without any background. Hey, we're both Boilermakers. So we all stick together.",
+      ],
+    },
+    { speaker: "Vikrant", role: "Host", text: ["Appreciate it. Boiler up again."] },
+    { speaker: "Jim Tompkins", role: "Guest", text: ["Yes."] },
+    {
+      speaker: "Vikrant",
+      role: "Host",
+      text: [
+        "Awesome. So let's go into like, so our main agenda for today is resilience versus efficiency. So Jim, my first question to you is that you have written a lot, which I read like, you know, about the tension between resilience and efficiency. So where do you see like companies getting that trade off wrong?",
+      ],
+    },
+    {
+      speaker: "Jim Tompkins",
+      role: "Guest",
+      text: [
+        "Well, I think what we see is that people get the trade off wrong because they don't really understand what resilience and what efficiency really means. Resilience is actually a term from physics. And in physics, if I hold a ball at this height and I drop the ball and it hits the surface and bounces right back up and hits my hand just when it comes back up, that's resilience of one. If I drop the ball and it comes only halfway up, that's a resilience of 0 .5. And so resilience is the ability to absorb shock and to recover quickly. To the contrary, efficiency, and both Baikin and I are industrial engineers, and so we know a lot about efficiencies that was drummed into our heads. Efficiency is the ability to reduce waste. It's the streamline processes and to eliminate anything that does not add value. And so resilience and efficiencies are two totally different concepts. And so how best to illustrate this, I think probably one of the things that hit us around COVID time or a little before that was just a major, wow, what are we doing, is the issue of just-in-time inventory versus just-in-case inventory. Efficiency votes for just-in-time. Resilience votes for just-in-case. And so people ask, which one is right? Well, that's a bad question because it doesn't make sense to answer which one is right. The answer to that question is, it depends, is what are the conditions you're living with?",
+      ],
+    },
+    {
+      speaker: "Vikrant",
+      role: "Host",
+      text: [
+        "You know, when you talk about just-in-time for sure, that was like the first initial years, that's all I was doing, that how do we get like just-in-time implemented? Oh, like every 15 minutes, we need like these small wires to be shipped to this manufacturing plant, you know, to that point. And another important aspect, which I was thinking was that definitely like efficiency versus resilience, like, you know, you have to plan for both, given like, you know, the right time. I also want to know your thoughts on that sometimes people get to know about the impact late. What I mean by that is, I can maybe give a real-life example of me, like, you know, when COVID hit, I came back, I cannot remember where I came back from, to Indiana, and in 2020, and I went to go get milk because I was suddenly feeling like eating cereal randomly. And I realized, all the grocery stores are empty. And that was the moment I realized that, oh, like, what's going on, I went to Trader Joe's, tried to like, you know, stock up and like, you know, obviously, people react in those scenarios as well, which everyone did. And at the same time, this reminds me of the other concept, the bullwhip effect in supply chain, right? So like, the small chain starts very early, but people really get to know it later on. And again, and again, you were saying 2018, but everything about resilience, and being able to like the VUCA times and everything like that all started more like, you know, people started talking more about it in like, after 2020. So I also want to know a little bit your thoughts on that. And what was the main thing which changed in 2018, according to you?",
+      ],
+    },
+    {
+      speaker: "Jim Tompkins",
+      role: "Guest",
+      text: [
+        "Yeah, you're absolutely right. I mean, 2018, we lost the steady state. 2020, we went crazy. Because nobody knew anything. I can recall a vice president of manufacturing for a major appliance company called me, and he was crying. He says, Jim, I just had to send 1400 people home, because we can't make refrigerators, we can't make washers, we can't make dryers, there's nothing we can manufacture, because we don't have the components. We're missing something for everything. These 1400 people live from paycheck to paycheck. And when I sent them home, they're going to go home and they're going to wind up having empty refrigerators. And so this is this is just terrible. And oftentimes, this is something that companies do to themselves. Under the banner of efficiency, they put all their eggs in one basket, which results in them being brittle. And so the purchasing department, the purchasing department is buying 100 items for this guy at $1 each. And this guy is buying 200 of those same items, and he's getting for $0.95 each. And this guy is buying 300 of the same item and getting for $0.90 each. And then a smart guy comes along and says, why do we have three sources? Let's buy 300, 400, 500. Let's buy all 600 from the same company. We buy all 600 from the same company, and we're not going to pay $1 or $0.95 or $0.90. We're going to pay $0.85. And look at the money we'll save. We'll save a fortune. Guess what? They do save a fortune. And that's marvelous. And the guy might even get a promotion out of it. But then what's going to happen is you now have all your eggs in one basket. And that company that's selling you that component, when they get disrupted and they're not able to produce, you're out of business.",
+      ],
+    },
+    {
+      speaker: "Vikrant",
+      role: "Host",
+      text: [
+        "Bottom line of everything is supply chain in one way or the other. And I think like optionality versus optimality is probably the keyword from this first section of our talk today. So that brings me to the next question. So you did give some example about the refrigerator company. And can you think of something or maybe share more in detail that a company which leaned more into efficiency?",
+      ],
+    },
+    {
+      speaker: "Jim Tompkins",
+      role: "Guest",
+      text: [
+        "The whole concept of optionality is kind of like insurance. It's an insurance policy. And so the thing we have to think about is the same thing we think about when we buy insurance. And when is the cost of the insurance policy greater than the risk that it alleviates for you? And if you're paying more for your insurance policy, then is likely that you're going to save if the risk occurs, then you have too much resilience. Okay. And so too much resilience means you've got too many options. So maybe I had the example that was three people we were buying from, and that was wrong because the pricing wasn't good. But we also said one was not so good because now you're brittle, but maybe we should have had two. And maybe let's think about four. Let's think about this. How do we change it? Maybe that item is only used on these appliances, but on these appliances, something similar, and I could make that a common part. And I can buy more of that common part, and I can get the benefits of the volume discount, but I don't lose the optionality of having multiple vendors. And so if you build extra inventory that you never use, you don't have extra inventory. What you have is waste. Or if you have extra suppliers, they say, well, let's get five suppliers. Well, we've got five suppliers, but you're only using three. Someone said, well, that doesn't cost you more. Well, it doesn't cost you more, but guess what? That supplier has been adding capability that you don't use. And so if you do need them, he's not there.",
+      ],
+    },
+    {
+      speaker: "Vikrant",
+      role: "Host",
+      text: [
+        "That's amazing. And coming through, so most of the audience who listen to my podcast, as you know, they're more like 3PL. So I would like to ask a more specific 3PL question. So if you were advising a 3PL today, how would you tell them to think about the trade-off differently than a Fortune 500 company?",
+      ],
+    },
+    {
+      speaker: "Jim Tompkins",
+      role: "Guest",
+      text: [
+        "The Fortune 500 companies, they've got scale, they've got capital, they've got bargaining power. And so what they can do is they can maneuver around this resilience thing differently than a mid-size 3PL does. And so it sounds like the same question, but the answers are totally, totally different. So for Fortune 500 company, they can afford resilience by doing redundancy. They've got enough scale that they can do that. But a mid-size 3PL can't do that. And so what they need to do is build redundancy, not by using resilience, but what instead they need to do is they need to be building resilience by using agility. And so the 3PL needs to not use its scale, not try to do a deal that builds resilience, but needs to have a solution that is based on responsive, flexible labor stay as modeled, real-time visibility, and having the ability to pivot quickly.",
+      ],
+    },
+    {
+      speaker: "Vikrant",
+      role: "Host",
+      text: [
+        "We all have like, you know, they are like, people are talking about how do you go from like doing pallet in, pallet out to fulfillment. I also wrote a white paper on it. But what happened after 2020, 2021, there were a lot of companies, 3PLs who were popped up doing only e-commerce. They were even softwares like, you know, WMS systems only helping e-commerce fulfillment. And now they are also like going in the other direction that they need to do like pallet in, pallet out as well, because their clients are asking, how do they do it now? They didn't think about it. And no one is even talking about it. Like as far as I can see, like, you know, being a part of all this that, but that is now becoming a problem. And actually funny enough, I was thinking about this like three weeks back and I got like, I had three conversations this week itself, where there are 3PLs like e-commerce doing great 5,000 orders a day. Like, oh no, but like, we really need to do B2B now. We are also shipping to Costco. We are doing this. Like, and we are not able to manage it. We don't know how to build it. Like, you know, so it's very interesting thing, like to kind of see like how things change, I think goes back to the same thing. How's your, like, what are you seeing like around that part?",
+      ],
+    },
+    {
+      speaker: "Jim Tompkins",
+      role: "Guest",
+      text: [
+        "The one that's going to be the successful 3PL is the one that's the most agile. The one that's going to fail is the one when the client calls up and says, Hey, our volumes, our forecasts were wrong. And we had them backwards. We said, there's a hundred of these and 10 of these. It's actually going to be 90 of these and 40 of these. And so you need to respond. The 3PL that says we can't handle that is not going to be in business. The 3PL that says, okay, that's a hard one, but we're going to make it happen. So agility and speed and responsiveness and those things are really, really critical so we can keep up with this moving target. Because the target, what it says in the contract, that ain't happening. That was just, that was nice thing to agree on some pricing, but now it's the real world. What do we really need to do next month? And that's a challenge.",
+      ],
+    },
+    {
+      speaker: "Vikrant",
+      role: "Host",
+      text: [
+        "Just last year in December, around the holiday season, we scaled up our systems to support X amount of orders. And we got 7X in one day. And, but we were still able to support it, which was kind of a pressure test of our system, but like we all could not sleep all night, like thinking that, oh, what will happen now? And, and same thing. That means if we got hit by that volume, our 3PLs got hit by that too. Like imagine what, like their SLA is getting delabored. Like, are you training more people? And I think this goes back to like one of the conversations you and I had in Atlanta as well, like about workforce, you know, a lot of people, yes, they are training the damn people, but are you training enough?",
+      ],
+    },
+    {
+      speaker: "Jim Tompkins",
+      role: "Guest",
+      text: [
+        "Right on. Yeah, absolutely. And that's a, that's a critical selling point. In fact, when we look at organizations now we say, you know, they want to do the network and optimize the network. Well, do you want to optimize it for January, February, March? Or do you want to optimize it for October, November, December? Because those are totally different networks. How do you do that? Well, you use 3PL.",
+      ],
+    },
+    {
+      speaker: "Vikrant",
+      role: "Host",
+      text: ["Absolutely. Absolutely. And same way, like 3PLs should rely on similar methods too."],
+    },
+    {
+      speaker: "Jim Tompkins",
+      role: "Guest",
+      text: [
+        "Huge, huge. In fact, that gets back down to the basic issue. What is a company's core competency? And is it a core competency that they do their own logistics?",
+      ],
+    },
+    {
+      speaker: "Vikrant",
+      role: "Host",
+      text: [
+        "Especially when we look at like, you know, these small to mid-size companies in general, and, but specifically right now today talking about like 3PLs or ones in supply chain leadership. And like, you know, you have written a whole book on it. So I'll like just probably ask you to summarize a few things out of that. And maybe what's the gap that you most often see between like operators who are great at doing their work versus like leading. Because a lot of these smaller companies come out of, oh, I'm a warehouse manager and 10 years down the line, like I'm, I'm starting a 3PL because this customer loves me, let me do it. And that's how most of these smaller companies are made. So what are your thoughts on that?",
+      ],
+    },
+    {
+      speaker: "Jim Tompkins",
+      role: "Guest",
+      text: [
+        "Well, number one, I need to admit that I've read your book on leadership as well. So if I steal some of your material, since I said it on this show, it's mine now, it's no longer yours, but no. I would have stolen it from you anyway. Well, you know, I think the thing that's interesting is there's an inherent difference in people. Some people, oftentimes engineers, are awesome operators. And what they love to do is they love to solve problems. And we should, we should honor those people. That's amazing that they want to, and they have the ability to solve these problems. To the contrary, leaders don't solve problems. Leaders teach people how to solve problems. Okay. And so there's a, there's a different type of makeup. And so great operators solve problems. Great leaders build people who solve problems. Great operators get promoted because they do a great job at solving problems. And they should, you know, they should remain in the director and in the vice president roles. But then the leaders, they are on the other side of the house. And what they're doing is on focusing on developing others. So are you focusing on developing others? Are you focusing on solving problems? Is the question.",
+      ],
+    },
+    {
+      speaker: "Vikrant",
+      role: "Host",
+      text: [
+        "The hardest shift in this whole leadership thing, and many of us go through it. I started to be an operator, and then I became a leader. And what I need to do is I had to go from, I'll fix that to, I'll teach someone how to fix that. Three years back when I hired the first salesperson in Leanify, like the sales slowed down, like for three months, even four months. But I had to bear that. That is why I can sit here and talk to you now today. So I had to bear loss for that time, etc. to be able to do that. I think that's one of the things which I've seen at the biggest payment. And also, like you said in the beginning that operators love to solve problems. So sometimes when they're not solving problems, they're feeling like, oh, I'm not doing anything.",
+      ],
+    },
+    { speaker: "Jim Tompkins", role: "Guest", text: ["Yes. Yes. Yes."] },
+    {
+      speaker: "Vikrant",
+      role: "Host",
+      text: [
+        "Kind of the same thing. Do you think leadership is teachable? Or is it something either you have or you don't have?",
+      ],
+    },
+    {
+      speaker: "Jim Tompkins",
+      role: "Guest",
+      text: [
+        "There's some people that say, you know, you're born a leader. And so what their stereotype is, this guy's six foot five. He's got a strong jaw. You know, he's got, you know, and then what you find out is the greatest leader in the company is this guy that's five foot two. He's bald. You know, he's got big ears. And you kind of go, wait a minute. That's not the, you know, the Brad Pitt leader that I wanted. And so leadership absolutely is a skill and it absolutely is teachable. Leadership is not a personality trait. Now, you'll find some people that instill enthusiasm in people because they're enthusiastic. You'll find other people instill enthusiasm in people and they're quiet and very controlled, but people get excited about working with them. So there are some natural tendencies that come into play, but if you don't have those natural tendencies, you can learn them. Okay. And so what does it make to be a great leader? Well, you got to be a good speaker. You got to be a good listener. You got to have enthusiasm. You got to have accountability. You got to be honest. You have to have integrity. You need to be able to make decisions. You need to have insight about what's going on around you. You need to be able to create a vision. You need to get people aligned with that vision. And then what you have to do is you have to work hard.",
+      ],
+    },
+    {
+      speaker: "Vikrant",
+      role: "Host",
+      text: [
+        "Totally agree with that. So most important question of the entire session. So 50 years and I know a lot about you, but a lot of people may or may not know. So what is one mistake you made in the leadership scenarios over your career? And how would you have handled that scenario differently?",
+      ],
+    },
+    {
+      speaker: "Jim Tompkins",
+      role: "Guest",
+      text: [
+        "Early in my career, I equated speed with effectiveness. And so I was very interested in moving fast, in making decisions fast, and I expected people around me to stay up. What I learned is that speed without alignment creates chaos. And so the speed at which you can carry a team forward depends upon that ability of that team to understand where they're heading. If they don't know where they're going, if they're not aligned, they're not going to be successful. So now I try to slow down long enough to bring people with me, to explain to people why we are doing what we're doing, and to build a shared understanding of how we can all move together. And that we can move together faster in the long run when people agree with the journey you're on.",
+      ],
+    },
+    {
+      speaker: "Vikrant",
+      role: "Host",
+      text: [
+        "I love it. I love it. And there is like a lot you have given me to think over the weekend. I am also going to think about speed and alignment and vision and make sure my team is aligned. So thank you for sharing that. So when a company is scaling fast, what's the leadership crack which tends to show up? I think one of that which you mentioned that if the team is not aligned with you versus maybe the vision, how to carry with them. So what are some other examples which you can think of?",
+      ],
+    },
+    {
+      speaker: "Jim Tompkins",
+      role: "Guest",
+      text: [
+        "Sometimes this is not easy to detect, but the first crack is communications. Because when we were a smaller company, we all knew what we were doing. We all sat at the same lunch table. We sat together. We talked about what we were doing. And we communicated where we were heading. And so communications was just happening on a real time basis. Well, then when we grew, what we found is that the people were not communicating as clearly. And they assumed people knew what was happening. And so what happened is individuals kind of shifted their thinking. Teams started shifting what they were doing. And what we found is we had a lack of focus. Instead of us all pulling the rope north, we had some people pulling northeast, some people pulling northwest. We had some people pulling the rope southwest because they think we had to straighten up the people that were going northeast. And so we were losing the strength of us moving where we were heading. Now, as you point out, the second crack that comes from the first crack, when communications fall off and we don't have a clear understanding of where we're heading, the next thing that happens is that we start misunderstanding our role. So I thought you were going to do this, Vikram. And Charlie, I thought you were going to do this. And Barbara, I thought you were going to do this. Barbara says, no, no, no, I'm not doing that. Vikram's doing that. And I said, no, no, Vikram. And so now we don't understand the roles. And so now what we find is because of bad communications, we have role assignments which are broken and therefore that breaks the company's alignment.",
+      ],
+    },
+    {
+      speaker: "Vikrant",
+      role: "Host",
+      text: [
+        "Wonderful. That's probably like, you know, the highlight of the session and probably we'll start with the video editing with that line. Thanks for the punchline. And thank you so much, Jim, for your time today. I really appreciate it. And for the audience, thank you for listening. And if you got to this part, that means you would enjoy the next episode, which will be released about two weeks after this episode comes up. So thank you, everyone. And thank you so much. I enjoyed it. Thank you.",
+      ],
+    },
+  ],
+  "50-years-of-supply-chain-one-honest-reflection": [
+    {
+      speaker: "Vikrant",
+      role: "Host",
+      text: [
+        "Good morning, good afternoon everyone, depending on what time you are seeing it. Welcome to Execution at Scale. As you know, this series exists because most conversation happens over coffee and not on the actual stage. And today I have again Dr. Jim Tompkins with me. As we all know, this is episode two of the three-part series me and Jim are doing together. And just still to give you a quick introduction about Jim as most of you know him already, so I'll make it very short and quick. So Jim has spent over 50 years in the industry, started over 15 businesses, written over 30 books and given over like north of about 2000 presentations, which is amazing. And he holds a PhD in industrial engineering along with undergrad from Purdue, like boiler up, love Purdue. And so most of what you hear in this industry is about what happens next. This one is more about like what Jim has seen over the span of 50 years. So essentially reflections over 50 years and counting. So welcome, Jim. Thank you again for your time today and sharing your insights and anything which I missed or anything you would like to add on.",
+      ],
+    },
+    { speaker: "Jim Tompkins", role: "Guest", text: ["All good. Let's do it."] },
+    {
+      speaker: "Vikrant",
+      role: "Host",
+      text: [
+        "Awesome. Love it. Love it. So my first question to you is that 15 businesses, 50 years, that's quite an achievement. So what's the through line, across all of the businesses you have created so far?",
+      ],
+    },
+    {
+      speaker: "Jim Tompkins",
+      role: "Guest",
+      text: [
+        "So 15, now 16. And I'm not sure I'm counting, I might be 16 might be my final shot, but it's been a it's been a joy. And the thought line between the companies that I've done is that I see it's time for a shift. There's something going to happen that's going to create a major transition for the industry. I don't like starting businesses that are kind of like me too. You know, there's 20 other people doing the same thing. Well, let me make it 21. I don't like that. What I like to do is say, okay, as I look at this entire supply chain world, there is about time where there's going to be something that's going to be big, that's going to shift. And therefore I see an opportunity to create a business. I like to start a business that's kind of on the edges. It's other people haven't necessarily seen the problem I'm seeing yet. So I'm ahead of them. And it's an emerging problem that's coming upon us. And I see it and I say, oh, this is an opportunity to start a new business. So you mentioned the 50 years. In the 70s and the 80s, what we saw is that supply chain, although we didn't use that word back then, we used logistics or industrial distribution. What we saw mostly was fork trucks and racks. And that's what was going on in the industry. So there wasn't much. Mid 80s, we started getting WMS and we started understanding there is a technology component, but it was in the 1990s when we saw, oh my goodness, there's an opportunity for engineered systems, for robotics, for automation to start to come into play inside what we call supply chain. And so the engineering systems became something that I started a business on in the 1990s. And then in 2000, e-commerce came upon us and I said, oh my goodness, we don't need distribution centers. We need fulfillment centers. And oh my goodness, we need huge return centers. And so the problem was a major shift. We went from shipping pallets, maybe every now and then cases to a situation where we were shipping pallets, cases and lots of each's. And so it was a whole big shift there. I can recall people yelling and screaming at me and said, Jim, no company will ever be able to ship a shirt to someone's house and have it delivered to the house and make money doing that. It's impossible. And so that was to me, oh, there's an opportunity here. What we saw that has evolved in the 2000s and e-commerce grew and and we began seeing different types of delivery and types of innovation and delivery. In 2010, the robotics and the automation is drastically different than what we saw in the 90s. There is a material handling instead of being kind of a backward industry, became a very, very forward looking industry. So that was a new opportunity. I started my robotics company in 2015. And then today and what's been happening for the last three, four years is this thing called AI. And so what I've seen is there's major shifts. And when there's a major shift, I say to myself, oh, it's time to do business. And so I anticipate a shift and I say, what is going to be the need that industry is going to need for that shift? And then I can focus on that need and I can create a business.",
+      ],
+    },
+    {
+      speaker: "Vikrant",
+      role: "Host",
+      text: [
+        "Yeah, I know. I really appreciate you sharing that. And like, you know, while you were saying that and like talking about different phases, I was thinking about like, oh, like, you know, we used to talk about robotics in a way that, oh, it's a big capex, etc. And now, as we all are seeing, like hardware as a service has been evolving too. So that is very interesting turn. And like, also like a follow up on that, like, was there kind of a problem like you kept drawn back to over this time period? Or was it more of a moment like a different moment each time, like you said about opportunity? So was there like something similar, which was like, oh, like, you know, this is something like, you know, I'm going back to?",
+      ],
+    },
+    {
+      speaker: "Jim Tompkins",
+      role: "Guest",
+      text: [
+        "In my head, I didn't have the word supply chain yet, but I had the concept of material flow that started someplace in an iron ore pit and wound up in someone's driveway. And so I saw this material flow, I saw this information flow, and I saw this cash flow. And I saw this not as a operational function. I don't see supply chain as an operational function. I see it as a strategic discipline. And so I saw supply chain as the heartbeat of business. It's kind of like the heart pumping, pumping, and it's pumping this stuff, money, information, materials through the supply chain. And if the heart dies, the business dies. And so it's a supply chain is a place where you can create differentiation. So you have a supply chain, I have a supply chain, how am I going to make my supply chain different than Vikram's? What am I going to do to make mine have more profits, have more customer experience, have more resilience? What are the services I can provide that gives my firm and my supply chain a strategic advantage? And so I went through everything I could see in what's going on with technology and automation and robotics and AI and globalization. And everything I did was driven by the strategic intent. I didn't do any research unless I understood what the strategic intent was. I didn't start a business. I didn't look at technology. I didn't look at AI until I understood. So I do not believe we should be thinking about a operational function. We should be thinking about a strategic intent. Also, what this tells me, if I'm looking at something as a strategic intent, and I go back and I wrap that into the first question about wanting to be anticipatory, what that tells me is I'm going to be early. And so what I found out about being early, you get people throwing rocks at you.",
+      ],
+    },
+    {
+      speaker: "Vikrant",
+      role: "Host",
+      text: [
+        "Yeah, no, absolutely. And like, you know, I'm enjoying like listening that here because as you share these experiences, I am reflecting back on my last 10 years, like, you know, I'm still in the early phase of my career for the most part. But as you know, from our multiple conversations, like, I also try to do things like, you know, in a similar way to create impact. The objective is not just to make a multi-billion dollar company or this, it's more about solving a problem. And when you think like differently than most people around you, then obviously like, you know, you get a lot of stones at you, as you said, then it's about persistence, having that resilience, even in yourself, not just the companies and making sure that you go through it. And then 50 years from now, maybe I'll be sitting in place of you, there'll be some other one called Vikrant.",
+      ],
+    },
+    {
+      speaker: "Jim Tompkins",
+      role: "Guest",
+      text: [
+        "Yeah, I like you use the word persistence. My wife uses the word stubborn. I prefer to think, no, I'm persistent.",
+      ],
+    },
+    { speaker: "Vikrant", role: "Host", text: ["Yeah. Well, that makes two of us for sure."] },
+    { speaker: "Jim Tompkins", role: "Guest", text: ["Exactly. Exactly."] },
+    {
+      speaker: "Vikrant",
+      role: "Host",
+      text: [
+        "So like, what was like, you know, kind of like the decision early in your career? Like, you know, you like, maybe it was like, you know, when you went to Purdue after that, like, what was your like early years, like before you founded the company?",
+      ],
+    },
+    {
+      speaker: "Jim Tompkins",
+      role: "Guest",
+      text: [
+        "And I guess the thing is that the thing that really drove me and also haunted me was my curiosity. I just want to understand why. And one time I had an opportunity to drive Dr. Lillian Gilbreth, the mother of my profession, of our profession, industrial engineering. I drove her from Purdue to the Indianapolis airport. And I used Dr. Rudy Reed's car. My car was a junk. I couldn't take my car. I took Dr. Reed's car. And I had prepared like 20 questions I was going to ask her. And we got in the car and I went and held the door for her. She was like 80 something years old. And I held the door for her and got her in. We started driving. And before I even got the car started, she looked at me and she said, Jim, tell me your story. What do your parents do? Why did you come to Purdue? Why do you want to be in it? And she started and just, and bam, bam, bam, bam, bam. And finally she took a breath and she said, do you have a question to me? I said, yes. What's, to be a good industrial engineer, what, what do I need to do? And she says, you need to learn to ask the question why. And you know what I said to her? Why? Now I wasn't playing with the question. I really, I really wanted to know why that I should be asking why. And that led to a delightful conversation. And I mean, it was so cool to learn from her. And so that gave me an awareness of wanting to be able to discover new thinking. You know, like finding the problem is the more difficult part than finding the solution, because at least if you know that there's a problem, you can find it.",
+      ],
+    },
+    {
+      speaker: "Vikrant",
+      role: "Host",
+      text: ["And I think it all makes sense. That was a very interesting story. Thank you for sharing that."],
+    },
+    { speaker: "Jim Tompkins", role: "Guest", text: ["Appreciate it."] },
+    {
+      speaker: "Vikrant",
+      role: "Host",
+      text: [
+        "So great. So like the next part is like, what's something you believe about running a business today that you would have completely disagreed with 30 years back?",
+      ],
+    },
+    {
+      speaker: "Jim Tompkins",
+      role: "Guest",
+      text: [
+        "Well, this is something that I think we all got stuck in. And I've spent quite a bit of time thinking on this because it was such a bozo thing for the world to do. But you, if we look back 20, 30 years, the thing that was obvious to everyone is that mega globalization was going to be the answer. I mean, you look at China came into the market with virtually unlimited labor, very inexpensive. And by the 1990s, their quality was really substantially improving. By year 2000, China became the factory of the world. They manufactured more than the whole rest of the world combined. By 2001, they joined the World Trade Organization. And the labor, the quality, the government building infrastructure. It was an unbelievable a surge. I mean, China went from nowhere to the leader of manufacturing. And then in the late 1990s, another thing happened is the containerization thing. And the reduction of cost of handling products around ships went down by one eighth the cost because of containerization. And we had a time there where we had global stability. The Cold War was over. Reagan said, take this wall down. And the wall came down. And we had U.S. as a global superpower. There was all sorts of trade agreements. There was all sorts of tariffs that were falling. And there was a time of stability. JIT became almost the obvious answer. It was lean this, lean that. Everything was lean. There was a concept of using technology to make globalization simpler. We really applied technology to the global flow of material and information. And that was a tremendous breakthrough. We had retail becoming huge. I mean, you just look at what three companies, Target, Home Depot and Walmart did. It changed the whole focus of retail around the world. And so the China globalization thing was absolutely embraced by everybody in the world. It was beautiful. We had low prices. We had higher margins. We had predictable flows. We had on-time transportation. We had scalable production. I mean, everything worked. And this would be, you know, the thing that was going to continue into the future. I mean, why not? I mean, this is absolutely marvelous. And then the surprise started to occur in 2018, 2019. It turned out to be a series of weather disasters and some lack of stability in the world. And then COVID gave it a huge shot in the arm. And the next thing we knew is that mass globalization was fragile.",
+      ],
+    },
+    {
+      speaker: "Vikrant",
+      role: "Host",
+      text: [
+        "I mean, I think that is a very, very interesting perspective and definitely nothing near close to the answer I was expecting.",
+      ],
+    },
+    {
+      speaker: "Jim Tompkins",
+      role: "Guest",
+      text: ["Well, it wasn't the one I had either until about four that morning."],
+    },
+    {
+      speaker: "Vikrant",
+      role: "Host",
+      text: [
+        "Yeah. But I mean, like, you know, and what do you think, like, you know, and kind of like this is somewhat part of it, you kind of answered here. But if there is anything else, like, what do you think was going to be a huge deal 20 or 30 years ago, which turned out to be nothing?",
+      ],
+    },
+    {
+      speaker: "Jim Tompkins",
+      role: "Guest",
+      text: [
+        "There's literally hundreds of micro things. But those micro things, when you add them all up, don't come close to that moment in time, when all of a sudden, we found out that we couldn't buy tomato juice in the grocery store, we couldn't buy toilet paper. And, and it literally people were saying why, and the answer was supply chain. And they were right, supply chain let the world down, because we forgot about optionality, we forgot about flexibility and adaptability. And that's the big one.",
+      ],
+    },
+    {
+      speaker: "Vikrant",
+      role: "Host",
+      text: [
+        "Yeah, like, you know, as an engineer, we always thought about like, constraints and assumptions, and most solutions are based on that. And I think about the engineering discipline that has always been the most, I would not even say worrisome, but something which I always ponder upon, like, since I started, like, you know, my career as a student and otherwise that, what if, like, you know, what if this one assumption is wrong, and but we have to start somewhere. And I think being aware, as you said, like, you know, being aware about it, and trying to build things into it is probably the way to go. Overall, like, you know, when you look at, as a follow up on this, is that what has changed less compared to what I think it has? You know, like, we have been talking about, like, disruption and everything, but there must be certain things which are around the steady state. That's, you know, that's the upside down almost question of the last one.",
+      ],
+    },
+    {
+      speaker: "Jim Tompkins",
+      role: "Guest",
+      text: [
+        "So, what we see is that the physics of supply chain, and I'll define that in a moment, unchanged, we change our technology, we change our vocabulary, we change the tools that we have. But at the end of the day, supply chain is plan, buy, make, move, store, sell, okay? We still need to balance cost, service, and speed. You know, if you can really teach a person plan, buy, make, move, store, sell, and balancing cost, service, and speed, they have a bachelor's degree in supply chain, if they really understand that, okay? Now, to get into a master's or a PhD in supply chain, we got to understand what we, guess what? Independent AI, not AI, technology, whatever, whatever, whatever, call it SNOP, call it IBP, call it whatever you want, we still have to forecast demand. We don't know what the demand is going to be, and we got to roll the dice. And so, we really need to work hard at that, because if you forecast demand incorrectly, which you will every time, you'll never get it right. And so, what we need to do is deal with that's a fact, it is, and it will be, and it will continue to be. Once we get the demand close to right, we then got to position the inventory. And when you position the inventory, you have to have a network that has the right locations. Then we need to build the right transportation, and we need to have the ability to flow material through that transportation network, through the distribution and fulfillment facilities, and get it to the customer, be it a B2B or B2C. At the end of the day, we are all humans, and having that human aspect in supply chain is probably the end part, putting this file on the end customer.",
+      ],
+    },
+    {
+      speaker: "Vikrant",
+      role: "Host",
+      text: [
+        "Probably my biggest takeaway from this part of our conversation. And this takes me to like, you know, my final question, which would kind of like, somewhat sort of sum everything up, is that if you were starting Tompkins International today, instead of 1975, what would you do differently given everything you know now? And you can probably answer it from the perspective of experience you have had, or where the world is today, or a mix of both. I'll leave it up to you.",
+      ],
+    },
+    {
+      speaker: "Jim Tompkins",
+      role: "Guest",
+      text: [
+        "If I really had the choice today about starting a business in 1975, I would have started something drastically different. I would have built an AI technology first ecosystem that was not a consulting company. But in 1975, I couldn't spell AI, and I didn't know what an ecosystem company was. And so I started a consulting company. Now, the interesting thing in 1975, what the industry needed was a consulting firm, because we lacked the basics, there wasn't a good foundation. Companies needed expertise, they needed strategy, they needed engineering, and they needed to get those basics right. And so the best way to do that was go in and help them do that. And so I think starting off as a consulting firm in 1975 was a good movement. But then as we moved into the 80s and the 90s, it became clear that you couldn't do a good job of consulting if you didn't have the right technology. And so we did WMS, and we did order management, we did TMS, and we did labor management, the yard management. And then we got into ERP, and how do those things interact. And then we got into the warehouse execution systems, the real time control system between the WMS and the equipment controllers. And so there was this evolution, where we learned what was needed, and we transferred from becoming the original Tompkins Associates that then became Tompkins International. And then as we started evolving, we saw that clients had lots of staff, and they didn't need that basic expertise and strategy, they already had that. And what they needed was more of a broad solutions capability. And so what we did is we went from being a company, Tompkins International, we went to being an ecosystem, which was Tompkins Ventures.",
+      ],
+    },
+    {
+      speaker: "Vikrant",
+      role: "Host",
+      text: [
+        "Yeah, I mean, it is very fascinating as we look back and look at things. And even if I look at both my companies, like, I probably pivoted three to four times in a short span of six years for one company and 10 years for the other. And it is very interesting that how quickly and, and we are in a pivot phase again. So I would not necessarily call it pivot more like, you know, restrategizing and I was talking to my co founder the other day that earlier we used to make that okay, like what's our company's three year plan, five year plan that used to be normal while I was growing up. But definitely for our generation, it never seemed true, because that's what we saw working for years. And suddenly, when we are in business, boom, no, it's one year max. And now we are literally looking at like months to go like, oh, let's plan next three months. And I'm pretty sure the next couple years we come to a point, let's plan like next day.",
+      ],
+    },
+    {
+      speaker: "Jim Tompkins",
+      role: "Guest",
+      text: [
+        "Yeah, yeah. But my wife says to me, she says, Jim, why do you keep pushing? Why do you keep? I mean, you know, you've had tremendous success, things have gone really great. Why don't you just relax a little bit? And I said, I would love to. But there's another chapter you have to write. And so we got to we got to write that now. Is this the final chapter? I don't know. But it needs to be written. And I didn't create the need for it. The world created the need. I'm just going to try to write down what we need to do to do well. And so it's exciting time.",
+      ],
+    },
+  ],
+  "from-garage-to-800-retail-stores": [
+    {
+      speaker: "Vikrant",
+      role: "Host",
+      text: [
+        "Welcome everyone to Execution at Scale. As you know that this series exists because most conversations happen over coffee or over beer and not on the stage. So today we have Kelly with us who's founder of Villager Puzzles and she was kind enough to give me one when we met a few weeks back. Me and her are both together in a tech which is now Vistage Group and it's a very interesting concept. We'll get to know more about it but right now what I'm going to do is introduce Kelly first and most of my guests so far have been on the other side so more like on the operations like 3PL, Logistics etc. And today we have Kelly who's a brand owner and scaled this over the years so it'll be good to hear from the other side of the story. So just for context Kelly started Villager Puzzles in 2023 because she could not find modern well-designed jigsaw puzzles for her own evening wind down. And the brand works exclusively right now with Canadian women artists who earn uncapped royalties on every puzzle sold and in just over two years Villager Puzzles has sold more than 200,000 puzzles and gone from one car garage operation and being present in 800 retail locations across Canada. And now over to you Kelly. Congratulations first of all that's a pretty unique business you have built and a very successful business over last I would say like about three years. So welcome and thank you for your time and anything you would like to add which I missed.",
+      ],
+    },
+    {
+      speaker: "Kelly Striemer",
+      role: "Guest",
+      text: [
+        "I think you you got the gist of it so we make old school jigsaw puzzles and people have a chance to sit down at their table at the end of the day and unwind without a screen and so we see a lot of people who are pursuing more analog hobbies these days and then also just ways to connect with people to sit together and do a and so it's been a really wild three-year ride.",
+      ],
+    },
+    {
+      speaker: "Vikrant",
+      role: "Host",
+      text: [
+        "So very interesting so I'm curious like what was your sales channel in the beginning? Was it like we're running ads or was it more like word of mouth or how did you get through those first batch of puzzles?",
+      ],
+    },
+    {
+      speaker: "Kelly Striemer",
+      role: "Guest",
+      text: [
+        "Yeah so the first like initially so my my plan was always to go into e-commerce and and wholesale. I wanted to do both because my theory was is that you know because it's more analog hobby I didn't think that the shopping for it was just happening exclusively online and so before I even launched I actually started my social media and started creating a bit of a community around it which we now call the village but I would ask them for feedback about art. I would ask them for feedback about puzzles, about the box, about the package design and just weigh topics with people who were invested and the puzzling community is actually really engaged and I discovered a lot of people through social media that ended up being early customers.",
+      ],
+    },
+    {
+      speaker: "Vikrant",
+      role: "Host",
+      text: [
+        "That is amazing, that is wonderful like you know building the community and like it is very interesting to know that there's a puzzle community and I will follow the village community as well. So can you like walk us through like you know the last three years at a very high level that what were the inflection points, growth points, what were some of the like high level challenges like you know you faced and how you overcome that like you know how you overcame those challenges?",
+      ],
+    },
+    {
+      speaker: "Kelly Striemer",
+      role: "Guest",
+      text: [
+        "Just trying to figure out what the right amount of inventory to carry was. So when we first brought in you know the 3200 puzzles about two weeks after I launched we had a TikTok that went viral and so for a brand new brand that's getting you know a handful of orders here and there we suddenly got 100 orders overnight and so that was sort of like okay I think there's I think there's something here and then we a couple months in we sold out of most of our inventory and as you can imagine that was probably the worst time of year. We sold out around November and so Q4 is so busy and so much of the puzzle sales happened during that quarter so I ended up you know air freighting in some some last minute puzzles in order to meet the demand that I had for that holiday season and I took that learning and I ran with it so when we came out with the next collection in spring you know I definitely had more inventory and as we went into that second year I started doing wholesale trade shows and we were moving from having a couple of dozen retail stores you know getting into 100 and 200 locations mostly in western Canada and I definitely by that point was like okay we have something that's working here.",
+      ],
+    },
+    {
+      speaker: "Vikrant",
+      role: "Host",
+      text: [
+        "Yeah I think I must have been a crazy journey I'm sure like you know scaling up like that and like that brings me to my primary question which I was like you know most interested to ask so like you said that you started in garage fulfilling orders yourself. What made you like move to a 3PL and you recently moved to a 3PL based on our previous conversations?",
+      ],
+    },
+    {
+      speaker: "Kelly Striemer",
+      role: "Guest",
+      text: [
+        "Yeah so I had worked for a couple of businesses in you know my previous career that used 3PLs and so I was I knew what it was I knew why why it was needed but for my own business I definitely you know had the intention that I'm gonna start this out myself I'm gonna fulfill this myself and the volume just got to be difficult to manage. I ended up hiring somebody part-time in the community who would come to my house and pack orders with me a few hours every week and that was great but I very quickly realized that that wasn't going to scale. So the big turning point happened about a year and a half in we launched a new collection for spring and we had just come out of a trade show season and I packed puzzle orders for seven days straight probably about 10 hours a day and I was like this is the last time I'm going to be able to do this because spring is light in comparison with so I knew that by the time fall of 2025 came around that I needed to have a 3PL or I just wasn't like it wasn't going to be possible.",
+      ],
+    },
+    {
+      speaker: "Vikrant",
+      role: "Host",
+      text: [
+        "And like how was that research like you know like you have worked with other businesses in the past who use 3PL but like dealing with a 3PL like work did you like I guess like go through like seven eight different options how was your experience in terms of how they were pricing you and all that?",
+      ],
+    },
+    {
+      speaker: "Kelly Striemer",
+      role: "Guest",
+      text: [
+        "You know having been on the marketing side of the business I didn't I knew that there was like a pick and pack fee that I hadn't you know dive deep on any of the numbers so I reached out to a former colleague who had worked on the operations side of the business and you know you use your village like you do for a lot of things you need some insights in order to get you started and so you know he was able to kind of give me some guidance as to how the the costing structure was going to be and then also gave me some leads in terms of who to reach out to where there was some existing relationships or you know somehow through you know the network and so I reached out I think I ended up connecting with about five yeah I think five 3PLs looking at different options in Vancouver area, Calgary, Toronto and then you know went through the process of figuring out what was the financial impact of",
+      ],
+    },
+    {
+      speaker: "Vikrant",
+      role: "Host",
+      text: [
+        "And like what were some of the decision making factors because like you essentially distribute all across Canada and I'm assuming your products come into the Vancouver port or",
+      ],
+    },
+    { speaker: "Kelly Striemer", role: "Guest", text: ["Yes"] },
+    {
+      speaker: "Vikrant",
+      role: "Host",
+      text: [
+        "And then like so that's the initial point you are here so those are two points I guess to be in greater Vancouver area and then but if you look at like maybe from the last mile and the distribution side it's on one side of the country so how did you I guess do that math or if you did that math?",
+      ],
+    },
+    {
+      speaker: "Kelly Striemer",
+      role: "Guest",
+      text: [
+        "So we took a look at the data and where our customers were located so at the time I think at the time that we made the move we were in about 400 stores across Canada but at most of most of them were in Western Canada. We had some in Ontario and you know a little bit around Eastern Canada but the bulk of the sales was still happening in Western Canada. I had started my you know distribution in terms of where I lived and then kind of you know went east from there and so I figured you know that we were going to need to start with a location in Western Canada that would be able to you know quickly distribute those orders but I also wanted a 3PL that had the potential to scale with us so having a warehouse location in Eastern Canada as well so the 3PL that I work with actually has an east and a west location so that when we're ready we can split our inventory and move into their second warehouse location.",
+      ],
+    },
+    {
+      speaker: "Vikrant",
+      role: "Host",
+      text: [
+        "Makes sense and like how was your experience in terms of like you know how you got these line items from your colleague and in my experience like you know every 3PL does differently. In fact, I was working on writing a white paper yesterday which I'll publish next week which is all about that you can talk to 10 3PLs which are like less than a mile away from each other and they will have different pricing so how was your experience in that? Did you see a lot of variability in that or was it pretty standard?",
+      ],
+    },
+    {
+      speaker: "Kelly Striemer",
+      role: "Guest",
+      text: [
+        "There was definitely some there was definitely some variability I mean I think the biggest challenge when you're a brand and you're looking for a 3PL is that not every 3PL prices things consistently and so I was trying to make sense of the cost of the pick and pack and the storage and make sense of what that was going to cost but also trying to understand how they were costing out the shipping fees because as we know shipping costs across Canada are crazy expensive and so making sure that I had a really good understanding of how that cost structure was also being administered because I wanted to make sure we were getting good shipping rates so that we could you know work with all of our e-commerce customers and offer free shipping at a reasonable threshold. So my analysis looked at storage pick and pack and the actual shipping cost.",
+      ],
+    },
+    {
+      speaker: "Vikrant",
+      role: "Host",
+      text: [
+        "Yeah absolutely and it is very interesting like you know as like you know brand scale I've seen like besides like some people start themselves they keep on doing it themselves they expand they get a warehouse scale from there and then at some point get a 3PL and then also the scale to a certain point then now it probably makes sense for them to do it in-house as well but like you know there are companies like even like Red Bull who uses a 3PL and 4PL you cannot always do it yourself at a scale you know because especially like as you talk about expanding so building your model around that is always the best part because like you know you might need a warehouse in Eastern Canada tomorrow maybe Toronto or something so working with a 3PL helps with that and you maybe expand you're like you know we were talking briefly you might expand to other countries as well you know so and so I'm curious like you know was this something was something you already planned when you started like was it like how did your costing or pricing change or because obviously like doing it in your garage is technically no cost but were you attributing it like you know your time to it or were you anticipating that okay eventually if I will get a 3PL it will add like let's say six bucks uh an order or something like how how did you go about that",
+      ],
+    },
+    {
+      speaker: "Kelly Striemer",
+      role: "Guest",
+      text: [
+        "Yeah so I went into you know pricing and and and taking a look at margins making some assumptions about what the future would look like so when I started I knew I wanted to go into wholesale so I needed to make sure the margin was there in order to allow for that to happen I knew that at some point I was probably going to need some help with shipping whether that was you know the overhead of having a space or having a 3PL so I factored that in and then in those early days the savings and I use the that in quotations because you know somebody's not getting paid for those early days um I was like well this will allow me to fund some of the growth of the business and so you know to this day we're bootstrapped and so because of some of those early savings it gave me a little bit more wiggle room so that I could continue to grow the business at the pace that we have been growing with a little bit of of that early savings now that being said of course you know now we're you know in at the point where of course that's not the reality but it helps with cash flow in those in in those early startup months",
+      ],
+    },
+    {
+      speaker: "Vikrant",
+      role: "Host",
+      text: [
+        "So now like if you tell me like you know like you do d2c as well so you're selling on your website you also do uh the stores so how do you manage this because technically like if I would say in my opinion they're a little bit different in terms of how it is done one is more like you know shipping each and every piece uh once you can order one puzzle three puzzles you're breaking boxes breaking pallets the other is that you're shipping like you know a combination of pallets and sending it out so how are things distributed and managed how do you see both of these things differently",
+      ],
+    },
+    {
+      speaker: "Kelly Striemer",
+      role: "Guest",
+      text: [
+        "For sure I mean first off of course there is there can be differing expectations for an e-commerce customer versus a wholesale customer so in general e-commerce customers place an order they want it as soon as as soon as humanly possible the amazon effect has people expecting it same day next day you know definitely takes slightly longer than that but we we definitely do our best to ship e-commerce orders out as quickly as possible on the wholesale side of things sometimes people want stores want to receive things at a certain point in time sometimes they're placing pre-orders sometimes they're you know ordering a brand new collection for the first time so we will actually stagger our launches so that our wholesale customers are shipped first and so they receive the inventory before we launch on e-commerce so that at least we can try to sync up our launch dates so we want to have a consistent we want to have as consistent an experience as possible so the customer is seeing in both places at the same time so we always try to ship our wholesale orders first so that's one of the ways we manage the difference in terms of timing",
+      ],
+    },
+    {
+      speaker: "Vikrant",
+      role: "Host",
+      text: [
+        "That makes sense that's very insightful and also like coming back to like you know our initial conversation like as you said that you were moving like you know you are from lower mainland area so naturally moving towards east so how does the process looks like getting into stores was it more like a lot of phone calls sending samples door knocking like how was the overall process",
+      ],
+    },
+    {
+      speaker: "Kelly Striemer",
+      role: "Guest",
+      text: [
+        "It was it it was a lot of selling that I have to say I mean I don't know that I'm naturally a salesperson but I you know when you start a business you you have to get comfortable sales real fast so I did a combination of things when I first started I went door-to-door I went and stopped in at stores and said hello and told them what I was doing and asked them how they want a pitch to be received because at least that gave me some data to say stopping by is good stopping by is bad you know leaving a sample like just trying to figure out what that pitch looked like and so early days lots of days on the road um I quickly learned from that and realized that you know I had something that was going to work and so email pitches work great for you know busy store buyers a lot of times the retail stores that I'm in they are the store staff they're you know they're the cleaner they're the the owner they're the buyer they're everything in between and so an email pitch is something that they can review anytime they don't have to be you know seeing it when when you're in there in business hours and then you know so from those early days on the road to emails and then a lot more days on the road doing little tours all across the country and then eventually into trade shows.",
+      ],
+    },
+    {
+      speaker: "Vikrant",
+      role: "Host",
+      text: [
+        "That's amazing and very insightful to know I mean I can only imagine like you were doing it yourself technically you like until you hired these two people I don't know how",
+      ],
+    },
+    {
+      speaker: "Kelly Striemer",
+      role: "Guest",
+      text: [
+        "I mean I'm just trying to think back to you know I've probably got into at least half of those stores like when it was just and plus the online orders as well",
+      ],
+    },
+    {
+      speaker: "Vikrant",
+      role: "Host",
+      text: [
+        "Yeah managing that too so very intriguing very intriguing so now like so my question is like so like some of the retailers some are small some are big but like you know one of the ones I looked up on your website is Simon's so like they're pretty big size so what did it require like operationally like was there any operational differences or they had any requirements specific how did you manage on that",
+      ],
+    },
+    {
+      speaker: "Kelly Striemer",
+      role: "Guest",
+      text: [
+        "Yeah there's definitely some different requirements I wouldn't say that they were terribly different than a lot of our our other stores there's a little bit more of a listing process that you go through with bigger accounts Simon's and others that are you know around that size but overall we've been able to manage it within our regular wholesale flow",
+      ],
+    },
+    {
+      speaker: "Vikrant",
+      role: "Host",
+      text: [
+        "Like I'm curious like did they did anyone have like any minimum requirements that you need to keep certain levels of stock or any like technical requirements that obviously we have to send you orders via EDI or like they just regularly send like via email or",
+      ],
+    },
+    {
+      speaker: "Kelly Striemer",
+      role: "Guest",
+      text: ["Thankfully thankfully no special requirements as of yet no EDI ordering so far so far"],
+    },
+    {
+      speaker: "Vikrant",
+      role: "Host",
+      text: ["Don't get scared if you ever need help in that I can help out so yeah"],
+    },
+    { speaker: "Kelly Striemer", role: "Guest", text: ["Thank you much appreciate it"] },
+    {
+      speaker: "Vikrant",
+      role: "Host",
+      text: [
+        "So so you launched like about three collections a year and we thought you briefly mentioned about like you know demand and planning things like you know when you ran out a year and a half back in November so how do you plan around that demand like to forecast this",
+      ],
+    },
+    {
+      speaker: "Kelly Striemer",
+      role: "Guest",
+      text: [
+        "This is my this has been my biggest challenge I will tell you of of the entire thing because having a business that is highly seasonal we probably do about 40 percent of our volume in Q4 there's such a major need to have inventory for that season now my time because I'm manufacturing overseas is also you know about four to six months in total and so that's a fairly long time in order to plan and then also play catch up you know if something does sell through so this demand planning piece has been just a combination of my very best guess combined with some spreadsheets like I will not say there is anything magical about what we've been doing and I've sold out a little more often than I would like to that being said we're also our business is tripling year over year so it's been challenging to keep up with that just this past few months or so I now have somebody that I've brought on on a consulting basis to help me with that a little more sophisticated model than just my excel spreadsheet alone so that we can be looking at demand plans at a level as well based off of what's selling and then introducing new SKUs discontinuing some that are slower movers and then you know filling the pipeline and then figuring out what the regular flow of demand is",
+      ],
+    },
+    {
+      speaker: "Vikrant",
+      role: "Host",
+      text: [
+        "That's amazing like you know and it is very very intriguing and I can only imagine like you know how you go through that because as a founder we have like a little bit pain like you know because if I lose a deal because I cannot deliver let's say like you know we are different because like we are services we can still like manage and maneuver a little bit but like for product like you know if you sold out and now if you order again it will not be here for another five to six weeks minimum like bare minimum I'm saying",
+      ],
+    },
+    {
+      speaker: "Kelly Striemer",
+      role: "Guest",
+      text: [
+        "Oh and not even I mean honestly my lead time is is at least four months four months so at this point I wouldn't get it in time for Christmas and the entire the entire season is missed so it has to I have to look at these things as learnings and then I will do better the next year 100%",
+      ],
+    },
+    {
+      speaker: "Vikrant",
+      role: "Host",
+      text: [
+        "And like I can only imagine so like my all the best wishes to you that you never well technically you almost sold so sell well almost sell out but not always have like two percent left so like that kind of like makes me wonder like you know as we talked about this journey of three years kind of like maybe I have a one answer that what a bad week looks like today versus what a bad week looked like three years back one of which is like you know selling out when you can sell more but apart from that",
+      ],
+    },
+    {
+      speaker: "Kelly Striemer",
+      role: "Guest",
+      text: [
+        "Well I have to tell you you know in the early days a bad day I don't bad day bad week it's never bad like I I actually think I probably need to say this like I dreamed of starting my own business for you know 20 plus years and I was I felt like when this idea came I was like okay this is this is the thing so I don't know that I look at anything that's happened in the past three years as bad per se but I can tell you that there were some evenings when I was out in the garage packing puzzles where I wasn't super happy about my life choices now fast forward three years I'm not having to you know hustle like that and you know a bad day or a bad week is both a combination of like well we sold out but we sold out and so would I be happy if we sold out two months from now yeah but instead we sold out now which is like you can see that is really great or you can see it as bad I can see it as both",
+      ],
+    },
+    {
+      speaker: "Vikrant",
+      role: "Host",
+      text: [
+        "Absolutely I'm sure like when you look uh three years back any bad thing today you see looks better because at least like you're not sitting in the garage right now so so also like you know I we briefly talked about this when we met a few weeks back so I want to touch on the uh returns so you did mention that you get very few returns it's less than one percent",
+      ],
+    },
+    {
+      speaker: "Kelly Striemer",
+      role: "Guest",
+      text: [
+        "Um so our return rate is very low um I think a lot of times when people buy a puzzle they're buying it for either for themselves and because it's something they want to do or they're buying it as a gift for somebody and so in general we find you know people don't often return they'll sometimes want to exchange the style for for a different one and you know we can we we always try to make that happen in a you know as seamless a way as possible but thankfully it hasn't been you know returns haven't been a major challenge which I know is for a lot of e-commerce businesses um you know I can only imagine running a clothing company where people need to exchange sizes and all that kind of stuff I you know puzzles they always fit",
+      ],
+    },
+    {
+      speaker: "Vikrant",
+      role: "Host",
+      text: ["Yeah I mean like you know and your 3PL must be really happy because you don't get any returns"],
+    },
+    {
+      speaker: "Kelly Striemer",
+      role: "Guest",
+      text: [
+        "I'm probably more happy than you because managing returns is a big headache I can tell you that and definitely not fun",
+      ],
+    },
+    {
+      speaker: "Vikrant",
+      role: "Host",
+      text: [
+        "So let's say like if today someone was like you know thinking about starting like you know an e-commerce brand or like you know a d2c brand like going through either stores online etc like a consumer driven brand like you did three years back what would be some things like you know you would tell them like something which you wish someone told you three years back without let's say you asking",
+      ],
+    },
+    {
+      speaker: "Kelly Striemer",
+      role: "Guest",
+      text: [
+        "Sometimes I sometimes I think about the fact that I named my business villager and I don't know that I completely had the foresight that I did at the time but I have to tell you like the the thing that has always that I keep going back to is that I go to the village for for insights when I want when we talk about new artists and new art and where we want to sell and where we want to do markets and you know whether we should do this size puzzle or that size puzzle I go to the village and so you have this following that I can go to and ask for feedback and people have opinions people are more than happy to share their opinions with you so if I were to go back and tell myself early on like any insight you want it's like sitting right there you just got to talk to people and so you know whether you choose to do that online whether you choose to do that in person with stores whether that's you know face to face to the market or whatever it is I think that being able to get that feedback is just it's so valuable.",
+      ],
+    },
+    {
+      speaker: "Vikrant",
+      role: "Host",
+      text: [
+        "Yeah absolutely like if I understand like you were saying that go and ask and talk to people like it could be any community you're part of create a community like you did which is very amazing I'm actually working on creating a supply chain community which I'm still thinking what to name I'm not as creative as you so it might take me a bit more time to come up with a name like how I have been referring it as more like a fraternity of like you know supply chain but we'll definitely see where it goes but the whole idea is what you just said that like you know people need help and like sometimes the worst thing I've seen in most businesses I've worked with over the last 10 to 12 years of my career as a consultant or even as a software company founder is that people generally don't go out and ask for help like you know with one like you know they think that okay what will people think about them like you know that they don't know what they're doing and the second biggest reason is that either they think that they know a lot and they know more than others and third could be that just they don't know that help exists.",
+      ],
     },
   ],
 };

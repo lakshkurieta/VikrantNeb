@@ -182,6 +182,26 @@
   margin-top: 6px;
 }
 
+/* Formspree's honeypot: off screen for people, still there for bots. */
+.connect__trap {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+.connect__failed {
+  grid-column: 1 / -1;
+  font-size: 15px;
+  color: #e5484d;
+}
+.connect__failed a {
+  text-decoration: underline;
+}
+.connect__send:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
 .connect__sent {
   align-self: center;
 }

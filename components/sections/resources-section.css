@@ -1,7 +1,8 @@
 /*
-  Resources: "Tools for operators, not observers." (ResourcesSection.tsx). Each white paper is a
-  paper stack beside its summary, alternating sides; the stack settles into place as it scrolls in
-  and fans its sheets on hover (components/resources/paper.css).
+  Resources: "Tools for operators, not observers." (ResourcesSection.tsx). The papers as an editorial
+  index: big numbered rows between hairlines. Each row wipes in from the left as it scrolls into view
+  (its hairline drawing across first); on hover its cover lifts in beside it and the arrow turns.
+  Phones show the cover inline.
 */
 .resources {
   padding: clamp(96px, 16svh, 180px) var(--spacing-gutter) clamp(72px, 12svh, 140px);
@@ -58,94 +59,200 @@
   margin-top: 20px;
 }
 
-/* ---- The papers ---------------------------------------------------------------------------------- */
-.resources-list {
+/* ---- The index -------------------------------------------------------------------------------- */
+.resources-index {
   margin-top: clamp(56px, 10svh, 112px);
-  display: flex;
-  flex-direction: column;
-  gap: clamp(64px, 12svh, 140px);
+  border-bottom: 1px solid var(--color-line);
 }
-.resource-row {
+.resources-index__row {
+  position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
-  align-items: center;
-  gap: clamp(36px, 6vw, 112px);
+  grid-template-columns: clamp(56px, 7vw, 120px) minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 0 clamp(20px, 3vw, 48px);
+  padding: clamp(28px, 5svh, 52px) 0;
 }
-/* Every other paper sits on the right (the columns swap with it). */
-.btn.resources-show-all {
-  margin-top: clamp(40px, 7svh, 72px);
+/* The hairline above each row. */
+.resources-index__row::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 1px;
+  background: var(--color-line);
+  transform-origin: left;
 }
-.resources-list > li:nth-child(even) .resource-row {
-  grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
-}
-.resources-list > li:nth-child(even) .resource-row__cover {
-  order: 2;
-}
-.resource-row__cover {
-  display: block;
-  /* Leaves room for the sheets fanning out to the right. */
-  padding-right: 30px;
-}
-.resource-row__title {
+.resources-index__n {
   font-family: var(--font-display);
-  margin-top: 18px;
-  font-size: clamp(1.9rem, 3.4vw, 3.4rem);
+  font-size: clamp(1.4rem, 2.4vw, 2.4rem);
   font-weight: 800;
-  line-height: 1.02;
-  letter-spacing: -0.03em;
+  line-height: 1;
+  color: var(--color-signal);
+}
+.resources-index__text {
+  display: grid;
+  gap: 12px;
+  max-width: 60ch;
+}
+.resources-index__title {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 4.2vw, 4.2rem);
+  font-weight: 800;
+  line-height: 0.98;
+  letter-spacing: -0.035em;
   text-wrap: balance;
+  transition: color 300ms;
 }
-.resource-row__title a {
-  background: linear-gradient(currentColor, currentColor) no-repeat 0 100% / 0% 2px;
-  transition: background-size 600ms var(--ease-out-expo);
-}
-
-.resource-row__kicker {
-  margin-top: 14px;
+.resources-index__kicker {
   font-family: var(--font-serif);
-  font-size: clamp(1.25rem, 1.7vw, 1.6rem);
+  font-size: clamp(1.2rem, 1.7vw, 1.6rem);
   font-style: italic;
   line-height: 1.25;
   color: var(--color-signal);
 }
-.resource-row__summary {
-  margin-top: 16px;
-  max-width: 54ch;
+.resources-index__summary {
   font-size: 16px;
-  line-height: 1.65;
+  line-height: 1.6;
   color: var(--color-muted);
 }
-.resource-row__actions {
-  margin-top: 28px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
+.resources-index__meta {
+  margin-top: 4px;
+  color: var(--color-muted);
+}
+.resources-index__arrow {
+  display: grid;
+  place-items: center;
+  width: clamp(48px, 5vw, 72px);
+  aspect-ratio: 1;
+  border: 1.5px solid var(--color-line);
+  border-radius: 50%;
+  transition:
+    background 300ms,
+    border-color 300ms,
+    color 300ms,
+    rotate 600ms var(--ease-out-expo);
+}
+.resources-index__arrow svg {
+  width: 18px;
+  height: auto;
+}
+/* Desktop: the cover waits off to the side of the row, out of sight, until the row is hovered. */
+.resources-index__cover {
+  position: absolute;
+  top: 50%;
+  right: clamp(96px, 12vw, 200px);
+  width: clamp(150px, 15vw, 240px);
+  opacity: 0;
+  translate: 0 -46%;
+  rotate: -8deg;
+  scale: 0.86;
+  pointer-events: none;
+  transition:
+    opacity 300ms,
+    translate 700ms var(--ease-out-expo),
+    rotate 700ms var(--ease-out-expo),
+    scale 700ms var(--ease-out-expo);
+}
+.resources-index__cover img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+  box-shadow: 0 30px 60px -30px rgb(0 0 0 / 0.5);
+}
+.btn.resources-show-all {
+  margin-top: clamp(32px, 5svh, 56px);
+}
+
+/* The wipe: each row's hairline draws across, then the row uncovers from the left, as it scrolls in. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .resources-index__row {
+      animation: resources-wipe linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 32%;
+    }
+    .resources-index__row::before {
+      animation: resources-line linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 18%;
+    }
+  }
+}
+@keyframes resources-wipe {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+@keyframes resources-line {
+  from {
+    scale: 0 1;
+  }
 }
 
 @media (width < 1024px) {
-  .resources-head,
-  .resource-row,
-  .resources-list > li:nth-child(even) .resource-row {
+  .resources-head {
     grid-template-columns: minmax(0, 1fr);
   }
-  .resources-list > li:nth-child(even) .resource-row__cover {
-    order: 0;
-  }
-  .resource-row__cover {
-    width: min(78%, 360px);
-  }
 }
+/* Phones: number over the title, the cover inline beside it, no arrow (the whole row is the link). */
 @media (width < 768px) {
+  .resources {
+    padding-top: 56px;
+  }
   .resources-title {
     font-size: clamp(2.6rem, 13vw, 4rem);
+  }
+  .resources-index__row {
+    grid-template-columns: 88px minmax(0, 1fr);
+    gap: 10px 16px;
+    padding: 24px 0;
+  }
+  .resources-index__n {
+    grid-column: 1 / -1;
+    font-size: 1rem;
+  }
+  .resources-index__cover {
+    position: static;
+    width: auto;
+    opacity: 1;
+    translate: none;
+    rotate: -3deg;
+    scale: 1;
+  }
+  .resources-index__title {
+    font-size: 1.45rem;
+    line-height: 1.05;
+  }
+  .resources-index__kicker {
+    font-size: 1.05rem;
+  }
+  .resources-index__summary {
+    display: none;
+  }
+  .resources-index__arrow {
+    display: none;
   }
 }
 
 /* Hover effects only where a hover-capable pointer exists: on touch these states latch
    on tap and stay stuck until you tap somewhere else. */
 @media (hover: hover) and (pointer: fine) {
-  .resource-row__title a:hover,
-  .resource-row__title a:focus-visible {
-    background-size: 100% 2px;
+  .resources-index__row:is(:hover, :focus-visible) .resources-index__title {
+    color: var(--color-signal);
+  }
+  .resources-index__row:is(:hover, :focus-visible) .resources-index__cover {
+    opacity: 1;
+    translate: 0 -50%;
+    rotate: -4deg;
+    scale: 1;
+  }
+  .resources-index__row:is(:hover, :focus-visible) .resources-index__arrow {
+    border-color: var(--color-signal);
+    background: var(--color-signal);
+    color: var(--color-on-signal);
+    rotate: -45deg;
   }
 }

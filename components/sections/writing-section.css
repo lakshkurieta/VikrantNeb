@@ -167,6 +167,12 @@
 .btn.writing-more {
   margin: 14px 0 0 14px;
 }
+/* Phones: full width and in line with the text (the shared button rules in globals.css). */
+@media (width < 640px) {
+  .btn.writing-more {
+    margin-left: 0;
+  }
+}
 .writing-row__text {
   display: flex;
   min-width: 0;

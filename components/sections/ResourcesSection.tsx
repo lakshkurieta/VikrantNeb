@@ -1,16 +1,18 @@
+import Image from "next/image";
 import Link from "next/link";
 import { resourceHref, resources, resourcesIntro } from "@/content/resources";
+import { pad } from "@/lib/format";
 import { Reveal } from "@/components/motion/Reveal";
-import { PaperCover } from "@/components/resources/PaperCover";
 import { ConnectButton } from "@/components/connect/ConnectButton";
-import { ArrowRight, ArrowUp } from "@/components/ui/icons";
+import { ArrowRight } from "@/components/ui/icons";
+import "@/components/resources/more.css";
 import "./resources-section.css";
 
 /**
  * Resources: "Tools for operators, not observers." Two of Vikrant's free white papers
- * (`resourcesIntro.home`), each as a paper stack beside its summary, alternating sides, then a link
- * to all of them on /resources. Each opens its own page on this site (app/resources/[slug]) with a
- * reader, or downloads straight away.
+ * (`resourcesIntro.home`) as an editorial index: big numbered rows that wipe in as they scroll into
+ * view, each showing its cover beside it on hover (inline on phones) and opening the paper's own page
+ * (app/resources/[slug]); then a link to all of them on /resources.
  *
  * Server component.
  */
@@ -40,31 +42,30 @@ export function ResourcesSection() {
           </Reveal>
         </header>
 
-        <ol className="resources-list">
-          {shown.map((resource) => (
+        <ol className="resources-index">
+          {shown.map((resource, i) => (
             <li key={resource.slug}>
-              <Reveal className="resource-row">
-                <Link className="resource-row__cover" href={resourceHref(resource.slug)} tabIndex={-1} aria-hidden>
-                  <PaperCover src={resource.cover} sizes="(min-width: 1024px) 30vw, 80vw" />
-                </Link>
-                <div className="resource-row__text">
-                  <h3 className="resource-row__title">
-                    <Link href={resourceHref(resource.slug)}>{resource.title}</Link>
-                  </h3>
-                  <p className="resource-row__kicker">{resource.kicker}</p>
-                  <p className="resource-row__summary">{resource.summary}</p>
-                  <div className="resource-row__actions">
-                    <Link className="btn btn-ink" href={resourceHref(resource.slug)}>
-                      Read the paper
-                      <ArrowRight />
-                    </Link>
-                    <a className="btn" href={resource.file} download>
-                      Download PDF
-                      <ArrowUp className="rotate-180" />
-                    </a>
-                  </div>
-                </div>
-              </Reveal>
+              <Link className="resources-index__row" href={resourceHref(resource.slug)}>
+                <span className="resources-index__n">{pad(i + 1)}</span>
+                <span className="resources-index__cover">
+                  <Image
+                    src={resource.cover}
+                    alt=""
+                    width={900}
+                    height={1042}
+                    sizes="(min-width: 1024px) 240px, 96px"
+                  />
+                </span>
+                <span className="resources-index__text">
+                  <span className="resources-index__title">{resource.title}</span>
+                  <span className="resources-index__kicker">{resource.kicker}</span>
+                  <span className="resources-index__summary">{resource.summary}</span>
+                  <span className="resources-index__meta text-label">{resource.pages} pages · Free PDF</span>
+                </span>
+                <span className="resources-index__arrow" aria-hidden>
+                  <ArrowRight />
+                </span>
+              </Link>
             </li>
           ))}
         </ol>

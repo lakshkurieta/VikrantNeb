@@ -48,6 +48,8 @@ export function StudioBust({ className }: { className?: string }) {
     const host = hostRef.current;
     const studio = root?.closest<HTMLElement>("[data-studio]");
     if (!root || !host || !studio) return;
+    // Phones: no bust at all (studio.css hides it), so there is nothing to load or drive.
+    if (window.matchMedia("(width < 768px)").matches) return;
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const head = studio.querySelector<HTMLElement>("[data-studio-pin]");
     const pin = head?.parentElement ?? null;

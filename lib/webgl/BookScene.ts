@@ -51,6 +51,9 @@ export class BookScene {
   /** First page centre in turntable space (closed, front-facing pose); the dive ends on its plane. */
   private page = new THREE.Vector3();
   private restDistance = 10;
+  /** Pixels the resting book sits below the screen's centre (phones: centred between heading and buttons). */
+  private restShift = 0;
+  private viewSize = new THREE.Vector2(1, 1);
   private readDistance = 6;
   /** Reading distance as a share of the log-distance from rest to the dive's end (see render). */
   private readDepth = 0.1;
@@ -190,13 +193,22 @@ export class BookScene {
     }
   }
 
-  resize(width: number, height: number) {
+  /**
+   * `band` is the stretch of the canvas (px, top and bottom) the resting book must keep to, so it never
+   * meets the text around it: on phones, between the heading and the buttons. It returns to the centre
+   * as the camera dives, so the page still fills the screen.
+   */
+  resize(width: number, height: number, band: [top: number, bottom: number] = [0, height]) {
     this.renderer.setSize(width, height);
+    this.viewSize.set(width, height);
     this.camera.aspect = width / Math.max(height, 1);
-    // Fit the closed book (3.2 tall, ~2.3 wide while turning) by height, or by width on narrow screens.
+    // Fit the closed book (3.2 tall, ~2.3 wide while turning) by height, or by width on narrow screens,
+    // and to 90% of the band.
     const byHeight = 3.2 / (FILL * 2 * TAN_HALF_FOV);
     const byWidth = 2.3 / (FILL * 2 * TAN_HALF_FOV * this.camera.aspect);
-    this.restDistance = Math.max(byHeight, byWidth);
+    const byBand = 3.2 / ((0.9 * (band[1] - band[0])) / Math.max(height, 1)) / (2 * TAN_HALF_FOV);
+    this.restDistance = Math.max(byHeight, byWidth, byBand);
+    this.restShift = (band[0] + band[1]) / 2 - height / 2;
     // Close enough to read the first page, never further than the resting view.
     const readByHeight = this.pageSize.y / (READ_FILL * 2 * TAN_HALF_FOV);
     const readByWidth = this.pageSize.x / (READ_FILL * 2 * TAN_HALF_FOV * this.camera.aspect);
@@ -226,6 +238,10 @@ export class BookScene {
     const distance = this.restDistance * (DIVE_END / this.restDistance) ** depth;
     this.camera.position.set(0, 0, this.page.z + distance);
     this.camera.lookAt(0, 0, this.page.z);
+    // Off-centre at rest (the band), back on centre by the time the page fills the screen.
+    const shift = this.restShift * (1 - depth);
+    if (shift) this.camera.setViewOffset(this.viewSize.x, this.viewSize.y, 0, -shift, this.viewSize.x, this.viewSize.y);
+    else this.camera.clearViewOffset();
 
     this.renderer.render(this.scene, this.camera);
   }

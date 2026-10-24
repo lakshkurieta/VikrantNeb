@@ -1,6 +1,6 @@
 /*
   Resources: "Tools for operators, not observers." (ResourcesSection.tsx). The papers as an editorial
-  index: big numbered rows between hairlines. Each row wipes in from the left as it scrolls into view
+  index: big rows between hairlines. Each row wipes in from the left as it scrolls into view
   (its hairline drawing across first); on hover its cover lifts in beside it and the arrow turns.
   Phones show the cover inline.
 */
@@ -67,7 +67,7 @@
 .resources-index__row {
   position: relative;
   display: grid;
-  grid-template-columns: clamp(56px, 7vw, 120px) minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: start;
   gap: 0 clamp(20px, 3vw, 48px);
   padding: clamp(28px, 5svh, 52px) 0;
@@ -80,13 +80,6 @@
   height: 1px;
   background: var(--color-line);
   transform-origin: left;
-}
-.resources-index__n {
-  font-family: var(--font-display);
-  font-size: clamp(1.4rem, 2.4vw, 2.4rem);
-  font-weight: 800;
-  line-height: 1;
-  color: var(--color-signal);
 }
 .resources-index__text {
   display: grid;
@@ -197,7 +190,7 @@
     grid-template-columns: minmax(0, 1fr);
   }
 }
-/* Phones: number over the title, the cover inline beside it, no arrow (the whole row is the link). */
+/* Phones: the cover inline beside the title, no arrow (the whole row is the link). */
 @media (width < 768px) {
   .resources {
     padding-top: 56px;
@@ -209,10 +202,6 @@
     grid-template-columns: 88px minmax(0, 1fr);
     gap: 10px 16px;
     padding: 24px 0;
-  }
-  .resources-index__n {
-    grid-column: 1 / -1;
-    font-size: 1rem;
   }
   .resources-index__cover {
     position: static;

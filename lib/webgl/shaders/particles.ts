@@ -116,7 +116,8 @@ void main() {
   if (alpha < 0.01) discard;
 
   vec3 color = mix(uShadow, uHighlight, pow(vTone, 0.85));
-  color = mix(color, uAccent, vHeat);
+  // Flare to the accent quickly, so pushed particles read as gold rather than half-blended tones.
+  color = mix(color, uAccent, smoothstep(0.0, 0.55, vHeat));
   gl_FragColor = vec4(color, alpha);
 }
 `;

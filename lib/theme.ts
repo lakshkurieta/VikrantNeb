@@ -18,9 +18,9 @@ export const themes = {
  * dots and the bright shirt all but vanishes into the paper.
  */
 export const portraitPalettes: Record<ThemeName, PortraitPalette> = {
-  // The particles keep the orange accent; the rest of the site is blue.
-  dark: { shadow: "#4a453f", highlight: themes.dark.fg, accent: "#ff5a1f" },
-  light: { shadow: "#cdc4b6", highlight: themes.light.fg, accent: "#e94d12" },
+  // Pushed particles flare metallic gold (a deeper gold on white, to show against the ink); the rest of the site is blue.
+  dark: { shadow: "#4a453f", highlight: themes.dark.fg, accent: "#f0c23b" },
+  light: { shadow: "#cdc4b6", highlight: themes.light.fg, accent: "#c9961a" },
 };
 
 /** Inline style helper for the CSS intro choreography (see `.intro-*` in globals.css). */

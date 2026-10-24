@@ -25,7 +25,9 @@ const ENDPAPER = "#f4f4f4";
 /**
  * Scroll choreography (progress 0 → 1 across the pinned section):
  *
- *   0.04 – 0.46  turn over: exactly 180°, back cover → spine → front cover
+ *   0.04 – 0.46  turn over: a full 360°, from the front cover round past the back to the front again
+ *                (on twice the scroll of the rest of this timeline, so at a half-turn's old pace: see
+ *                lib/bookTimeline.ts)
  *   0.46 – 0.50  hold on the front cover
  *   0.50 – 0.66  the cover swings open in place
  *   0.56 – 0.98  one continuous camera move, never stopping: in to reading distance (0.70), a slow
@@ -217,8 +219,8 @@ export class BookScene {
     this.camera.updateProjectionMatrix();
   }
 
-  render(progress: number) {
-    const turn = easeInOutCubic((progress - 0.04) / 0.42);
+  render(progress: number, turnProgress: number) {
+    const turn = easeInOutCubic(turnProgress);
     const open = easeInOutCubic((progress - 0.5) / 0.16);
     // Camera depth, 0 = resting view, 1 = at the paper. Keyframes on a monotone curve: smooth,
     // never reversing and, apart from leaving rest, never stopping.
@@ -229,8 +231,12 @@ export class BookScene {
       [0.98, 1],
     ]);
 
-    // Exactly half a turn about the spine axis, with a slight lean that settles before opening.
-    this.turntable.rotation.set(0.1 * Math.sin(turn * Math.PI), Math.PI * (1 - turn), -0.03 * Math.sin(turn * Math.PI));
+    // One full turn about the spine axis, front to front, with a slight lean that settles before opening.
+    this.turntable.rotation.set(
+      0.1 * Math.sin(turn * Math.PI),
+      2 * Math.PI * (1 - turn),
+      -0.03 * Math.sin(turn * Math.PI),
+    );
     if (this.hinge) this.hinge.rotation.y = -open * COVER_OPEN;
 
     // Straight down the camera's axis. Depth is measured in log-distance, so equal steps of scroll

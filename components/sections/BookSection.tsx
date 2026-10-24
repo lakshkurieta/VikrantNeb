@@ -8,6 +8,7 @@ import { whenIntroPlays } from "@/lib/intro";
 import { AmazonLogo } from "@/components/ui/AmazonLogo";
 import { ArrowRight, ArrowUpRight } from "@/components/ui/icons";
 import type { BookScene } from "@/lib/webgl/BookScene";
+import { bookTimeline } from "@/lib/bookTimeline";
 import "./book-section.css";
 import { frameScroll } from "@/lib/scroll";
 
@@ -118,7 +119,8 @@ export function BookSection() {
 
       // Book progress, from the scroll alone: like the hand-off, the page around the book never
       // waits on WebGL. Reduced motion and the fallback don't scrub; they show the front cover.
-      const progress = scrubbed ? clamp((scrolled - handoff) / distance) : 0.52;
+      const scroll = scrubbed ? clamp((scrolled - handoff) / distance) : 1;
+      const { progress, turn } = scrubbed ? bookTimeline(scroll) : { progress: 0.52, turn: 1 };
       if (progress !== lastProgress) {
         lastProgress = progress;
         // Timings mirror the choreography in BookScene: the chrome leaves as the cover opens.
@@ -136,14 +138,14 @@ export function BookSection() {
           next.toggleAttribute("data-arrived", arrive > 0.5);
           // How far below its resting place the section still is (px). Lets it hold pieces at their
           // final spot while it rises; capped, so it is only rewritten during the last stretch.
-          const lift = scrubbed ? Math.min(1 - progress, 0.15) * distance : 0;
+          const lift = scrubbed ? Math.min(1 - scroll, 0.15) * distance : 0;
           next.style.setProperty("--book-next-lift", `${lift.toFixed(1)}px`);
         }
       }
 
       if (!scene || !visible || progress === last) return;
       last = progress;
-      scene.render(progress);
+      scene.render(progress, turn);
     };
     const contextLost = (event: Event) => {
       event.preventDefault();

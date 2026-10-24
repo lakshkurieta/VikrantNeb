@@ -1,12 +1,12 @@
 /*
-  Writing section: "Notes from the floor", the studio's second page (studio.css has the bust and
+  Writing section: "Notes from the floor", the studio's second page (studio.css has the portrait and
   the sideways pan).
 
   Pulled up over the podcast's last screen, so its header pins (top: --podcast-top) exactly when
   the podcast has scrolled to its end: the cross-over starts from that frame. While pinned, for
-  --writing-shift of scroll, the bust crosses to the left (--studio-move, written by StudioBust)
+  --writing-shift of scroll, the portrait crosses to the left (--studio-move, written by StudioPortrait)
   and the header slides in from the right; then it scrolls on as normal, with the articles after it.
-  Content sits in the right column; the left one is now the bust's.
+  Content sits in the right column; the left one is now the portrait's.
 */
 .writing {
   --writing-shift: 110svh;

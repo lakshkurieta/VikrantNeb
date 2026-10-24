@@ -24,7 +24,8 @@
   /* Pulled up over the hero's pin track (--handoff, set on :root): that stretch of scroll is the
      hand-off, then come the book's own ~3.2 screens, then the stage's height. Transparent, so the
      hero shows through until the stage fades in. */
-  height: calc(var(--book-stage-h) + var(--handoff) + 320svh);
+  /* 320svh of book, × 1.42 for the full 360° turn (lib/bookTimeline.ts: the turn's 0.42 share again). */
+  height: calc(var(--book-stage-h) + var(--handoff) + 320svh * 1.42);
   margin-top: calc(-1 * (max(100svh, 640px) + var(--handoff)));
   background: transparent;
   color: var(--color-fg);
@@ -268,7 +269,7 @@
     --book-stage-h: max(100svh, 700px);
   }
   .book-section {
-    height: calc(var(--book-stage-h) + var(--handoff) + 280svh);
+    height: calc(var(--book-stage-h) + var(--handoff) + 280svh * 1.42);
   }
   .book-stage {
     min-height: 700px;

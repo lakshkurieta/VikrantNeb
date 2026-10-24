@@ -4,7 +4,6 @@ import Link from "next/link";
 import { resourceHref, resources, resourcesIntro } from "@/content/resources";
 import { site } from "@/content/site";
 import { resourcesGraph } from "@/lib/schema";
-import { pad } from "@/lib/format";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { ConnectButton } from "@/components/connect/ConnectButton";
 import { ArrowRight, ArrowUp } from "@/components/ui/icons";
@@ -20,8 +19,8 @@ export const metadata: Metadata = {
 
 /**
  * The library as a bookshelf: every white paper as a 3D booklet (its cover and page edges) on its own
- * lit stage, the newest featured large beside its details, the rest in a grid; each with what it's
- * about (and what you'll learn, where the paper says), to read on the site or download. Server component.
+ * lit stage, the newest featured large beside its details, the rest in a grid lined up row by row;
+ * each with what it's about, to read on the site or download. Server component.
  */
 export default function ResourcesPage() {
   const { title } = resourcesIntro;
@@ -62,21 +61,12 @@ export default function ResourcesPage() {
               </span>
             </Link>
             <div className="shelf-item__text">
-              <p className="text-label text-signal">
-                {pad(i + 1)} · {resource.pages} pages
-              </p>
+              <p className="text-label text-signal">{resource.pages} pages</p>
               <h2 className="shelf-item__title">
                 <Link href={resourceHref(resource.slug)}>{resource.title}</Link>
               </h2>
               <p className="shelf-item__kicker">{resource.kicker}</p>
               <p className="shelf-item__summary">{resource.summary}</p>
-              {resource.learn && (
-                <ul className="shelf-item__learn">
-                  {resource.learn.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-              )}
               <div className="page-actions">
                 <Link className="btn btn-ink" href={resourceHref(resource.slug)}>
                   Read the paper

@@ -9,7 +9,7 @@ their own:
 - The book section: a 3D hardcover of _Execution Under Pressure_ turns, opens on its printed first page, and the
   camera dives into the page.
 - The podcast section, _Execution at Scale_, arrives on the page the camera dives into. The title and the latest
-  episode, open with its video, come first, with a 3D bust of Vikrant locked in place beside them while the episodes
+  episode, open with its video, come first, with Vikrant's black-and-white portrait locked in place beside them while the episodes
   scroll past; a sign-up band pops up over him at the end.
 - Then the page moves on to Writing, _Notes from the floor_: the sign-up band pops up and away, Vikrant dips and glides
   across to the left of the page, turning to face it, and Writing slides in beside him.
@@ -47,7 +47,6 @@ npm run dev          # http://localhost:3000
 | `npm run format`    | Prettier                                                                 |
 | `npm run portrait`  | Rebuilds the particle source image (see [Portrait](#portrait))           |
 | `npm run signature` | Rebuilds the signature ink and pen strokes (see [Signature](#signature)) |
-| `npm run bust`      | Rebuilds the podcast's 3D bust from the source scan (see [Bust](#bust))  |
 
 ## Structure
 
@@ -84,8 +83,8 @@ components/
     Reveal.tsx          lifts content in once as it scrolls into view
   sections/
     BookSection.tsx     the 3D book, scrubbed by scroll; drives the hand-offs on either side of it
-    Studio.tsx          wraps the podcast and Writing pages; the rail the shared 3D bust rides on
-    StudioBust.tsx      mounts the bust; drives the sideways pan, arrival, drag-to-spin, cursor light
+    Studio.tsx          wraps the podcast and Writing pages; the rail the shared portrait rides on
+    StudioPortrait.tsx  the portrait (the About page's photograph); drives the sideways pan
     PodcastSection.tsx  "Execution at Scale" layout, pitch and sign-up band (server component)
     Episodes.tsx        the newest three episodes as pills that open to their video; "Show all" → /podcast
     WritingSection.tsx  "Notes from the floor": pinned header with the latest article, then the rest
@@ -100,7 +99,6 @@ lib/
   webgl/
     ParticlePortrait.ts the particle engine (framework-agnostic)
     BookScene.ts        the scroll-scrubbed book
-    BustScene.ts        Vikrant's 3D bust: lighting, arrival, the turn as he crosses, idle breath, spin
     TouchTexture.ts     cursor trail painted into a texture the shader samples
     shaders/            GLSL as template strings
   intro.ts              loader ↔ hero handshake (signature drawn → portrait ready → play → done)
@@ -109,11 +107,10 @@ lib/
   theme-mode.ts         theme state, pre-paint script, animated switch
 scripts/
   prepare-portrait.mjs
-  prepare-bust.mjs
   trace-signature.py
 assets/source/          full-resolution source photo, signature and 3D scan (not served)
 public/images/          the 720px portrait WebP and the recoloured signature ink
-public/assets/          the book model and cover, podcast and article covers, the bust model and its still
+public/assets/          the book model and cover, podcast and article covers
 ```
 
 ## How the intro works
@@ -140,7 +137,7 @@ The toggle in the navbar (sun/moon) switches themes. Light is the default, and t
 - **One attribute.** Colours are tokens named by role (`canvas`, `raised`, `fg`, `muted`, `subtle`, `line`,
   `signal`, `on-signal`) in `app/globals.css`. `:root[data-theme="light"]` swaps their values, so components never
   branch on the theme. Use these tokens, not raw hex, in new sections. Light is pure white (no grain); `signal` is
-  the original site's blue (`#1a60e0`, `#3a78ee` in dark mode). Only the particle portrait keeps orange.
+  the original site's blue (`#1a60e0`, `#3a78ee` in dark mode). The particle portrait's scatter is metallic gold (`#F0C23B`; `#C9961A` on white).
 - **No flash.** A tiny inline script in `<head>` (`themeInitScript` in `lib/theme-mode.ts`) applies the saved theme
   before first paint.
 - **Transition.** Where the View Transitions API exists, the new theme is revealed by a circle growing out of the
@@ -156,7 +153,7 @@ The toggle in the navbar (sun/moon) switches themes. Light is the default, and t
   luminance and random seeds are baked into attributes, so the shader never samples the photo. Based on Bruno
   Imbrizi's [Interactive Particles](https://github.com/brunoimbrizi/interactive-particles) (MIT).
 - **Hover.** Pointer motion is stamped into a 96px canvas texture as soft blobs that swell and fade. Particles under a
-  blob are pushed apart and flare to the accent orange. The portrait itself never moves with the cursor. Force follows
+  blob are pushed apart and flare to the accent gold. The portrait itself never moves with the cursor. Force follows
   pointer speed in uv/second, so 60Hz and 120Hz feel the same.
 - **Assembly.** Each particle swirls in from a dust cloud on its own clock, starting at the hairline. An oval vignette
   dissolves the shoulders before they reach the copy on either side.
@@ -200,7 +197,7 @@ scrubs the GLB from `public/assets/book/` against that scroll:
 
 | Scroll    | What happens                                                                                                                                                                               |
 | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| 0.04–0.46 | The book turns over exactly **180°**, back cover → spine → front cover                                                                                                                     |
+| 0.04–0.46 | The book turns a full **360°**, front cover → back → front cover, on twice the scroll (`lib/bookTimeline.ts`), so at the old half-turn's pace                                              |
 | 0.50–0.66 | The front cover swings open in place; the camera eases in to reading distance                                                                                                              |
 | 0.70–0.82 | A slow push while the first page is read: the quote and "150 Copies Gone in 1.5 Days!" (`lib/webgl/FirstPage.ts`). It never holds still, because a dead stop while scrolling reads as jank |
 | 0.82–0.98 | The camera glides on into the page's open middle until paper fills the screen. One monotone curve covers 0.56–0.98                                                                         |
@@ -218,7 +215,7 @@ scrubs the GLB from `public/assets/book/` against that scroll:
 
 ## Podcast and Writing (the studio)
 
-The two pages are wrapped in `Studio.tsx`, because Vikrant's 3D bust is shared between them: it rides a rail
+The two pages are wrapped in `Studio.tsx`, because Vikrant's portrait is shared between them: it rides a rail
 (`.studio__rail`, absolute over the whole studio) and its stage is `position: sticky`, so it stays pinned from the
 podcast's arrival to the end of Writing.
 
@@ -230,43 +227,32 @@ scroll between the book and the podcast. Clicks pass through until it has arrive
 fallback, reduced motion, no script) it is an ordinary section.
 
 **Podcast layout.** Two columns. Left: the title, then the episodes, the latest open with its video straight away,
-and the show's pitch, scrolling as normal. Right: Vikrant's 3D bust, with YouTube's mark and name ghosted behind him,
+and the show's pitch, scrolling as normal. Right: Vikrant's portrait, cut out so he stands on the page itself,
 pinned at the same height the page starts at, so once it has arrived he never moves vertically. Last, the sign-up band
 spans both columns, above the rail, and pops up over him (`.reveal--pop`).
 
 **The cross-over to Writing.** Writing is pulled up over the podcast's last screen, so its header pins
 (`data-studio-pin`) exactly when the podcast has scrolled to its end. It stays pinned for `--writing-shift` (110svh) of
-scroll, and across that stretch `StudioBust` writes `--studio-move` (0 → 1) and `--studio-dip` (0 → 1 → 0, a sine)
+scroll, and across that stretch `StudioPortrait` writes `--studio-move` (0 → 1) and `--studio-dip` (0 → 1 → 0, a sine)
 on every `[data-studio-move]` element:
 
-| Element              | Across the cross-over                                                                                                                                                                                                 |
-| -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| the sign-up band     | pops up and off the top, over his head: it scrolls up as normal plus an extra 38svh, growing slightly and fading                                                                                                      |
-| the rest of the page | scrolls up as normal, fading                                                                                                                                                                                          |
-| the bust             | crosses from the right column to the left (13/11 of its width plus the gap), dipping up to 22svh down on the way; he turns from facing left to facing right on the way down (done by 55%), then rises back into place |
-| Writing's header     | slides in from the right (from 30%) and fades up (from 45%), as he rises                                                                                                                                              |
+| Element              | Across the cross-over                                                                                                                        |
+| -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| the sign-up band     | pops up and off the top, over his head: it scrolls up as normal plus an extra 38svh, growing slightly and fading                             |
+| the rest of the page | scrolls up as normal, fading                                                                                                                 |
+| the portrait         | crosses from the right column to the left (13/11 of its width plus the gap), dipping up to 22svh down on the way, then rises back into place |
+| Writing's header     | slides in from the right (from 30%) and fades up (from 45%), as he rises                                                                     |
 
-YouTube's ghost swaps for "Blogs" as he crosses. After it, Writing's header scrolls on
+After it, Writing's header scrolls on
 as normal and the next two articles follow in the right column while he stays pinned on the left. The "Writing" nav link
-lands at the end of the cross-over. Below 1024px the studio is one column: the bust stands at the top, then the
+lands at the end of the cross-over. Below 1024px the studio is one column: the portrait stands at the top (phones leave it out), then the
 podcast, then Writing, with no cross-over.
 
-**Bust.** `lib/webgl/BustScene.ts`, mounted by `StudioBust.tsx` once the intro has played, at the first quiet moment
-after the book has loaded (no scrolling for 700ms), or when the studio comes near if the reader never pauses. Its
-one-off GPU set-up (second WebGL context, environment, textures, shaders, one warm-up frame) used to land in the
-book's dive and freeze it for up to half a second; now it happens off-screen beforehand. It draws only while on screen
-and once the studio has started arriving, and fades its own waist into the page in the shader rather than through a
-CSS mask, which would make the browser composite the canvas through an extra pass every frame. A still render
-(`vikrant-neb-bust.webp`) stands in until it's ready and without WebGL. It is a single scanned mesh with no rig, so
-every motion moves the whole bust:
-
-- **Arrival:** as the section lands from the book's dive he fades in and turns to face the copy, in place. While the
-  section is still rising, BookSection's `--book-next-lift` holds his column at its final spot, so he never moves
-  vertically: not on arrival, not while scrolling, and not when scrolling back up into the book.
-- **Idle:** a slight breath and sway. Scrolling never moves him, except the cross-over to Writing.
-- **Drag:** grab him to spin him; let go and a spring brings him back the short way round. Only horizontal drags
-  turn him (`touch-action: pan-y`), so a vertical swipe on a phone still scrolls.
-- **Cursor:** a blue rim light swings around behind him with the pointer.
+**Portrait.** `StudioPortrait.tsx` shows two black-and-white photographs cut out of their dark studio backdrops
+(`podcast.portraits`, `public/images/portrait/vikrant-neb-studio-*.webp`, framed alike), so he stands on the page itself in either
+theme: looking left toward the podcast's copy, then looking right toward Writing's, crossfading halfway across the
+glide; their cut-off bottom fades into the page. The cut-outs were made with macOS Vision's subject lifting
+(`VNGenerateForegroundInstanceMaskRequest`). It replaced a 3D bust, so the page loads no 3D model.
 
 **Episodes.** Each episode is a pill; the open one shows its video, guest, summary, and YouTube link. The
 video (`components/podcast/LiteYouTube.tsx`, also on the episode pages) is a still cover until pressed, then YouTube's
@@ -295,18 +281,6 @@ entry at the top with its paragraphs and add its cover beside the others.
   marks the intro as played at once, so going to the home page afterwards simply animates the hero in.
 - **Navbar on other pages.** Section links lead back to the home page (`/#writing` etc.) with client-side navigation,
   so the loader doesn't replay, and "Writing" shows as current on article pages.
-
-## Bust
-
-```bash
-npm run bust                                      # assets/source/vikrant-neb-bust.glb
-npm run bust -- path/to/model.glb                 # any single-material glTF binary
-```
-
-The source scan is 29 MB (593k triangles, 2K textures). The script drops its black emissive map, welds and simplifies
-the mesh to about 150k triangles, re-encodes the textures as WebP (colour 2048px, normal and metal/roughness 1024px)
-and meshopt-compresses the geometry, writing `public/assets/podcast/vikrant-neb-bust.glb` at about 2.5 MB. The
-still that stands in while it loads, `vikrant-neb-bust.webp`, is a transparent render from the same camera and lights.
 
 ## Portrait
 
@@ -345,7 +319,7 @@ skeleton into strokes in writing order (left to right, underline last, then dots
   `--depth` (how far back in the stack: smaller, tilted, faded) per card, and lifts the newest reader's face.
   Quotes and photos are from the live site's "Kind Words From Our Readers"; `mark` is the line highlighted.
 - **Resources** (`ResourcesSection.tsx`, `app/resources`): the home page shows two papers (`resourcesIntro.home`)
-  as an editorial index, big numbered rows that wipe in from the left as they scroll in (a CSS scroll-driven
+  as an editorial index, big rows that wipe in from the left as they scroll in (a CSS scroll-driven
   animation), each showing its cover beside it on hover (inline on phones), then "Show all". `/resources` is a
   bookshelf: every paper as a 3D booklet (cover plus page edges) on a lit stage, turning in as it scrolls into view
   and straightening on hover, the newest featured large and the rest in a grid with their buttons lined up. Each
@@ -353,7 +327,7 @@ skeleton into strokes in writing order (left to right, underline last, then dots
   buttons use the `download` attribute. Titles and descriptions follow the live /resources pages; note the PDFs' own
   cover titles differ ("Pricing What Actually Got Picked", "From Pallet In, Pallet Out to 10,000 Orders a Day").
 - **Phones** (under 768px): the hero's particle portrait runs from under the menu to the bottom, the copy over it;
-  the 3D bust is left out (not even loaded); the book rests between its heading and buttons (`BookScene` takes that
+  the studio's portrait is left out; the book rests between its heading and buttons (`BookScene` takes that
   band), returning to centre for the dive; the menu's links sit right under its bar; every group of buttons stacks
   into full-width buttons of one height (globals.css). On About the portrait fills the first screen, then stays
   pinned behind the text, dimming as it scrolls.
@@ -385,7 +359,7 @@ skeleton into strokes in writing order (left to right, underline last, then dots
   link row on every screen size.
 - **Connect** (`components/connect`): every "Connect" / "Get in touch" button opens the query form, revealed by the
   theme switch's circle (`lib/reveal.ts`). Sending posts it to Formspree (`contact.form` in `content/site.ts`), which
-  delivers it to Vikrant's inbox with the visitor's email as reply-to and "Topic · Name" as the subject; a hidden
+  delivers it to Vikrant's inbox with the visitor's email as reply-to and "Website message · Name" as the subject; a hidden
   `_gotcha` field catches bots. If it fails, the form keeps what was typed and shows me@vikrantneb.com as a fallback.
 
 ## Pages

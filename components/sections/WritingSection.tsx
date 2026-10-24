@@ -16,7 +16,7 @@ const FIRST = 3;
  * sideways pan from the podcast.
  *
  * Its header (title, intro and the latest article) is pinned for the pan (`data-studio-pin`) and
- * slides in from the right as Vikrant's bust glides across to the left; then it scrolls on as
+ * slides in from the right as Vikrant's portrait glides across to the left; then it scrolls on as
  * normal and the next two articles follow in the right-hand column, beside him, with "Show all"
  * for the Blog page (app/blogs). Every article opens on its own page (app/blogs/[slug]).
  *

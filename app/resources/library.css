@@ -38,7 +38,7 @@
 .shelf {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: clamp(48px, 7svh, 80px) clamp(20px, 2.6vw, 36px);
+  column-gap: clamp(20px, 2.6vw, 36px);
 }
 .shelf-item {
   display: flex;
@@ -48,6 +48,7 @@
 /* The newest: across the shelf, the booklet beside its details. */
 .shelf-item:first-child {
   grid-column: 1 / -1;
+  margin-bottom: clamp(56px, 8svh, 96px);
   display: grid;
   grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
   align-items: center;
@@ -99,21 +100,34 @@
   line-height: 1.6;
   color: var(--color-muted);
 }
-.shelf-item__learn {
-  display: grid;
-  gap: 8px;
-  padding-left: 1.1em;
-  list-style: square;
-  font-size: 14.5px;
-  line-height: 1.5;
-}
-.shelf-item__learn li::marker {
-  color: var(--color-signal);
-}
-/* Buttons at the foot of every card, so they line up along each row. */
-.shelf-item__text .page-actions {
+/* Buttons at the foot of the newest's details. */
+.shelf-item:first-child .page-actions {
   margin-top: auto;
   padding-top: 12px;
+}
+/* The rest share their rows (subgrid): stage, label, title, subtitle, description and buttons each
+   start level across a row of cards, however long the text; the buttons stack at full width. */
+.shelf-item:not(:first-child) {
+  display: grid;
+  grid-row: span 6;
+  grid-template-rows: subgrid;
+  row-gap: 12px;
+  margin-bottom: clamp(48px, 7svh, 80px);
+}
+.shelf-item:not(:first-child) .shelf-item__text {
+  display: contents;
+}
+.shelf-item:not(:first-child) .shelf-item__stage {
+  margin-bottom: 10px;
+}
+.shelf-item:not(:first-child) .page-actions {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 10px;
+  padding-top: 8px;
+}
+.shelf-item:not(:first-child) .page-actions .btn {
+  width: 100%;
 }
 
 /* ---- The booklet: the cover, turned, with the page block behind its right edge ------------------ */

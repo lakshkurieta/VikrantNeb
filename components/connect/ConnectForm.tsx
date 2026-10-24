@@ -55,7 +55,7 @@ export function ConnectForm() {
   const send = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    data.set("_subject", `${data.get("topic") || "Hello"} · ${data.get("name")}`);
+    data.set("_subject", `Website message · ${data.get("name")}`);
     setStatus("sending");
     try {
       const response = await fetch(contact.form, {
@@ -144,17 +144,6 @@ export function ConnectForm() {
               </span>
               <input name="company" autoComplete="organization" />
             </label>
-            <fieldset className="connect__field connect__field--wide">
-              <legend>What’s it about?</legend>
-              <div className="connect__topics">
-                {contact.topics.map((topic, i) => (
-                  <label key={topic} className="connect__topic">
-                    <input type="radio" name="topic" value={topic} defaultChecked={i === 0} />
-                    <span>{topic}</span>
-                  </label>
-                ))}
-              </div>
-            </fieldset>
             <label className="connect__field connect__field--wide">
               <span>Message</span>
               <textarea name="message" rows={5} required />

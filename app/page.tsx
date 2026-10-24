@@ -24,7 +24,7 @@ export default function Home() {
       </div>
       <BookSection />
       {/* Arrives on the page the book's camera dives into (`data-book-next`, studio.css). Vikrant's 3D
-          bust is shared by both pages and crosses from the podcast to Writing as the studio pans. */}
+          portrait is shared by both pages and crosses from the podcast to Writing as the studio pans. */}
       <Studio>
         <PodcastSection />
         <WritingSection />

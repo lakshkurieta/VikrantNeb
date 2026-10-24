@@ -183,6 +183,20 @@ export const podcast = {
   /** Set on two lines, "at" in the serif italic accent: EXECUTION / at SCALE. */
   title: { top: "Execution", joiner: "at", bottom: "Scale" },
   host: { lead: "Hosted by", name: "Vikrant Neb" },
+  /** The studio's portraits, framed alike (his head the same size and height): looking left beside the
+   *  podcast, right beside Writing. Dark theme: cut out of their studio backdrop; light theme: on their own
+   *  light backdrop, feathered into the page. */
+  portraits: {
+    podcast: {
+      dark: "/images/portrait/vikrant-neb-studio-left-dark.webp",
+      light: "/images/portrait/vikrant-neb-studio-left-light.webp",
+    },
+    writing: {
+      dark: "/images/portrait/vikrant-neb-studio-right.webp",
+      light: "/images/portrait/vikrant-neb-studio-right-light.webp",
+    },
+    alt: "Vikrant Neb",
+  },
   tagline: { lead: "Real operators.", accent: "Real answers." },
   description:
     "No-nonsense conversations with 3PL and supply chain leaders across the US on how execution, decision-making and operational systems evolve as logistics businesses scale. Experience over theory, every episode.",
@@ -190,12 +204,6 @@ export const podcast = {
   youtube: "https://www.youtube.com/@ExecuteWithVik",
   /** The show's page (app/podcast). */
   page: { latest: "Latest episode", every: "Every episode", watch: "Watch on YouTube" },
-  /** The 3D bust on the stage (`npm run bust` builds the model; the poster stands in until it loads). */
-  bust: {
-    model: "/assets/podcast/vikrant-neb-bust.glb",
-    poster: "/assets/podcast/vikrant-neb-bust.webp",
-    alt: "Vikrant Neb in 3D, arms crossed, in a black jacket and glasses",
-  },
   signup: {
     title: "Don’t miss the next conversation.",
     body: "Sign up for the upcoming episode of Execution at Scale.",
@@ -216,8 +224,6 @@ export const writing = {
     "What I keep seeing inside 3PLs and warehouse operations, written down as it happens. Observations, not prescriptions.",
   all: { label: "All blogs", href: "/blogs" },
   showAll: "Show all blogs",
-  /** Behind the bust once he has crossed to this page, in place of the podcast's YouTube mark. */
-  ghost: "Blogs",
   readLabel: "Read the note",
 } as const;
 
@@ -302,7 +308,6 @@ export const contact = {
   title: { top: "Let’s", joiner: "talk", bottom: "execution." },
   intro:
     "Whether you’re running a 3PL, scaling an operation, or just want to push back on something in the book, Vikrant reads every message. For speaking, advisory or media, this is the place.",
-  topics: ["Advisory", "Speaking", "Media", "Podcast", "Something else"],
   /** Formspree: the form posts here and the message lands in Vikrant's inbox. */
   form: "https://formspree.io/f/xgaoqeob",
   send: "Send message",

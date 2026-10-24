@@ -1,7 +1,7 @@
 /*
   An episode's page (app/podcast/[slug]): a split. The video, title and brief stay pinned on the
   left (in YouTube's order: video, title, buttons, description) while what you'll learn, the guest
-  and the transcript (as speaker turns) scroll past on the right, as the copy scrolls past the bust
+  and the transcript (as speaker turns) scroll past on the right, as the copy scrolls past the portrait
   on the home page. Type from app/blogs/blog.css.
 */
 .episode-split {

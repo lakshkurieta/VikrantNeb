@@ -15,12 +15,12 @@ const arrive = (step: number) => ({ "--stagger": step }) as CSSProperties;
  * of the book: the camera dives into the first page and the studio arrives on that paper.
  *
  * Two columns. Left: the title, then the episodes, the latest open with its video straight away,
- * and the show's pitch, scrolling as normal. Right: empty, for Vikrant's 3D bust on the studio's
+ * and the show's pitch, scrolling as normal. Right: empty, for Vikrant's portrait on the studio's
  * rail, locked in place while the episodes scroll up past him. Last, the sign-up band pops up over
  * him, full width. Then the studio pans sideways to Writing: everything marked `data-studio-move`
  * slides out to the left.
  *
- * Server component. The bust, the episodes and the reveals are client islands.
+ * Server component. The portrait, the episodes and the reveals are client islands.
  */
 export function PodcastSection() {
   const { title, tagline, host, signup } = podcast;

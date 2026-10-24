@@ -1,13 +1,13 @@
 /*
   Podcast section: "Execution at Scale", the studio's first page (studio.css has the arrival from
-  the book, the bust and the sideways pan to Writing).
+  the book, the portrait and the sideways pan to Writing).
 
-  Content sits in the left column; the right one is the bust's. In the cross-over to Writing the
+  Content sits in the left column; the right one is the portrait's. In the cross-over to Writing the
   page scrolls up and away and the sign-up band pops up off the top, over his head.
 */
 .podcast {
   position: relative;
-  /* No bottom padding: the sign-up band carries it, so the bust's rail reaches the very end. */
+  /* No bottom padding: the sign-up band carries it, so the portrait's rail reaches the very end. */
   padding: var(--podcast-top) var(--spacing-gutter) 0;
 }
 .podcast__inner {
@@ -29,9 +29,9 @@
   opacity: clamp(0, calc(1.3 - var(--studio-move) * 2), 1);
 }
 
-/* ---- Layout: heading and episodes left; the right column is the bust's -----------------------------
+/* ---- Layout: heading and episodes left; the right column is the portrait's --------------------------
    The left column scrolls up past him, then the sign-up band pops up over him: it spans both
-   columns, above the bust's rail. */
+   columns, above the portrait's rail. */
 .podcast-layout {
   display: grid;
   grid-template-columns: var(--studio-columns);
@@ -281,7 +281,7 @@
 
 /* ---- Smaller screens ------------------------------------------------------------------------- */
 @media (width < 1024px) {
-  /* One column; the bust stands above the page (studio.css), and there is no pan. */
+  /* One column; the portrait stands above the page (studio.css), and there is no pan. */
   .podcast-layout {
     grid-template-columns: minmax(0, 1fr);
     grid-template-rows: none;

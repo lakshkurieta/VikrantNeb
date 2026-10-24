@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { resourceHref, resources, resourcesIntro } from "@/content/resources";
-import { pad } from "@/lib/format";
 import { Reveal } from "@/components/motion/Reveal";
 import { ConnectButton } from "@/components/connect/ConnectButton";
 import { ArrowRight } from "@/components/ui/icons";
@@ -10,7 +9,7 @@ import "./resources-section.css";
 
 /**
  * Resources: "Tools for operators, not observers." Two of Vikrant's free white papers
- * (`resourcesIntro.home`) as an editorial index: big numbered rows that wipe in as they scroll into
+ * (`resourcesIntro.home`) as an editorial index: big rows that wipe in as they scroll into
  * view, each showing its cover beside it on hover (inline on phones) and opening the paper's own page
  * (app/resources/[slug]); then a link to all of them on /resources.
  *
@@ -43,10 +42,9 @@ export function ResourcesSection() {
         </header>
 
         <ol className="resources-index">
-          {shown.map((resource, i) => (
+          {shown.map((resource) => (
             <li key={resource.slug}>
               <Link className="resources-index__row" href={resourceHref(resource.slug)}>
-                <span className="resources-index__n">{pad(i + 1)}</span>
                 <span className="resources-index__cover">
                   <Image
                     src={resource.cover}

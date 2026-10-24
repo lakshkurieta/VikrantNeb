@@ -47,7 +47,7 @@
   }
 
   /* Pure white and press-black. Signal is the original site's blue (#1a60e0); dark mode's is a step
-     brighter so small labels still read on black. The particle portrait keeps its orange (lib/theme.ts). */
+     brighter so small labels still read on black. The particle portrait's scatter is gold (lib/theme.ts). */
   :root[data-theme="light"] {
     color-scheme: light;
     --color-canvas: #ffffff;
